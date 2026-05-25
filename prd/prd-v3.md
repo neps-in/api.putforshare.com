@@ -1,0 +1,3 @@
+- Should coupons/discounts be added to checkout UI? -
+- Should wishlist/favorites be exposed to users?
+- Should the photo upload page be hidden behind a feature flag?

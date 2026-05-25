@@ -1,0 +1,17 @@
+1. Barcode Scanner to Scan ISBN
+2. Photo model can be linked to any model like user , product or any other model. It should work seamlessly
+
+3. Every product should have plan = SELF_SELL or SMART_SELL or DONATE if it is not there check the seller 
+
+1. For Book Seller
+
+Self Sell Plan
+
+1. Prerequesite for self seller
+
+
+dash/backlog/backlog.md
+plan/
+plan/email-sending.todo
+plan/highlevel-plan-v2.todo
+plan/highlevel-plan.todo

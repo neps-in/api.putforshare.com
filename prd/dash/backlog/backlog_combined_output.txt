@@ -1,0 +1,467 @@
+==================================================
+FILE: backlog-9-may-2026.md
+==================================================
+
+# Dash Backlog
+
+Created: 9/May/2026
+
+# UI Items
+
+1. Add Help support Icon on the top navbar visible in mobile screen , tab, desktop
+2. Add 'Earning Calculator' menu item as first item in the left nav menu and link to component
+   earningCalculator - read the code inside
+   djre-store/dash/src/earningcalc/
+
+# S3 Browser
+
+Create AWS S3 browser using suitable backend library
+list component (grid),
+show - detail component
+config is at .env file in djre-store/backend/
+
+
+==================================================
+FILE: backlog.md
+==================================================
+
+# Backlog
+
+## Micro
+
+1. Add Title to all pages
+2. Add Favicon
+3. Add PINCODE data
+4. Updated the Terms of Service link at Signup Page to https://putforshare.com/terms-of-service.php. [x] PM Verified [ ]
+5.
+
+## Inventory Data Strategy
+
+assume We are building book inventory.
+We need book metadata,
+like all information like ISBN numbers and description, the synopsis of the book, and other information, and also if possible, pricing.
+
+We have different data providers like
+
+Open Library Search
+https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data
+
+ISBNDB Search
+https://api2.isbndb.com/book/{isbn}
+
+Google Search
+https://www.googleapis.com/books/v1/volumes
+
+UPCDB Search
+https://api.upcitemdb.com/prod/trial/lookup?upc={isbn}
+
+We need to come up with a strategy to either to crawl all the data and save it on our servers.
+or
+We can fetch individually as and when required, and then cache the data on our servers and use it if there is a second time we wanted to use the data.
+
+We need to come up with a strategy for implementing this and so that it is efficient and cost effective.
+
+Also, we need to get the images of the book saved on our servers.
+
+If possible, in a different size, or either we generate a high-resolution image in different sizes.
+
+The sizes details are deferred for now, and we will implement it later, and we need to store these in AWS S3 buckets so that it can be used.
+
+If you have any open questions , you may ask.
+
+## My Inventories /my/inventories/
+
+1. CRUD
+2. List + Search by title, isbn, author, publisher,
+3. List should be sortable by Title, Author, Publisher,
+   Price, Qty, Date added, Last updated
+4. View
+
+5. Create
+   Ask category of product selectbox - Book | Soap | Others
+
+   if books:
+   SCAN To Add
+   Create should first have a button called scan barcode. And once clicking on that should be able to open the scanner view and scan the barcode.
+   And once the barcode is being scanned, it should display -
+   Scan Success (in GREEN COLOR) or Failed (in RED COLOR).
+   if Success
+   it should remove un wanted chars like .,- and space and populate on text box.
+
+   Search by ISBN text box and trigger enter key and search should be triggered.
+
+   There
+
+   And there should be a default enter key press and on key press of that event, there should be a search operation that should be triggered.
+
+   That should fill up all the details on the box,
+   along with the URL of the cover image.
+   also URL also should be displayed as an image
+   and also displayed in the image text box. And other details should be populated in relevant textboxes.
+
+   ### Data API
+
+   Open Library Search
+   https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data
+
+   ISBNDB Search
+   https://api2.isbndb.com/book/{isbn}
+
+   Google Search
+   https://www.googleapis.com/books/v1/volumes
+
+   UPCDB Search
+   https://api.upcitemdb.com/prod/trial/lookup?upc={isbn}
+
+   Add Mannually
+
+   The following details are .
+   UPC in a universal product code.
+   GCID,
+   part number,
+   sell option, smart sell or self cell, - whatever you have choosen in the profile will be applied.
+   product title or a book title,
+   short description,
+   full description,
+   SKU,
+   product category ID,
+   quality,
+   quality note,
+   ISBN 10, ISBN_13,
+   Language, - Use language lookups from lookups app
+   edition,
+   cover type, - selectbox
+   page count,
+   publisher, - from publisher select box.
+   published date,
+   price,
+   maximum retail price,
+   sale price,
+   quantity,
+   and also it should link to the product gallery or photo gallery,
+
+   product dimension,
+   length, breadth, height in centimeters,
+   and
+   weight in grams.
+   Authors - Multiple select box
+   last edited by - automaticall fill the user id of loggedin user,
+   view counter, how many times it is being viewed in storefront.there should be a this view counter should be updated,
+   inventory note. This is private to the seller, it should not be displayed on the product listing or product detail page.
+   Is featured.
+   Select state for tax calculation purpose which state he belongs to
+   is_active,
+   is_archived.
+
+Also add book original pic - and upload to s3 and link to this inventory
+
+# Aside
+
+All aside should have help & user guide links in form
+create / edits / list for inventory, orders - [ ]
+
+---
+
+7. Typography - font should be used in this specific font.
+8. We should have one dashboard resource,
+9. users resource,
+10. inventory resource,
+
+# Inventory
+
+Add inventory for 1 Rupee Store,
+
+# Mobile Screen
+
+listing table to cards, with pagination
+
+
+==================================================
+FILE: inventory-completed.md
+==================================================
+
+# Inventory Completed
+
+## My Inventories
+
+1. Added seller-scoped inventory API endpoint `inventory/my-products`.
+2. Implemented seller-only CRUD behavior with auto-owner assignment on create (`seller=request.user`).
+3. Added search and sorting support for:
+   - title
+   - ISBN
+   - author
+   - publisher
+   - price
+   - quantity
+   - created date
+   - updated date
+4. Added `MyInventorySerializer` with:
+   - writable `category_uuid`
+   - auto SKU generation when missing
+   - default fallback values for pricing and quantity
+   - flattened read fields (`isbn_10`, `isbn_13`, `author_name`, `publisher_name`)
+5. Added React Admin resource `my/inventories` with:
+   - list
+   - create
+   - edit
+   - show
+   - helpful aside
+6. Wired frontend data provider mapping:
+   - `my/inventories -> inventory/my-products`
+7. Added backend tests for:
+   - seller isolation (list shows only current seller records)
+   - owner auto-assignment on create
+   - search by ISBN, author, publisher
+8. Fixed inventory model save issues:
+   - corrected slug uniqueness checks
+   - added missing `super().save()` call in `Product.save`
+
+## Verification
+
+1. `backend/.conda/bin/python backend/manage.py check` passed.
+2. `backend/.conda/bin/python backend/manage.py test apps.api.tests.MyInventoryAPITests -v 2` passed (3/3).
+
+- Persist ISBN/author/publisher (and related book metadata) into Book on inventory create/update:
+  - Added write-only fields in serializer:
+    - isbn_10_input, isbn_13_input, author_name_input, publisher_name_input, etc.
+    - backend/apps/api/serializers.py:398
+  - Added safe book upsert logic that copies parent Product fields before creating the Book child row (fixes the created_on
+    integrity error):
+    - backend/apps/api/serializers.py:491
+    - backend/apps/api/serializers.py:515
+  - Wired create/update to call that logic:
+    - backend/apps/api/serializers.py:638
+    - backend/apps/api/serializers.py:650
+- Wired fetched ISBN data into those persistent input fields in UI:
+  - Auto-fill from API fetch:
+    - dash/src/index.jsx:1029
+    - dash/src/index.jsx:1031
+    - dash/src/index.jsx:1032
+  - Added form inputs so values are submitted:
+    - dash/src/index.jsx:1156
+    - dash/src/index.jsx:1158
+    - dash/src/index.jsx:1159
+- Added test coverage for persistence:
+
+  - backend/apps/api/tests.py:273
+
+  Book Language in inventory form is now a selectbox sourced from the lookups app (/api/v1/lookups/languages/) instead of a free-
+  text input.
+
+  ### Language choices
+
+  - Added lookup-driven language select component:
+    - dash/src/index.jsx:1107 (InventoryBookLanguageInput)
+  - Replaced text input with select input:
+    - dash/src/index.jsx:1188
+  - Kept ISBN fetch autofill writing into book_language_input so selection auto-fills when possible:
+    - dash/src/index.jsx:1033
+  - Ensured edit payload/response prefills these input fields (including book_language_input) from existing Book data:
+    - backend/apps/api/serializers.py:631 (to_representation mapping)
+
+## Authors
+
+- Authors now uses AutocompleteArrayInput in dash/src/index.jsx:1184
+- Publishers now uses AutocompleteInput in dash/src/index.jsx:1230
+- Both are fed from model-backed endpoints:
+  - inventory/authors
+  - inventory/publishers
+- Kept backend compatibility:
+  - authors are still saved to author_name_input as comma-separated text via parse/format
+  - publisher remains publisher_name_input string
+
+Also cleaned leftover interrupted imports (Tab, Tabs) from dash/src/index.jsx.
+
+## Pending (Not Yet Implemented)
+
+1. Barcode scan UI flow in inventory create.
+2. External ISBN metadata fetch/autofill (OpenLibrary/Google/ISBNDB/UPCDB).
+3. Full typed create flow for `Book`/`Soap` subclass records from dashboard forms.
+
+
+==================================================
+FILE: react-admin-dash-v1.md
+==================================================
+
+# React Admin Based - Seller Dashboard - dash v1
+
+## General
+
+1. Delete - Soft delete & Restore [ ]
+
+## Address
+
+1. Delete - Soft delete & Restore [ ]
+2. View - Show component - Restore - show Restore btn for deleted items at the bottom.
+
+## Logistics > Packages /my/packages/
+
+1. Delete - Soft delete & Restore [ ]
+2. View - Show component - Restore - show Restore btn for deleted items at the bottom.
+
+## Logistics > Pickup Request - /my/pickups/
+
+#### Validations to be done
+
+1.  Ensure pickup_scheduled_for is greater than pickup_created_at or pickup last updated
+
+scheduled date must be atleast one day after the date of creation(today). Please contact support phone number in that case immediately to prioritize your pickup.'
+
+priority_pickup - boolean field if true it is a priority pickup ignore
+the validation and do the pickup.
+
+2.  from_user and to_user should not be same or equal
+
+3.  from_address and to_address should not be same else
+    raise validation error.
+
+4.  Make sure pickup req has at least one package
+
+    ```py
+    if self.no_of_packages <= 0:
+    raise ValidationError({
+    'no_of_packages': 'Make sure you are sending at least one package.'
+    })
+
+    def save(self, *args, **kwargs):
+            # Run full_clean before saving to ensure validations are applied
+            self.full_clean()
+            super().save(*args, \*\*kwargs)
+
+    ```
+
+
+==================================================
+FILE: react-admin-superadmin-dash.md
+==================================================
+
+# dash.putforshare.com/admin/
+
+## General
+
+1. Add copyright at bottom using snippet in
+   prd/dash/ra-code/
+
+## Users
+
+1. List User
+1. Edit User,
+1. BAN A user with reason.
+1. Delete - soft_delete user
+1. List all Users
+   1. sort by created on, updated on, id, earnings, inventories, username, fullname
+1. View / Show user - row click default behavior
+1. filter by today, this week, this month, from date and to date
+
+## View / Show of User
+
+Should have - two sections
+top section - disolay
+User Profile pic, Name, email, upi id
+created on, updated on, active
+Inventories count,
+earnings
+
+bottom section
+should have tabs - Packages, Pickup Req, Inventories, Addresses, Photos uploaded, Orders, Transactions
+
+## Pickup Request
+
+1. CRUD
+2. List All Pickup Req of all users
+   1. search by pickup id, contact number, address , pincode, email,
+   2. sort by id, weight, package count, created date,
+   3. filter by today, this week, this month, from date and to date
+
+## Packages
+
+1. CRUD
+2. List All Packages of all users
+3. List My Packages
+
+## Address
+
+1. CRUD
+2. List All Address of all users
+3. List My Addresses
+
+## Photos
+
+1. CRUD meta data
+2. upload to s3
+3. list
+
+## Inventories
+
+1. CRUD
+2. View / Show rowclick default action
+3. List
+
+##
+
+1. users,
+2. all inventory,
+3. all media,
+4. complete address book,
+5. list of all the authors,
+6. list of all the publishers,
+7. logistics,
+   1. all the shippers available,
+   2. all the packages,
+   3. all pickup requests,
+   4. all carts,
+   5. abandoned cart of all users
+   6. all the orders of all,
+   7. all the purchase orders.
+   8. all the sales orders of all the sellers.
+
+## User detail / Show
+
+## User
+
+1. Edit profile So on the header, there should be a My Profile icon at the top right, which will have the initial of the user.[x]
+2. on clicking that, you should have something like help,
+3. edit my profile,
+4. change my password,
+5. logout. Okay,
+6.
+7. And coming back to the seller's admin, so any user who logged in can see his in my inventory, my address, my packages, my pickup request, my uploads,
+8. my abandoned cart,
+9. my orders,
+10. my notifications,
+11. my seller dashboard.
+
+## my seller dashboard.
+
+1. upload counts
+   1. linked to inventories / orphan / total files count / total media size
+2. Inventories sold / total
+3. my abandoned cart,
+4. my orders,
+5. my notifications,
+6. my seller dashboard.
+
+
+==================================================
+FILE: super-admin.md
+==================================================
+
+## Super Admin
+
+- Create `/admin` entry point in Super Admin UI. [x] PM Verified [ ]
+- Implement `/admin` List view with search, filters, and pagination. [x] PM Verified [ ]
+- Implement `/admin` Create flow with validation and default values. [x] PM Verified [ ]
+- Implement `/admin` Edit flow with validation and state sync. [x] PM Verified [ ]
+- Implement `/admin` Show view with summary + related data sections. [x] PM Verified [ ]
+- Add AddressBook management under `/admin` (List, Create, Edit, Show). [x] PM Verified [ ]
+- Add Inventories management under `/admin` (List, Create, Edit, Show). [x] PM Verified [ ]
+- Add Photos management under `/admin` (List, Create, Edit, Show). [x] PM Verified [ ]
+- Add Packages management under `/admin` (List, Create, Edit, Show). [x] PM Verified [ ]
+- Add Pickup Requests management under `/admin` (List, Create, Edit, Show). [x] PM Verified [ ]
+
+Create a filter. number of user sign UPS Today this week this month. and between two dates in django backend and react admin for users, pickup request, inventories.
+
+› mimic ui of my/pickup-requests in the pickup request in addition to username, fullname, mobile name display. Search by
+username, email, mobile, fullname, pincode, from address. Also mimic my/pickup-req/uuid/show.
+
+

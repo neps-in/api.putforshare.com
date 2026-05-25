@@ -1,0 +1,45 @@
+# Build output
+
+# Bundle analysis
+coverage/
+
+# Dependencies
+dist/
+dist-ssr/
+
+.DS_Store
+
+# Editor / OS
+.vscode/
+
+# Env files
+.env
+.env.deploy
+.env.development.local
+.env.*.local
+.env.local
+.env.local
+.env.production.local
+.env.test.local
+.idea/
+*.local
+
+# Local env files (commit only .env.production with non-secret values)
+node_modules/
+
+# ── React + Vite ──────────────────────────────────────
+stats.html
+
+# Storybook
+storybook-static/
+*.swo
+*.swp
+
+# Testing
+Thumbs.db
+*.tsbuildinfo
+.vite/
+
+# Vite cache
+vite.config.ts.timestamp-*
+.vitest/

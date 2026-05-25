@@ -1,0 +1,241 @@
+# Merged content — prd/email-templates/
+
+_5 file(s) combined on this page._
+
+
+---
+
+# email-templates_combined_output.txt : email-templates
+
+_Source: `prd/email-templates/email-templates_combined_output.txt`_
+
+==================================================
+FILE: email_verification.txt
+==================================================
+
+Confirm your email address
+
+Hi{% if first_name %} {{ first_name }}{% endif %},
+
+Thanks for signing up for {{ company_name|default:"PutForShare" }}!
+To finish setting up your account, please verify that this email address{% if user_email %}
+({{ user_email }}){% endif %} belongs to you.
+
+Verify your email:
+{{ action_url }}
+
+This verification link expires in {{ expires_in_hours|default:"24" }} hour{{ expires_in_hours|default:"24"|pluralize }}.
+You can request a new one anytime from your account settings.
+
+Didn't sign up? You can safely ignore this email — no account will be created
+unless you confirm. If you keep getting these, please write to
+{{ company_email|default:"hi@putforshare.com" }}.
+
+Welcome aboard,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.
+
+
+==================================================
+FILE: forgot_password.txt
+==================================================
+
+Reset your password
+
+Hi{% if first_name %} {{ first_name }}{% endif %},
+
+We received a request to reset the password for your
+{{ company_name|default:"PutForShare" }} account{% if user_email %} ({{ user_email }}){% endif %}.
+Open the link below to choose a new one:
+
+{{ action_url }}
+
+This link expires in {{ expires_in_hours|default:"24" }} hour{{ expires_in_hours|default:"24"|pluralize }}.
+After that you'll need to request a new one.
+
+Didn't ask for this? You can safely ignore this email — your password won't
+change unless you open the link above. If you keep receiving these and you
+didn't request them, please contact us at
+{{ company_email|default:"hi@putforshare.com" }}.
+
+Stay secure,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.
+
+
+==================================================
+FILE: merchant_feed_sync_failed.txt
+==================================================
+
+Google Merchant feed sync failed
+================================
+
+A Google Merchant Centre feed sync just failed for {{ company_name|default:"PutForShare" }}.
+The catalogue on Google may now be out of date until the next successful sync.
+
+Log ID : {{ merchant_feed_log_id }}
+Trigger: {{ trigger_source|default:"unknown" }}
+
+{% if message %}Error details:
+--------------
+{{ message }}
+
+{% endif %}What to do:
+- Check the MerchantFeedSyncLog entry in the Django admin for the full payload and stack trace.
+- Re-run the sync via Inventory → Merchant Feed → Run now once the issue is resolved.
+
+— {{ company_name|default:"PutForShare" }} system notifications
+
+
+==================================================
+FILE: welcome.txt
+==================================================
+
+Welcome aboard{% if first_name %}, {{ first_name }}{% endif %}!
+
+Thanks for joining {{ company_name|default:"PutForShare" }}. Your account is
+all set up and ready to use.
+
+{{ company_name|default:"PutForShare" }} helps you share what you have —
+books, gear, gadgets — with people who'd love to use them. Here's a quick start:
+
+  - List items you'd like to put up for sharing.
+  - Browse what others in your community are sharing.
+  - Connect with borrowers and lenders, hassle-free.
+
+Get started:
+{{ action_url|default:"https://dash.putforshare.com/onboarding" }}
+
+Happy sharing,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+Need help? Write to {{ company_email|default:"hi@putforshare.com" }}.
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.
+
+
+---
+
+# email_verification.txt : email-templates
+
+_Source: `prd/email-templates/email_verification.txt`_
+
+Confirm your email address
+
+Hi{% if first_name %} {{ first_name }}{% endif %},
+
+Thanks for signing up for {{ company_name|default:"PutForShare" }}!
+To finish setting up your account, please verify that this email address{% if user_email %}
+({{ user_email }}){% endif %} belongs to you.
+
+Verify your email:
+{{ action_url }}
+
+This verification link expires in {{ expires_in_hours|default:"24" }} hour{{ expires_in_hours|default:"24"|pluralize }}.
+You can request a new one anytime from your account settings.
+
+Didn't sign up? You can safely ignore this email — no account will be created
+unless you confirm. If you keep getting these, please write to
+{{ company_email|default:"hi@putforshare.com" }}.
+
+Welcome aboard,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.
+
+
+---
+
+# forgot_password.txt : email-templates
+
+_Source: `prd/email-templates/forgot_password.txt`_
+
+Reset your password
+
+Hi{% if first_name %} {{ first_name }}{% endif %},
+
+We received a request to reset the password for your
+{{ company_name|default:"PutForShare" }} account{% if user_email %} ({{ user_email }}){% endif %}.
+Open the link below to choose a new one:
+
+{{ action_url }}
+
+This link expires in {{ expires_in_hours|default:"24" }} hour{{ expires_in_hours|default:"24"|pluralize }}.
+After that you'll need to request a new one.
+
+Didn't ask for this? You can safely ignore this email — your password won't
+change unless you open the link above. If you keep receiving these and you
+didn't request them, please contact us at
+{{ company_email|default:"hi@putforshare.com" }}.
+
+Stay secure,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.
+
+
+---
+
+# merchant_feed_sync_failed.txt : email-templates
+
+_Source: `prd/email-templates/merchant_feed_sync_failed.txt`_
+
+Google Merchant feed sync failed
+================================
+
+A Google Merchant Centre feed sync just failed for {{ company_name|default:"PutForShare" }}.
+The catalogue on Google may now be out of date until the next successful sync.
+
+Log ID : {{ merchant_feed_log_id }}
+Trigger: {{ trigger_source|default:"unknown" }}
+
+{% if message %}Error details:
+--------------
+{{ message }}
+
+{% endif %}What to do:
+- Check the MerchantFeedSyncLog entry in the Django admin for the full payload and stack trace.
+- Re-run the sync via Inventory → Merchant Feed → Run now once the issue is resolved.
+
+— {{ company_name|default:"PutForShare" }} system notifications
+
+
+---
+
+# welcome.txt : email-templates
+
+_Source: `prd/email-templates/welcome.txt`_
+
+Welcome aboard{% if first_name %}, {{ first_name }}{% endif %}!
+
+Thanks for joining {{ company_name|default:"PutForShare" }}. Your account is
+all set up and ready to use.
+
+{{ company_name|default:"PutForShare" }} helps you share what you have —
+books, gear, gadgets — with people who'd love to use them. Here's a quick start:
+
+  - List items you'd like to put up for sharing.
+  - Browse what others in your community are sharing.
+  - Connect with borrowers and lenders, hassle-free.
+
+Get started:
+{{ action_url|default:"https://dash.putforshare.com/onboarding" }}
+
+Happy sharing,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+Need help? Write to {{ company_email|default:"hi@putforshare.com" }}.
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.

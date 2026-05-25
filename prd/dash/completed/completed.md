@@ -1,0 +1,294 @@
+## General requirement [x]
+
+1. Use Vite + Material ui + react admin setup
+2. No Tailwind CSS for dashboard
+
+## Layout Creation [x]
+
+1. Create Top Navbar with 1 row [x]
+
+   1. Row ht: 60px
+   2. Columns : 3 cols
+   3. from left - 1st col - width: 30%
+   4. 1st col - Added PutForShare as h1 next to the logo in navbar left column.
+   5. Set logo container background to #FFF (white).
+   6. In the mob screen - Logo is hidden, search box is displayed at the bottom row in navbar
+   7. Set logo container background to #FFF (white).
+
+2. from left 2nd col - width 50%
+3. from left 3rd col - width 20%.
+4. In 2nd col add search box Center to navbar.
+5. in 3rd col add CTA right aligned
+
+## User Auth - Use react admin
+
+# Note: All forms to be centered to its container
+
+### Signup Page / component [x]
+
+1. should not have top navbar, or left nav [x]
+2. split screen in 2 folds left , right equally, [x]
+3. in the left have signup form. ra-code/pfssignup.jsx [x]
+
+4. Signup - req field [x]
+
+   1. Email [x]
+   2. Full Name [x]
+   3. username @username - must be unique , user should not type @, use a masked field
+      http://putforshare.com/@user_name - [x]
+      3.1 Generate user name - should generate cool tree name, plant name, fruit name - [x]
+   4. Password with show/hide password option in UI.
+   5. Accept Terms checkbox at the left aligned. [x]
+   6. Add Terms of Service link right aligned. [x]
+
+### Login
+
+1. (ra-code/pfslogin.jsx) email & password [x]
+2. In the navbar - in 3rd col After login - Add loggedin Welcome {username} instead of CTA, [x]
+3. Add User Profile Menu Icon next to username. [x]
+
+### Logout
+
+1. Logout [x]
+
+### Forgot password
+
+1. Forgot password -> (ra-code/forgotpass.jsx) email link -> Reset password flow [x]
+
+### Change My password
+
+2. Change My password - notify via email. [x]
+
+in all auth screens have this [x]
+Trouble with signup ? hi@putforshare.com - or call +91 89516 00629
+
+## Super Admin Dash dash.putforshare.com/#/admin/ - [x]
+
+List Important KPI
+
+1. Total Number of users with active/baned
+2. Total Orders - list orders in each status (Booked (4) / Picked (3) / Delivered (1))
+3. Total Revenue
+4. Total Address
+5. Total Packages - Packages Used in pickup req, Orphan packages.
+6. Total Pickup req - Draft (3) / Booked (2) / Picked (3) / Cancelled (1)
+
+# Seller Dashboard /my/dashboard/ [x]
+
+List key metrics like
+
+1. Number of orders
+2. Revenue
+3. Average order value
+
+# Aside
+
+All aside should have help & user guide links in form
+create / edits / list for packages, pickup req - [x]
+
+## Logistics > Packages /my/packages/
+
+1. Resource - Packages - List + CRUD - only created by the logged in user [x]
+2. Create form [x]
+   1. Package Name
+   2. Package contains
+   3. Weight in Kg
+   4. Length , Breadth, Height in CM
+   5. No. of packages in the given weight and dimensions
+   6. When u create the package in the backend, create individual rows or records based on No. of packages
+3. Edit - Edit individual package [x]
+
+## Logistics > Addresses /my/addresses/
+
+1. Resource - Address - List + CRUD - only created by the logged in user [x]
+2. Create Address with all the fields in the model [x]
+
+   1. full_name - Contact Person Name , Contact Mob #
+   2. building_name - Flat # , House No, Apartment name
+   3. company_name
+   4. area_sector - Area / Colony / Street / Sector / Village
+   5. landmark
+   6. town_city
+   7. state_region
+   8. address_type
+
+      # Hint:
+
+      Display below address_type
+      residence (7am to 9pm delivery time)
+      commercial (7am to 9pm delivery time)
+
+   9. default_shipping_address = models.BooleanField(default=True)
+   10. default_billing_address = models.BooleanField(default=True)
+
+3. Edit - Edit individual address [x]
+
+## Pickup
+
+3. List My Pickup request [x]
+
+## Address
+
+1. CRUD [x]
+2. List My Addresses [x]
+
+## Logistics > Addresses /my/addresses/
+
+1. Resource - Address - List + CRUD - only created by the logged in user [x]
+2. Create Address with all the fields in the model [x]
+
+   1. full_name - Contact Person Name , Contact Mob #
+   2. building_name - Flat # , House No, Apartment name
+   3. company_name
+   4. area_sector - Area / Colony / Street / Sector / Village
+   5. landmark
+   6. town_city
+   7. state_region
+   8. address_type
+
+      # Hint:
+
+      Display below address_type
+      residence (7am to 9pm delivery time)
+      commercial (7am to 9pm delivery time)
+
+   9. default_shipping_address = models.BooleanField(default=True)
+   10. default_billing_address = models.BooleanField(default=True)
+
+3. Edit - Edit individual address [x]
+
+4. owner - Fill this automatically in the backend - user who loggedin and created the pickup req. [x]
+
+5. package - FK To Package,
+   One Pickup req can have many packages
+6. awb_number = models.CharField(max_length=255)
+   shipper
+7. from_user - Fill this automatically in the backend - user who loggedin and created the pickup req.
+
+8. from_address - FK to address, Fill this automatically in the backend - user who loggedin and created the pickup req.
+
+9. to_user = models.ForeignKey(User) # FK to user - Always to Warehouse Admin , fetch by email = hi@putforshare.com
+
+10. to_address = models.ForeignKey(Address) - FK to addressbook , fetch by email = hi@putforshare.com
+
+    pickup_request_num = models.CharField(
+    max_length=255, blank=True, default='') # Generated by Shipper
+    pickup_scheduled_date = models.DateField(auto_now_add=False)
+    pickup_ready_start_time = models.DateTimeField(blank=True, null=True)
+    pickup_ready_end_time = models.DateTimeField(blank=True, null=True)
+
+    Sum packages by pickup id and fill this value in the backend api
+
+    no_of_packages = models.IntegerField(default=0)
+
+    total_weight = models.DecimalField(
+    max_digits=10, decimal_places=2, default='1.00')
+
+    total_invoice_value = models.DecimalField(
+    max_digits=10, decimal_places=2, default='1.00')
+
+    fright_charges = models.DecimalField(
+    max_digits=10, decimal_places=2, default='1.00')
+
+    status = models.CharField(max_length=255, choices=settings.INBOUND_PICKUP_STATUS_CHOICES,
+    blank=True, null=True, default='')
+
+    pickup_mode = models.CharField(
+    max_length=50,
+    choices=settings.SHIPMENT_MODE_CHOICES,
+    default='ROADWAYS_ECONOMY'
+    )
+
+    # Any pickup instructions for the admin / logistics team
+
+    pickup_instruction = models.CharField(
+    max_length=255, blank=True, null=True, default='')
+
+# AI
+
+we are going to build
+
+1. a seller dashboard using React Admin latest version. [x]
+2. Certain components are already done, certain components are yet to be done.
+3. Signup, login, logout, signup, [x].
+4. Forgot pass -> reset link [ ]
+5. The header should have this specific color [x],
+6. the header's background, and the height of the header should be 60 pixels. [x]
+
+# Frontend React admin
+
+• Frontend - Features - completed
+
+1. Added shipping label actions in pickup request show page with download flows for All, Summary, and Package Labels.
+2. Added status-based visibility for label downloads (BOOKED / READY_FOR_PICKUP only).
+3. Added paper size selection a4 or 4x6 thermal printer - in UI and changed it from buttons to radio options (A4 / 4x6 Thermal).
+4. Converted /my/packages mobile list to card-based layout with per-card Edit/Delete actions.
+5. Converted /my/pickup-requests mobile list to card-based layout with per-card Show/Edit/Delete actions.
+6. Added pickup mobile card fields: total weight, pickup instruction, cancellation reason (if any).
+7. Added reusable intro blocks (title + brief) for Packages and Pickup Request across list/create/edit/show.
+8. Enhanced Edit Profile with username URL masking, plant-style username generation, and WhatsApp share support.
+
+Frontend - Small Tasks
+
+1. Added/updated left menu icons for My Dashboard, Super Admin Dashboard, My Addresses, My Packages, My Pickup Requests.
+2. Added package guide aside content and later added package image (card-board-box.png) at top.
+3. Added pickup guide aside content for list/create/edit/show.
+4. Changed intro titles to include My (My Packages, My Pickup Request).
+5. Added 10px margin on all sides for intro sections.
+6. Removed spacing after https://putforshare.com/@ in profile username input.
+7. Added light background styling for masked username prefix.
+8. Updated WhatsApp share message template to: I have put for share few book on https://putforshare.com/@<username>.
+
+Backend - Big Tasks
+
+1. Built shipping label generation system for pickup requests (backend/apps/logistics/labels.py).
+2. Added pickup-request label endpoint action: /logistics/pickup-requests/{uuid}/shipping-labels/ with type and paper query
+   params.
+3. Implemented dual print formats where both summary and package slips follow selected paper size (A4 or 4x6).
+4. Reworked address rendering logic for labels: SHIP TO first, Ship From follows, with requested layout offsets.
+5. Reworked table layout so package slip also uses table format (one package per label row).
+
+Backend - Updates
+
+1. Removed quantity from summary/package labels.
+2. Removed AWB column/fields from labels.
+3. Removed tracking info box and related top tracking/package id info.
+4. Added Pickup Req #: {id} top-right in both summary and package slips (16px, bold).
+5. Removed word Logistics from summary heading.
+6. Added CM to dimensions column header (Dimensions (LxBxH) CM).
+7. Updated ship-to typography (bold/larger body), then removed ship-to background.
+8. Removed borders from ship-to/ship-from blocks.
+9. Set ship-from left gap to 40%.
+10. Address field ordering/format updates:
+
+- Door No and Street in one line after company name.
+- Landmark moved to last line in ship-to.
+- Removed email from both ship-to/ship-from.
+- Moved mobile to last line in both ship-to/ship-from.
+
+• Implemented my/address backlog tasks from prd/dash/backlog/backlog.md.
+
+### Done
+
+1. Added address_name in backend address model (after user) and migration.
+
+- backend/apps/users/models.py:80
+- backend/apps/users/migrations/0006_address_address_name.py:1
+
+2. Made company_name explicitly optional at serializer level.
+
+- backend/apps/api/serializers.py:173
+
+3. Updated admin to include/search address_name.
+
+- backend/apps/users/admin.py:64
+
+4. Refined my/address UI with cleaner create/edit/show/list layout and typography.
+
+- New address intro + helpful aside tips: dash/src/index.jsx:233, dash/src/index.jsx:387
+- Better card-style list with show/edit/delete actions: dash/src/index.jsx:540
+- Structured create/edit forms (sectioned cards): dash/src/index.jsx:689
+- Clean show page (card layout + meta): dash/src/index.jsx:840
+- Included address_name in pickup address dropdown text: dash/src/index.jsx:1408
+
+- Created On and Updated On should display in my/address show.

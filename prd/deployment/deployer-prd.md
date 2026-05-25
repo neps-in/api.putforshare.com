@@ -1,0 +1,20 @@
+Create a
+simple bash
+deployment script for deploying
+
+1. DJango based applications
+2. Do DB Migrations if required
+3. if required do a restart of the gunicorn.
+4. run collectstatic if required or whitenoise if required
+5. make sure the deployment succeeds.
+6. If the deployment fails, you should have an option to revert.
+7. Change Nginx servers configs required
+
+V2
+
+6. postgras.
+7. reactjs
+
+V3
+
+1. NextJs

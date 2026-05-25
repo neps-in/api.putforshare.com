@@ -1,0 +1,52 @@
+Arguments: 
+  /Users/arouldas/.nvm/versions/node/v20.19.0/bin/node /usr/local/bin/yarn install
+
+PATH: 
+  /Users/arouldas/.nvm/versions/node/v20.19.0/bin:/Users/arouldas/miniconda3/condabin:/Users/arouldas/Library/Python/3.10/bin:/Users/arouldas/.nvm/versions/node/v18.20.5/bin:/Users/arouldas/bin:/usr/local/bin:/Users/arouldas/Library/Python/3.10:/Users/arouldas/Library/Python/3.10/bin:/Users/arouldas/.opencode/bin:/Library/PostgreSQL/14/bin:/Users/arouldas/.local/bin:/Users/arouldas/.nvm/versions/node/v18.20.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  20.19.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001774.tgz: ESOCKETTIMEDOUT
+      at ClientRequest.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141517:19)
+      at Object.onceWrapper (node:events:638:28)
+      at ClientRequest.emit (node:events:524:28)
+      at TLSSocket.emitRequestTimeout (node:_http_client:849:9)
+      at Object.onceWrapper (node:events:638:28)
+      at TLSSocket.emit (node:events:536:35)
+      at Socket._onTimeout (node:net:595:8)
+      at listOnTimeout (node:internal/timers:581:17)
+      at process.processTimers (node:internal/timers:519:7)
+
+npm manifest: 
+  {
+    "name": "nstore",
+    "private": true,
+    "version": "0.1.0",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint"
+    },
+    "dependencies": {
+      "next": "14.2.5",
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
+    },
+    "main": "index.js",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

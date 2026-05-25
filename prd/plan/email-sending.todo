@@ -1,0 +1,155 @@
+# List of Transactional Emails to be sent
+
+## Admin Email
+
+- Notify admin when someone signup
+- Notify admin when someone place an order and the order is complete
+
+## SMART_SELL
+
+- Mark all the products as SMART_SELL in the production db
+
+
+
+
+- Notify admin when an product item with type = SMART_SELL 
+
+
+## 1. Account Emails
+
+- **Welcome Email** — Sent on successful account registration.
+- **Email Verification** — OTP or link to verify email address.
+- **Password Reset** — Link to reset forgotten password.
+- **Password Changed** — Confirms the password was successfully updated.
+- **Account Deactivated** — Notifies the customer their account has been deactivated.
+- **Account Deleted** — Confirms account deletion upon request.
+- **Profile Updated** — Confirms changes to account details.
+- **Login Alert (New Device)** — Security alert for login from an unrecognized device.
+
+
+## 1. Order Emails
+
+- **Order Confirmation** — Sent immediately after a customer places an order. Includes order ID, items, price, and estimated delivery.
+- **Order Received / Processing** — Confirms the store has received and is processing the order.
+- **Order Cancelled** — Sent when an order is cancelled by the customer or store.
+- **Order Modified** — Sent when items, quantity, or address is changed after placing the order.
+
+---
+
+## 2. Payment Emails
+
+- **Payment Confirmation** — Confirms successful payment with transaction ID and amount.
+- **Payment Failed** — Notifies the customer that payment was unsuccessful with retry instructions.
+- **Payment Refund Initiated** — Informs the customer a refund has been triggered.
+- **Refund Successful** — Confirms the refund amount has been credited back.
+- **Partial Refund** — Sent when only part of the order amount is refunded.
+- **Invoice / Receipt** — Detailed billing document sent after payment.
+- **Payment Reminder** — For pay-later or pending payment orders.
+
+---
+
+## 3. Shipping & Delivery Emails
+
+- **Order Shipped** — Confirms dispatch with courier name and tracking number.
+- **Out for Delivery** — Notifies the customer the package is on its way today.
+- **Order Delivered** — Confirms successful delivery.
+- **Delivery Attempted / Failed** — Sent when the courier couldn't deliver the package.
+- **Delivery Rescheduled** — When a new delivery date is set.
+- **Shipment Delayed** — Alerts the customer about unexpected delays.
+- **Tracking Update** — Periodic updates on shipment location/status.
+
+---
+
+## 4. Return & Refund Emails
+
+- **Return Request Received** — Acknowledges the customer's return request.
+- **Return Approved** — Confirms the return is accepted with instructions.
+- **Return Rejected** — Explains why the return was not accepted.
+- **Return Picked Up** — Confirms the courier has collected the return item.
+- **Return Received at Warehouse** — Confirms the returned item has arrived.
+- **Exchange Initiated** — Sent when a product exchange is processed.
+
+---
+
+## 5. Account Emails
+
+- **Welcome Email** — Sent on successful account registration.
+- **Email Verification** — OTP or link to verify email address.
+- **Password Reset** — Link to reset forgotten password.
+- **Password Changed** — Confirms the password was successfully updated.
+- **Account Deactivated** — Notifies the customer their account has been deactivated.
+- **Account Deleted** — Confirms account deletion upon request.
+- **Profile Updated** — Confirms changes to account details.
+- **Login Alert (New Device)** — Security alert for login from an unrecognized device.
+
+---
+
+## 6. Cart & Checkout Emails
+
+- **Abandoned Cart Reminder** — Reminds the customer of items left in the cart (1st, 2nd, 3rd follow-up).
+- **Saved Cart Expiry Warning** — Alerts that saved cart items are about to expire.
+- **Price Drop on Cart Item** — Notifies if a cart item's price has decreased.
+- **Back in Stock (Cart Item)** — Alerts when an out-of-stock cart item is available again.
+
+---
+
+## 7. Wishlist Emails
+
+- **Wishlist Item Back in Stock** — Notifies when a wishlisted item is available again.
+- **Wishlist Item Price Drop** — Alerts when a wishlisted item goes on sale.
+- **Wishlist Item Low Stock** — Urgency alert that a wishlisted item is running low.
+- **Wishlist Shared** — Confirmation when a customer shares their wishlist.
+
+---
+
+## 8. Subscription & Membership Emails
+
+- **Subscription Activated** — Confirms a subscription plan is active.
+- **Subscription Renewal Reminder** — Sent before the subscription auto-renews.
+- **Subscription Renewed** — Confirms successful renewal.
+- **Subscription Cancelled** — Confirms cancellation with end date.
+- **Subscription Expired** — Notifies that the subscription has ended.
+- **Membership Upgrade / Downgrade** — Confirms plan changes.
+
+---
+
+## 9. Review & Feedback Emails
+
+- **Review Request** — Asks the customer to review a purchased product.
+- **Review Published** — Confirms the review is live.
+- **Review Rejected** — Explains why a submitted review was not approved.
+- **Seller / Delivery Rating Request** — Asks for feedback on delivery or seller experience.
+
+---
+
+## 10. Loyalty & Rewards Emails
+
+- **Points Earned** — Confirms reward points added after a purchase.
+- **Points Expiry Warning** — Alerts that points are about to expire.
+- **Points Redeemed** — Confirms successful use of reward points.
+- **Tier Upgrade** — Notifies the customer they've moved to a higher loyalty tier.
+- **Referral Reward** — Confirms a referral bonus has been credited.
+
+---
+
+## 11. Coupon & Offer Emails
+
+- **Coupon Issued** — Delivers a discount code to the customer.
+- **Coupon Expiry Reminder** — Reminds the customer their coupon is expiring soon.
+- **Coupon Used Confirmation** — Confirms a coupon was applied to an order.
+- **Gift Card Received** — Delivers a gift card code from sender to recipient.
+- **Gift Card Balance Update** — Notifies remaining gift card balance after use.
+
+---
+
+## 12. Seller / Vendor Emails (for marketplaces)
+
+- **New Order Received** — Alerts seller about a new order to fulfill.
+- **Order Cancelled by Customer** — Notifies seller of cancellation.
+- **Return Initiated** — Informs seller a return is coming.
+- **Payout Processed** — Confirms seller payment has been sent.
+- **Low Inventory Alert** — Warns seller that a product is running low on stock.
+
+---
+
+That's a comprehensive list of all transactional emails in an ecommerce store. Let me know if you want email templates or Celery task implementations for any of these!

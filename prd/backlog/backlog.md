@@ -1,0 +1,64 @@
+- slug auto-populate for inventory model
+- slug auto-populate for inventory model
+- book meta data fetch from different api (Google Books etc.) not implemented.
+
+## Image Processing Features
+
+1. Remove background on the go - with checkbox
+2. Image enhancer on the go - with right controls
+
+## Catalog Module:
+
+Add Variant for a product with following conditions
+
+1. Not all products has variants.
+2. Variant can be on color, size, modelname or model number
+
+https://qthrifts.com
+
+https://tailwindflex.com/@code-huit/order-sumamary
+
+# Notifications:
+
+use django anymail for email and aws ses as emailer
+
+Deliver on moments of truth with 1:1 customer support:
+
+– Complement customer care with smart Whatsapp chatbots that can handle bulk of the routine queries
+– Reduce response time and operational costs with canned responses and self-serve flows
+– Gracefully handover to live agents for complex queries or irate customers
+
+## Retain your customers with awesome notification and customer service experiences.
+
+Rich Media Communication
+Enrich your customer interactions by sharing images, electronic tickets, video tutorials, audio files, QR codes, the position of the closest store, and any sort of documents.
+
+## Interactive Buttons
+
+Create call-to-actions and quick reply buttons within WhatsApp to get immediate responses from your audience.
+
+## Notifications and Customer Care Messages
+
+Enable customers to initiate a conversation with you anytime, anywhere.
+
+## WhatsApp Chatbots
+
+Automate conversations with your customers to progress them in the sales funnel, increase online bookings, manage their transactions, and provide timely responses to their queries.
+
+---
+
+## Photos model
+
+1.  Add FK to Authors model and link to Photos model. One author one photo
+2.  Add FK to Publisher model and link to Photos model. One publisher one photo
+3.
+
+---
+
+Inventory Autofill
+
+https://openlibrary.org/developers/api#rate-limits
+
+https://developers.google.com/books
+
+Good Reviews API

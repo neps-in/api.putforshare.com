@@ -1,0 +1,5 @@
+- Cart abandonment notification.
+- Send promotions, offers, and back-in-stock alerts while respecting customer permissions
+- Set up campaigns, send abandonment notifications, appointment alerts and re-buy reminders.
+- Trigger order and booking confirmations, subscription reminders, delivery updates.
+- Set template messages for you to notify your customers with important updates.

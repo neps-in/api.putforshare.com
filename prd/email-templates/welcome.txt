@@ -1,0 +1,22 @@
+Welcome aboard{% if first_name %}, {{ first_name }}{% endif %}!
+
+Thanks for joining {{ company_name|default:"PutForShare" }}. Your account is
+all set up and ready to use.
+
+{{ company_name|default:"PutForShare" }} helps you share what you have —
+books, gear, gadgets — with people who'd love to use them. Here's a quick start:
+
+  - List items you'd like to put up for sharing.
+  - Browse what others in your community are sharing.
+  - Connect with borrowers and lenders, hassle-free.
+
+Get started:
+{{ action_url|default:"https://dash.putforshare.com/onboarding" }}
+
+Happy sharing,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+Need help? Write to {{ company_email|default:"hi@putforshare.com" }}.
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.

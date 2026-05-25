@@ -1,0 +1,59 @@
+{% extends "email_base.html" %}
+
+{% block title %}Confirm your email — {{ company_name|default:"PutForShare" }}{% endblock %}
+{% block preheader %}Confirm your email address to finish setting up your {{ company_name|default:"PutForShare" }} account.{% endblock %}
+
+{% block content %}
+  <h1 style="margin:0 0 16px 0; color:#262626; font-size:24px; line-height:1.25; font-weight:700;">
+    Confirm your email address
+  </h1>
+
+  <p style="margin:0 0 14px 0;">
+    Hi{% if first_name %} {{ first_name }}{% endif %},
+  </p>
+
+  <p style="margin:0 0 14px 0;">
+    Thanks for signing up for <strong style="color:#007073;">{{ company_name|default:"PutForShare" }}</strong>!
+    To finish setting up your account, please verify that this email address
+    {% if user_email %}(<strong style="color:#262626;">{{ user_email }}</strong>){% endif %} belongs to you.
+  </p>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin:18px 0 24px 0;">
+    <tr>
+      <td align="center" bgcolor="#007073" style="border-radius:6px;">
+        <a href="{{ action_url }}"
+           style="display:inline-block; padding:13px 28px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:6px; background-color:#007073;">
+          Verify my email
+        </a>
+      </td>
+    </tr>
+  </table>
+
+  <p style="margin:0 0 6px 0; color:#666666; font-size:13px;">
+    Button not working? Copy and paste this link into your browser:
+  </p>
+  <p style="margin:0 0 18px 0; word-break:break-all;">
+    <a href="{{ action_url }}" style="color:#007073; text-decoration:underline; font-size:13px;">{{ action_url }}</a>
+  </p>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 18px 0;">
+    <tr>
+      <td style="background-color:#fff1ec; border-left:3px solid #f4c833; padding:12px 14px; border-radius:4px; color:#731d00; font-size:13px; line-height:1.5;">
+        ⏱ &nbsp;This verification link expires in
+        <strong>{{ expires_in_hours|default:"24" }} hour{{ expires_in_hours|default:"24"|pluralize }}</strong>.
+        You can request a new one anytime from your account settings.
+      </td>
+    </tr>
+  </table>
+
+  <p style="margin:0 0 8px 0; color:#666666; font-size:13px;">
+    <strong style="color:#262626;">Didn't sign up?</strong> You can safely ignore this email — no account will be created
+    unless you confirm. If you keep getting these, please write to
+    <a href="mailto:{{ company_email|default:'hi@putforshare.com' }}" style="color:#007073; text-decoration:none;">{{ company_email|default:"hi@putforshare.com" }}</a>.
+  </p>
+
+  <p style="margin:18px 0 0 0; color:#424242;">
+    Welcome aboard,<br />
+    <strong style="color:#007073;">The {{ company_name|default:"PutForShare" }} Team</strong>
+  </p>
+{% endblock %}

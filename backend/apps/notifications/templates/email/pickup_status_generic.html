@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      /* ... all your CSS exactly as you pasted ... */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #222;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100%;
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .card {
+        border: 1px solid #e6e6e6;
+        border-radius: 8px;
+        padding: 20px;
+        background: #ffffff;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .logo {
+        width: 48px;
+        height: 48px;
+        padding: 10px;
+        object-fit: contain;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 8px 0;
+        line-height: 1.45;
+      }
+      .muted {
+        color: #666;
+        font-size: 13px;
+      }
+      .details {
+        background: #f8f8f8;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 12px;
+      }
+      .details dt {
+        font-weight: 600;
+      }
+      .details dd {
+        margin: 0 0 8px 0;
+      }
+      .cta {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 10px 14px;
+        border-radius: 6px;
+        background: #0b76ef;
+        color: #fff !important;
+        text-decoration: none;
+      }
+      .footer {
+        margin-top: 18px;
+        font-size: 13px;
+        color: #666;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 12px;
+        background: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="header">
+          {% if company_logo_url %}
+          <img
+            src="{{ company_logo_url }}"
+            alt="{{ company_name }}"
+            class="logo"
+          />
+          {% endif %}
+          <div>
+            <h1>
+            {% if status == "DRAFT" %}
+              Your Pickup Request #{{ pickup_id }} Has Been Created and Saved as Draft
+            {% elif status == "BOOKED" %}
+              Your Pickup Request #{{ pickup_id }} Has Been BOOKED.
+            {% elif status == "READY_FOR_PICKUP" %}
+              Pickup Request #{{ pickup_id }} — is Ready for Pickup
+            {% elif status == "CANCELLED" %}
+              Pickup Request #{{ pickup_id }} Has Been Cancelled.
+            {% elif status == "PICKED_UP_AND_IN_TRANSIT" %}
+              Pickup Request #{{ pickup_id }} Has Been Picked up by Transport team from your address.
+            {% elif status == "RECEIVED" %}
+              Pickup Request #{{ pickup_id }} Received at Warehouse.
+            {% else %}
+              Update on Pickup Request #{{ pickup_id }}
+            {% endif %}
+          </h1>
+            <div class="muted">{{ company_name }}</div>
+          </div>
+        </div>
+
+        <p>
+          Dear {% if customer_name %}Mr. {{ customer_name }}{% else %}Customer {% endif %},
+        </p>
+
+        {% if status == "DRAFT" %}
+        <p>
+          We would like to inform you that your pickup request
+          <strong>#{{ pickup_id }}</strong> has been created and saved as a
+          <strong>DRAFT</strong>. Please review the details below and 
+          change the status as "BOOKED" when you are packings are completed and ready for pickup.
+        </p>
+
+        {% elif status == "BOOKED" %}
+        <p>
+          We are pleased to inform you that your pickup request
+          <strong>#{{ pickup_id }}</strong> has been
+          <strong>successfully BOOKED</strong>
+          Please keep all the packages (carton boxes) sealed with tape and
+          Shipping label pasted on side of each one of the packages (carton
+          boxes) ready. Once everything is done. Please change the status to
+          READY FOR PICKUP. So that our team will pickup from the below address.
+        </p>
+
+        {% elif status == "READY_FOR_PICKUP" %}
+        <p>
+          Your pickup request <strong>#{{ pickup_id }}</strong> is now
+          <strong>ready for pickup</strong>. Please ensure the package is <br />
+          1. Sealed with tapes <br />
+          2. Shipping labels are pasted on Side of the box (Not on top of the
+          box) <br />
+          3. You have one copy of the shipping label to handover to the person who
+          come for the pickup. <br />
+          4. kept in accessible place at the pickup address.
+        </p>
+
+        {% elif status == "CANCELLED" %}
+        <p>
+          We regret to inform you that your pickup request
+          <strong>#{{ pickup_id }}</strong> has been <strong>cancelled</strong>.
+          If you believe this is an error or wish to reschedule, please you can
+          change the status to READY_FOR_PICKUP
+        </p>
+
+        {% elif status == "RECEIVED" %}
+        <p>
+          Your pickup request <strong>#{{ pickup_id }}</strong> has been
+          <strong>received at our warehouse</strong>. Thank you for using our
+          service.
+        </p>
+
+        {% else %}
+        <p>
+          There has been an update to your pickup request
+          <strong>#{{ pickup_id }}</strong>. Please review the details below.
+        </p>
+        {% endif %}
+
+        <p>Please find the details below:</p>
+
+        <dl class="details">
+          <dt>Customer Name</dt>
+          <dd>{{ customer_name|default:"N/A" }}</dd>
+
+          <dt>Email</dt>
+          <dd>
+            <a href="mailto:{{ customer_email }}"
+              >{{ customer_email|default:"N/A" }}</a
+            >
+          </dd>
+
+          <dt>Pickup Address</dt>
+          <dd>{{ pickup_address|default:"N/A" }}</dd>
+
+          <dt>Landmark</dt>
+          <dd>{{ pickup_landmark|default:"N/A" }}</dd>
+
+          <dt>Current Status</dt>
+          <dd>
+            <span class="status-badge">{{ pickup_status|default:status }}</span>
+          </dd>
+        </dl>
+
+        {% if status == "DRAFT" %}
+        <a class="cta" href="{{ manage_pickup_url }}"
+          >Review & BOOK the Pickup</a>
+        {% elif status == "BOOKED" %}
+        <a class="cta" href="{{ manage_pickup_url }}">View Booking Details</a>
+        {% endif %}
+
+        <p class="muted" style="margin-top: 12px">
+          If you need any assistance or wish to make changes, please contact our
+          support team.
+        </p>
+
+        <p>Thank you for choosing our services.</p>
+
+        <div class="footer">
+          Warm regards,<br />
+          <strong>{{ company_name }}</strong><br />
+          Customer Support Team<br />
+          <a href="mailto:{{ company_email }}">{{ company_email }}</a> | {{ company_phone }}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

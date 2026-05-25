@@ -1,0 +1,75 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 1,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "Xk6THylQxRUC",
+      "etag": "iq9SNxLMIBo",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Xk6THylQxRUC",
+      "volumeInfo": {
+        "title": "Unix Power Tools",
+        "authors": ["Shelley Powers"],
+        "publisher": "\"O'Reilly Media, Inc.\"",
+        "publishedDate": "2003",
+        "description": "With the growing popularity of Linux and the advent of Darwin, Unix has metamorphosed into something new and exciting...",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780596003302"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0596003307"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 1154,
+        "printType": "BOOK",
+        "categories": ["Computers"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.3.3.0.preview.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Xk6THylQxRUC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Xk6THylQxRUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.co.in/books?id=Xk6THylQxRUC&printsec=frontcover&dq=isbn:0596003307&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.co.in/books?id=Xk6THylQxRUC&dq=isbn:0596003307&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Unix_Power_Tools.html?hl=&id=Xk6THylQxRUC"
+      },
+      "saleInfo": {
+        "country": "IN",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "IN",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Xk6THylQxRUC&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Want to try something new? Check this book first, and you're sure to find a tip or trick that will prevent you from learning things the hard way."
+      }
+    }
+  ]
+}

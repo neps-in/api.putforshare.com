@@ -1,0 +1,67 @@
+==================================================
+FILE: observations.md
+==================================================
+
+# Author
+
+1. Remove Authors CRUD, listing for SELLERS
+
+# Author for /admin - ADMIN Role
+
+2. In edit author, create author, slug should not be asked as input
+3. In edit when author name changes slug should be auto generated
+4. Slug should be displayed in the show component.
+5. listing: row click should be edit
+
+# Publishers
+
+Remove Publishers CRUD, listing for SELLERS
+
+# Publisher for /admin - ADMIN Role
+
+1. listing: in Publisher listing add sort by Created on, last updated. Default : last updated.
+2. listing: row click should be edit
+3. edit: when author name changes slug should be auto generated
+
+# My Address
+
+1. Edit address, Create Address look and feel, can expand in mobile screen to full mob width
+
+2. Pincode should be before Area colony and should auto populate the Area, Town, State values.
+3. Also pincode once entered should be checked for validity and service availability check and should display - Service Available - green color bg / Service Not Available - red color bg
+4. Only company name, landmark are optional other fields are required in the form, make required changes in the Address model, serializer if required, views if required.
+
+in Address aside -
+Helpful info
+Address Tips
+
+Use a clear address name like Home, Office, or Warehouse.
+Keep pincode, city, and state correct to avoid pickup issues.
+User Service Availability to check if service is available in your locality.
+Set defaults so shipping and billing are auto-selected.
+
+# Profile
+
+http://localhost:5173/#/my/profile/edit
+isSellerPlanLocked is not defined - error
+
+# Change my password
+
+Add eye icon for Current password, New Password.
+
+# My Dashboard
+
+Add Pincode Service Availablity Count Metrics
+
+Pincodes servicable / Total Pincodes
+
+# All Resource listing
+
+Remove Export in all listing in all resources.
+
+My Photos
+
+Help
+Alt Tag -
+
+

@@ -1,0 +1,18 @@
+Google Merchant feed sync failed
+================================
+
+A Google Merchant Centre feed sync just failed for {{ company_name|default:"PutForShare" }}.
+The catalogue on Google may now be out of date until the next successful sync.
+
+Log ID : {{ merchant_feed_log_id }}
+Trigger: {{ trigger_source|default:"unknown" }}
+
+{% if message %}Error details:
+--------------
+{{ message }}
+
+{% endif %}What to do:
+- Check the MerchantFeedSyncLog entry in the Django admin for the full payload and stack trace.
+- Re-run the sync via Inventory → Merchant Feed → Run now once the issue is resolved.
+
+— {{ company_name|default:"PutForShare" }} system notifications

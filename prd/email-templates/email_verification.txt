@@ -1,0 +1,24 @@
+Confirm your email address
+
+Hi{% if first_name %} {{ first_name }}{% endif %},
+
+Thanks for signing up for {{ company_name|default:"PutForShare" }}!
+To finish setting up your account, please verify that this email address{% if user_email %}
+({{ user_email }}){% endif %} belongs to you.
+
+Verify your email:
+{{ action_url }}
+
+This verification link expires in {{ expires_in_hours|default:"24" }} hour{{ expires_in_hours|default:"24"|pluralize }}.
+You can request a new one anytime from your account settings.
+
+Didn't sign up? You can safely ignore this email — no account will be created
+unless you confirm. If you keep getting these, please write to
+{{ company_email|default:"hi@putforshare.com" }}.
+
+Welcome aboard,
+The {{ company_name|default:"PutForShare" }} Team
+
+--
+You're receiving this email because an action was performed on your
+{{ company_name|default:"PutForShare" }} account.

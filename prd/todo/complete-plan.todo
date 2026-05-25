@@ -1,0 +1,41 @@
+Email content:
+    1. Onboarding email - Welcome
+    2. Forgotpass
+    3. 
+
+
+Order Processing:
+    Smart Sell:
+        1. Order Placed - to admin , buyer
+        2. Order Dispatched - to buyer, bcc admin
+    
+    Self Sell:
+        1. Order Placed - to admin , seller, buyer
+        2. Order Dispatched - to buyer, bcc admin
+
+Help System:
+
+    1. Search - add algolia search
+    2. Self Sell Preparation
+    3. Smart Sell Preparation
+    4. How to create Pickup Request
+    5. How to donate books ?
+    6. How to sell books at PutForShare.com 
+
+Dash:
+    Notify admin  someone signs up, 
+    when someone create a pickup request.
+    changes status for pickup request
+
+    For Admin:
+    Add Book Data 
+    We need to cache on the file system so that the next successive search can be made just by reading at it, the cache.
+
+NStore :
+    1. Add products via crawling 
+        Google, 
+        Open Library API
+        ISBNdb
+
+    2. APIFY as fallback - v2
+    3. Upload the image to bunny cdn

@@ -1,0 +1,51 @@
+{% extends "email_base.html" %}
+
+{% block title %}Google Merchant feed sync failed{% endblock %}
+{% block preheader %}A Google Merchant feed sync failed for {{ company_name|default:"PutForShare" }}. Log ID {{ merchant_feed_log_id }}.{% endblock %}
+
+{% block content %}
+  <h1 style="margin:0 0 16px 0; color:#731d00; font-size:22px; line-height:1.25; font-weight:700;">
+    ⚠️ Google Merchant feed sync failed
+  </h1>
+
+  <p style="margin:0 0 14px 0;">
+    A Google Merchant Centre feed sync just failed for
+    <strong style="color:#007073;">{{ company_name|default:"PutForShare" }}</strong>.
+    The catalogue on Google may now be out of date until the next successful sync.
+  </p>
+
+  {# Summary table — what failed, when, why. #}
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 18px 0; border-collapse:collapse; font-size:14px;">
+    <tr>
+      <td style="padding:8px 12px; background-color:#f3f9f9; border:1px solid #d8e6e6; color:#666666; width:140px;">Log&nbsp;ID</td>
+      <td style="padding:8px 12px; background-color:#ffffff; border:1px solid #d8e6e6; color:#262626;">
+        <code style="font-family: 'SF Mono', Menlo, Consolas, monospace; font-size:13px;">{{ merchant_feed_log_id }}</code>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px; background-color:#f3f9f9; border:1px solid #d8e6e6; color:#666666;">Trigger</td>
+      <td style="padding:8px 12px; background-color:#ffffff; border:1px solid #d8e6e6; color:#262626;">{{ trigger_source|default:"unknown" }}</td>
+    </tr>
+  </table>
+
+  {# Error details panel — soft red-tinted callout. #}
+  {% if message %}
+  <p style="margin:0 0 6px 0; color:#666666; font-size:13px;">Error details:</p>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 18px 0;">
+    <tr>
+      <td style="background-color:#fff1ec; border-left:3px solid #c0392b; padding:12px 14px; border-radius:4px; color:#731d00; font-size:13px; line-height:1.5; font-family: 'SF Mono', Menlo, Consolas, monospace; white-space:pre-wrap;">{{ message }}</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <p style="margin:0 0 8px 0; color:#666666; font-size:13px;">
+    <strong style="color:#262626;">What to do:</strong> Check the
+    <code style="font-family: 'SF Mono', Menlo, Consolas, monospace; font-size:13px;">MerchantFeedSyncLog</code>
+    entry in the Django admin for the full payload and stack trace, then re-run the sync via
+    <em>Inventory → Merchant Feed → Run now</em> once the underlying issue is resolved.
+  </p>
+
+  <p style="margin:18px 0 0 0; color:#424242;">
+    — {{ company_name|default:"PutForShare" }} system notifications
+  </p>
+{% endblock %}

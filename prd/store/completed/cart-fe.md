@@ -1,0 +1,12 @@
+have the cart icon in the top nav bar right most end, - Update evertime item is added in the cart .
+To catch the attention add simple animation to cart icon.
+And in the cart nav bar, show the number of items added in the cart.
+and
+
+Cart window
+Every time somebody adds an item to a cart and Show a pane on the right side,
+display the item in the cart
+below each item in the cart
+Show number of item in the text box, and
+add a plus button on the right and minus button on the left,
+and a delete button with only ic

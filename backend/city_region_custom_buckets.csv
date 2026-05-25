@@ -1,0 +1,632 @@
+category,city_name,state_name
+Central,Alirajpur,"MADHYA PRADESH"
+Central,Anuppur,"MADHYA PRADESH"
+Central,"Ashok Nagar","MADHYA PRADESH"
+Central,Balaghat,"MADHYA PRADESH"
+Central,Barwani,"MADHYA PRADESH"
+Central,Bastar,CHATTISGARH
+Central,Betul,"MADHYA PRADESH"
+Central,Bhind,"MADHYA PRADESH"
+Central,Bhopal,"MADHYA PRADESH"
+Central,Bijapur(CGH),CHATTISGARH
+Central,Bilaspur(CGH),CHATTISGARH
+Central,Burhanpur,"MADHYA PRADESH"
+Central,Chhatarpur,"MADHYA PRADESH"
+Central,Chhindwara,"MADHYA PRADESH"
+Central,Damoh,"MADHYA PRADESH"
+Central,Dantewada,CHATTISGARH
+Central,Datia,"MADHYA PRADESH"
+Central,Dewas,"MADHYA PRADESH"
+Central,Dhamtari,CHATTISGARH
+Central,Dhar,"MADHYA PRADESH"
+Central,Dindori,"MADHYA PRADESH"
+Central,Durg,CHATTISGARH
+Central,"East Nimar","MADHYA PRADESH"
+Central,Gariaband,CHATTISGARH
+Central,Guna,"MADHYA PRADESH"
+Central,Gwalior,"MADHYA PRADESH"
+Central,Harda,"MADHYA PRADESH"
+Central,Hoshangabad,"MADHYA PRADESH"
+Central,Indore,"MADHYA PRADESH"
+Central,Jabalpur,"MADHYA PRADESH"
+Central,Janjgir-champa,CHATTISGARH
+Central,Jashpur,CHATTISGARH
+Central,Jhabua,"MADHYA PRADESH"
+Central,Kanker,CHATTISGARH
+Central,Katni,"MADHYA PRADESH"
+Central,Kawardha,CHATTISGARH
+Central,Khandwa,"MADHYA PRADESH"
+Central,Khargone,"MADHYA PRADESH"
+Central,Korba,CHATTISGARH
+Central,Koriya,CHATTISGARH
+Central,Mahasamund,CHATTISGARH
+Central,Mandla,"MADHYA PRADESH"
+Central,Mandsaur,"MADHYA PRADESH"
+Central,Morena,"MADHYA PRADESH"
+Central,Narayanpur,CHATTISGARH
+Central,Narsinghpur,"MADHYA PRADESH"
+Central,Neemuch,"MADHYA PRADESH"
+Central,Panna,"MADHYA PRADESH"
+Central,Raigarh,CHATTISGARH
+Central,Raipur,CHATTISGARH
+Central,Raisen,"MADHYA PRADESH"
+Central,Rajgarh,"MADHYA PRADESH"
+Central,Rajnandgaon,CHATTISGARH
+Central,Ratlam,"MADHYA PRADESH"
+Central,Rewa,"MADHYA PRADESH"
+Central,Sagar,"MADHYA PRADESH"
+Central,Satna,"MADHYA PRADESH"
+Central,Sehore,"MADHYA PRADESH"
+Central,Seoni,"MADHYA PRADESH"
+Central,Shahdol,"MADHYA PRADESH"
+Central,Shajapur,"MADHYA PRADESH"
+Central,Sheopur,"MADHYA PRADESH"
+Central,Shivpuri,"MADHYA PRADESH"
+Central,Sidhi,"MADHYA PRADESH"
+Central,Singrauli,"MADHYA PRADESH"
+Central,Surguja,CHATTISGARH
+Central,Tikamgarh,"MADHYA PRADESH"
+Central,Ujjain,"MADHYA PRADESH"
+Central,Umaria,"MADHYA PRADESH"
+Central,Vidisha,"MADHYA PRADESH"
+Central,"West Nimar","MADHYA PRADESH"
+East,Angul,ODISHA
+East,Araria,BIHAR
+East,Arwal,BIHAR
+East,Aurangabad(BH),BIHAR
+East,Balangir,ODISHA
+East,Baleswar,ODISHA
+East,Banka,BIHAR
+East,Bankura,"WEST BENGAL"
+East,Bardhaman,"WEST BENGAL"
+East,Bargarh,ODISHA
+East,Begusarai,BIHAR
+East,Bhadrak,ODISHA
+East,Bhagalpur,BIHAR
+East,Bhojpur,BIHAR
+East,Birbhum,"WEST BENGAL"
+East,Bokaro,JHARKHAND
+East,Boudh,ODISHA
+East,Buxar,BIHAR
+East,Chatra,JHARKHAND
+East,"Cooch Behar","WEST BENGAL"
+East,Cuttack,ODISHA
+East,Darbhanga,BIHAR
+East,Darjiling,"WEST BENGAL"
+East,Debagarh,ODISHA
+East,Deoghar,JHARKHAND
+East,Dhanbad,JHARKHAND
+East,Dhenkanal,ODISHA
+East,Dumka,JHARKHAND
+East,"East Champaran",BIHAR
+East,"East Midnapore","WEST BENGAL"
+East,"East Singhbhum",JHARKHAND
+East,Gajapati,ODISHA
+East,Ganjam,ODISHA
+East,Garhwa,JHARKHAND
+East,Gaya,BIHAR
+East,Giridh,JHARKHAND
+East,Godda,JHARKHAND
+East,Gopalganj,BIHAR
+East,Gumla,JHARKHAND
+East,Hazaribag,JHARKHAND
+East,Hooghly,"WEST BENGAL"
+East,Howrah,"WEST BENGAL"
+East,Jagatsinghapur,ODISHA
+East,Jajapur,ODISHA
+East,Jalpaiguri,"WEST BENGAL"
+East,Jamtara,JHARKHAND
+East,Jamui,BIHAR
+East,Jehanabad,BIHAR
+East,Jharsuguda,ODISHA
+East,"Kaimur (Bhabua)",BIHAR
+East,Kalahandi,ODISHA
+East,Kandhamal,ODISHA
+East,Katihar,BIHAR
+East,Kendrapara,ODISHA
+East,Kendujhar,ODISHA
+East,Khagaria,BIHAR
+East,Khorda,ODISHA
+East,Khunti,JHARKHAND
+East,Kishanganj,BIHAR
+East,Koderma,JHARKHAND
+East,Kolkata,"WEST BENGAL"
+East,Koraput,ODISHA
+East,Lakhisarai,BIHAR
+East,Latehar,JHARKHAND
+East,Lohardaga,JHARKHAND
+East,Madhepura,BIHAR
+East,Madhubani,BIHAR
+East,Malda,"WEST BENGAL"
+East,Malkangiri,ODISHA
+East,Mayurbhanj,ODISHA
+East,Medinipur,"WEST BENGAL"
+East,Munger,BIHAR
+East,Murshidabad,"WEST BENGAL"
+East,Muzaffarpur,BIHAR
+East,Nabarangapur,ODISHA
+East,Nadia,"WEST BENGAL"
+East,Nalanda,BIHAR
+East,Nawada,BIHAR
+East,Nayagarh,ODISHA
+East,"North 24 Parganas","WEST BENGAL"
+East,"North Dinajpur","WEST BENGAL"
+East,Nuapada,ODISHA
+East,Pakur,JHARKHAND
+East,Palamau,JHARKHAND
+East,Patna,BIHAR
+East,Puri,ODISHA
+East,Purnia,BIHAR
+East,Puruliya,"WEST BENGAL"
+East,Ramgarh,JHARKHAND
+East,Ranchi,JHARKHAND
+East,Rayagada,ODISHA
+East,Rohtas,BIHAR
+East,Saharsa,BIHAR
+East,Sahibganj,JHARKHAND
+East,Samastipur,BIHAR
+East,Sambalpur,ODISHA
+East,Saran,BIHAR
+East,Seraikela-kharsawan,JHARKHAND
+East,Sheikhpura,BIHAR
+East,Sheohar,BIHAR
+East,Simdega,JHARKHAND
+East,Sitamarhi,BIHAR
+East,Siwan,BIHAR
+East,Sonapur,ODISHA
+East,"South 24 Parganas","WEST BENGAL"
+East,"South Dinajpur","WEST BENGAL"
+East,Sundergarh,ODISHA
+East,Supaul,BIHAR
+East,Vaishali,BIHAR
+East,"West Champaran",BIHAR
+East,"West Midnapore","WEST BENGAL"
+East,"West Singhbhum",JHARKHAND
+Islands,Lakshadweep,LAKSHADWEEP
+Islands,Nicobar,"ANDAMAN & NICOBAR ISLANDS"
+Islands,"North And Middle Andaman","ANDAMAN & NICOBAR ISLANDS"
+Islands,"South Andaman","ANDAMAN & NICOBAR ISLANDS"
+North,Agra,"UTTAR PRADESH"
+North,Ajmer,RAJASTHAN
+North,Aligarh,"UTTAR PRADESH"
+North,Allahabad,"UTTAR PRADESH"
+North,Almora,UTTARAKHAND
+North,Alwar,RAJASTHAN
+North,Ambala,HARYANA
+North,"Ambedkar Nagar","UTTAR PRADESH"
+North,Amritsar,PUNJAB
+North,Ananthnag,"JAMMU & KASHMIR"
+North,Auraiya,"UTTAR PRADESH"
+North,Azamgarh,"UTTAR PRADESH"
+North,Bageshwar,UTTARAKHAND
+North,Bagpat,"UTTAR PRADESH"
+North,Bahraich,"UTTAR PRADESH"
+North,Ballia,"UTTAR PRADESH"
+North,Balrampur,"UTTAR PRADESH"
+North,Banda,"UTTAR PRADESH"
+North,Bandipur,"JAMMU & KASHMIR"
+North,Banswara,RAJASTHAN
+North,Barabanki,"UTTAR PRADESH"
+North,Baramulla,"JAMMU & KASHMIR"
+North,Baran,RAJASTHAN
+North,Bareilly,"UTTAR PRADESH"
+North,Barmer,RAJASTHAN
+North,Barnala,PUNJAB
+North,Basti,"UTTAR PRADESH"
+North,Bathinda,PUNJAB
+North,Bharatpur,RAJASTHAN
+North,Bhilwara,RAJASTHAN
+North,Bhiwani,HARYANA
+North,Bijnor,"UTTAR PRADESH"
+North,Bikaner,RAJASTHAN
+North,"Bilaspur (HP)","HIMACHAL PRADESH"
+North,Budaun,"UTTAR PRADESH"
+North,Budgam,"JAMMU & KASHMIR"
+North,Bulandshahr,"UTTAR PRADESH"
+North,Bundi,RAJASTHAN
+North,"Central Delhi",DELHI
+North,Chamba,"HIMACHAL PRADESH"
+North,Chamoli,UTTARAKHAND
+North,Champawat,UTTARAKHAND
+North,Chandauli,"UTTAR PRADESH"
+North,Chandigarh,CHANDIGARH
+North,Chitrakoot,"UTTAR PRADESH"
+North,Chittorgarh,RAJASTHAN
+North,Churu,RAJASTHAN
+North,Dausa,RAJASTHAN
+North,Dehradun,UTTARAKHAND
+North,Deoria,"UTTAR PRADESH"
+North,Dholpur,RAJASTHAN
+North,Doda,"JAMMU & KASHMIR"
+North,Dungarpur,RAJASTHAN
+North,"East Delhi",DELHI
+North,Etah,"UTTAR PRADESH"
+North,Etawah,"UTTAR PRADESH"
+North,Faizabad,"UTTAR PRADESH"
+North,Faridabad,HARYANA
+North,Faridkot,PUNJAB
+North,Farrukhabad,"UTTAR PRADESH"
+North,Fatehabad,HARYANA
+North,"Fatehgarh Sahib",PUNJAB
+North,Fatehpur,"UTTAR PRADESH"
+North,Fazilka,PUNJAB
+North,Firozabad,"UTTAR PRADESH"
+North,Firozpur,PUNJAB
+North,Ganganagar,RAJASTHAN
+North,"Gautam Buddha Nagar","UTTAR PRADESH"
+North,Ghaziabad,"UTTAR PRADESH"
+North,Ghazipur,"UTTAR PRADESH"
+North,Gonda,"UTTAR PRADESH"
+North,Gorakhpur,"UTTAR PRADESH"
+North,Gurdaspur,PUNJAB
+North,Gurgaon,HARYANA
+North,Hamirpur,"UTTAR PRADESH"
+North,Hamirpur(HP),"HIMACHAL PRADESH"
+North,Hanumangarh,RAJASTHAN
+North,Hardoi,"UTTAR PRADESH"
+North,Haridwar,UTTARAKHAND
+North,Hathras,"UTTAR PRADESH"
+North,Hisar,HARYANA
+North,Hoshiarpur,PUNJAB
+North,Jaipur,RAJASTHAN
+North,Jaisalmer,RAJASTHAN
+North,Jalandhar,PUNJAB
+North,Jalaun,"UTTAR PRADESH"
+North,Jalor,RAJASTHAN
+North,Jammu,"JAMMU & KASHMIR"
+North,Jaunpur,"UTTAR PRADESH"
+North,Jhajjar,HARYANA
+North,Jhalawar,RAJASTHAN
+North,Jhansi,"UTTAR PRADESH"
+North,Jhujhunu,RAJASTHAN
+North,Jind,HARYANA
+North,Jodhpur,RAJASTHAN
+North,"Jyotiba Phule Nagar","UTTAR PRADESH"
+North,Kaithal,HARYANA
+North,Kangra,"HIMACHAL PRADESH"
+North,Kannauj,"UTTAR PRADESH"
+North,"Kanpur Dehat","UTTAR PRADESH"
+North,"Kanpur Nagar","UTTAR PRADESH"
+North,Kapurthala,PUNJAB
+North,Karauli,RAJASTHAN
+North,Kargil,"JAMMU & KASHMIR"
+North,Karnal,HARYANA
+North,Kathua,"JAMMU & KASHMIR"
+North,Kaushambi,"UTTAR PRADESH"
+North,Kheri,"UTTAR PRADESH"
+North,Kinnaur,"HIMACHAL PRADESH"
+North,Kota,RAJASTHAN
+North,Kulgam,"JAMMU & KASHMIR"
+North,Kullu,"HIMACHAL PRADESH"
+North,Kupwara,"JAMMU & KASHMIR"
+North,Kurukshetra,HARYANA
+North,Kushinagar,"UTTAR PRADESH"
+North,"Lahul & Spiti","HIMACHAL PRADESH"
+North,Lalitpur,"UTTAR PRADESH"
+North,Leh,"JAMMU & KASHMIR"
+North,Lucknow,"UTTAR PRADESH"
+North,Ludhiana,PUNJAB
+North,Maharajganj,"UTTAR PRADESH"
+North,Mahendragarh,HARYANA
+North,Mahoba,"UTTAR PRADESH"
+North,Mainpuri,"UTTAR PRADESH"
+North,Mandi,"HIMACHAL PRADESH"
+North,Mansa,PUNJAB
+North,Mathura,"UTTAR PRADESH"
+North,Mau,"UTTAR PRADESH"
+North,Meerut,"UTTAR PRADESH"
+North,Mirzapur,"UTTAR PRADESH"
+North,Moga,PUNJAB
+North,Mohali,PUNJAB
+North,Moradabad,"UTTAR PRADESH"
+North,Muktsar,PUNJAB
+North,Muzaffarnagar,"UTTAR PRADESH"
+North,Nagaur,RAJASTHAN
+North,Nainital,UTTARAKHAND
+North,Nawanshahr,PUNJAB
+North,"New Delhi",DELHI
+North,"North Delhi",DELHI
+North,"North East Delhi",DELHI
+North,"North West Delhi",DELHI
+North,Pali,RAJASTHAN
+North,Panchkula,HARYANA
+North,Panipat,HARYANA
+North,Pathankot,PUNJAB
+North,Patiala,PUNJAB
+North,"Pauri Garhwal",UTTARAKHAND
+North,Pilibhit,"UTTAR PRADESH"
+North,Pithoragarh,UTTARAKHAND
+North,Poonch,"JAMMU & KASHMIR"
+North,Pratapgarh,"UTTAR PRADESH"
+North,Pulwama,"JAMMU & KASHMIR"
+North,Raebareli,"UTTAR PRADESH"
+North,Rajauri,"JAMMU & KASHMIR"
+North,Rajsamand,RAJASTHAN
+North,Rampur,"UTTAR PRADESH"
+North,Reasi,"JAMMU & KASHMIR"
+North,Rewari,HARYANA
+North,Rohtak,HARYANA
+North,Ropar,PUNJAB
+North,Rudraprayag,UTTARAKHAND
+North,Rupnagar,PUNJAB
+North,Saharanpur,"UTTAR PRADESH"
+North,Sangrur,PUNJAB
+North,"Sant Kabir Nagar","UTTAR PRADESH"
+North,"Sant Ravidas Nagar","UTTAR PRADESH"
+North,"Sawai Madhopur",RAJASTHAN
+North,Shahjahanpur,"UTTAR PRADESH"
+North,Shimla,"HIMACHAL PRADESH"
+North,Shopian,"JAMMU & KASHMIR"
+North,Shrawasti,"UTTAR PRADESH"
+North,Siddharthnagar,"UTTAR PRADESH"
+North,Sikar,RAJASTHAN
+North,Sirmaur,"HIMACHAL PRADESH"
+North,Sirohi,RAJASTHAN
+North,Sirsa,HARYANA
+North,Sitapur,"UTTAR PRADESH"
+North,Solan,"HIMACHAL PRADESH"
+North,Sonbhadra,"UTTAR PRADESH"
+North,Sonipat,HARYANA
+North,"South Delhi",DELHI
+North,"South West Delhi",DELHI
+North,Srinagar,"JAMMU & KASHMIR"
+North,Sultanpur,"UTTAR PRADESH"
+North,"Tarn Taran",PUNJAB
+North,"Tehri Garhwal",UTTARAKHAND
+North,Tonk,RAJASTHAN
+North,Udaipur,RAJASTHAN
+North,"Udham Singh Nagar",UTTARAKHAND
+North,Udhampur,"JAMMU & KASHMIR"
+North,Una,"HIMACHAL PRADESH"
+North,Unnao,"UTTAR PRADESH"
+North,Uttarkashi,UTTARAKHAND
+North,Varanasi,"UTTAR PRADESH"
+North,"West Delhi",DELHI
+North,"Yamuna Nagar",HARYANA
+"North East",Aizawl,MIZORAM
+"North East",Barpeta,ASSAM
+"North East",Bishnupur,MANIPUR
+"North East",Bongaigaon,ASSAM
+"North East",Cachar,ASSAM
+"North East",Champhai,MIZORAM
+"North East",Chandel,MANIPUR
+"North East",Changlang,"ARUNACHAL PRADESH"
+"North East",Churachandpur,MANIPUR
+"North East",Darrang,ASSAM
+"North East",Dhalai,TRIPURA
+"North East",Dhemaji,ASSAM
+"North East",Dhubri,ASSAM
+"North East","Dibang Valley","ARUNACHAL PRADESH"
+"North East",Dibrugarh,ASSAM
+"North East",Dimapur,NAGALAND
+"North East","East Garo Hills",MEGHALAYA
+"North East","East Kameng","ARUNACHAL PRADESH"
+"North East","East Khasi Hills",MEGHALAYA
+"North East","East Siang","ARUNACHAL PRADESH"
+"North East","East Sikkim",SIKKIM
+"North East",Goalpara,ASSAM
+"North East",Golaghat,ASSAM
+"North East",Hailakandi,ASSAM
+"North East","Imphal East",MANIPUR
+"North East","Imphal West",MANIPUR
+"North East","Jaintia Hills",MEGHALAYA
+"North East",Jorhat,ASSAM
+"North East",Kamrup,ASSAM
+"North East","Karbi Anglong",ASSAM
+"North East",Karimganj,ASSAM
+"North East",Kiphire,NAGALAND
+"North East",Kohima,NAGALAND
+"North East",Kokrajhar,ASSAM
+"North East",Kolasib,MIZORAM
+"North East","Kurung Kumey","ARUNACHAL PRADESH"
+"North East",Lakhimpur,ASSAM
+"North East",Lawngtlai,MIZORAM
+"North East",Lohit,"ARUNACHAL PRADESH"
+"North East",Longleng,NAGALAND
+"North East","Lower Dibang Valley","ARUNACHAL PRADESH"
+"North East","Lower Subansiri","ARUNACHAL PRADESH"
+"North East",Lunglei,MIZORAM
+"North East",Mammit,MIZORAM
+"North East",Marigaon,ASSAM
+"North East",Mokokchung,NAGALAND
+"North East",Mon,NAGALAND
+"North East",Nagaon,ASSAM
+"North East",Nalbari,ASSAM
+"North East","North Cachar Hills",ASSAM
+"North East","North Sikkim",SIKKIM
+"North East","North Tripura",TRIPURA
+"North East","Papum Pare","ARUNACHAL PRADESH"
+"North East",Peren,NAGALAND
+"North East",Phek,NAGALAND
+"North East","Ri Bhoi",MEGHALAYA
+"North East",Saiha,MIZORAM
+"North East",Senapati,MANIPUR
+"North East",Serchhip,MIZORAM
+"North East",Sibsagar,ASSAM
+"North East",Sonitpur,ASSAM
+"North East","South Garo Hills",MEGHALAYA
+"North East","South Sikkim",SIKKIM
+"North East","South Tripura",TRIPURA
+"North East",Tamenglong,MANIPUR
+"North East",Tawang,"ARUNACHAL PRADESH"
+"North East",Thoubal,MANIPUR
+"North East",Tinsukia,ASSAM
+"North East",Tirap,"ARUNACHAL PRADESH"
+"North East",Tuensang,NAGALAND
+"North East",Ukhrul,MANIPUR
+"North East","Upper Siang","ARUNACHAL PRADESH"
+"North East","Upper Subansiri","ARUNACHAL PRADESH"
+"North East","West Garo Hills",MEGHALAYA
+"North East","West Kameng","ARUNACHAL PRADESH"
+"North East","West Khasi Hills",MEGHALAYA
+"North East","West Siang","ARUNACHAL PRADESH"
+"North East","West Sikkim",SIKKIM
+"North East","West Tripura",TRIPURA
+"North East",Wokha,NAGALAND
+"North East",Zunhebotto,NAGALAND
+South,Adilabad,TELANGANA
+South,Alappuzha,KERALA
+South,Ananthapur,"ANDHRA PRADESH"
+South,Ariyalur,"TAMIL NADU"
+South,Bagalkot,KARNATAKA
+South,Bangalore,KARNATAKA
+South,"Bangalore Rural",KARNATAKA
+South,Belgaum,KARNATAKA
+South,Bellary,KARNATAKA
+South,Bidar,KARNATAKA
+South,Bijapur(KAR),KARNATAKA
+South,Chamrajnagar,KARNATAKA
+South,Chennai,"TAMIL NADU"
+South,Chickmagalur,KARNATAKA
+South,Chikkaballapur,KARNATAKA
+South,Chitradurga,KARNATAKA
+South,Chittoor,"ANDHRA PRADESH"
+South,Coimbatore,"TAMIL NADU"
+South,Cuddalore,"TAMIL NADU"
+South,Cuddapah,"ANDHRA PRADESH"
+South,"Dakshina Kannada",KARNATAKA
+South,Davangere,KARNATAKA
+South,Dharmapuri,"TAMIL NADU"
+South,Dharwad,KARNATAKA
+South,Dindigul,"TAMIL NADU"
+South,"East Godavari","ANDHRA PRADESH"
+South,Ernakulam,KERALA
+South,Erode,"TAMIL NADU"
+South,Gadag,KARNATAKA
+South,Gulbarga,KARNATAKA
+South,Guntur,"ANDHRA PRADESH"
+South,Hassan,KARNATAKA
+South,Haveri,KARNATAKA
+South,Hyderabad,TELANGANA
+South,Idukki,KERALA
+South,K.V.Rangareddy,TELANGANA
+South,Kanchipuram,"TAMIL NADU"
+South,Kannur,KERALA
+South,Kanyakumari,"TAMIL NADU"
+South,Karaikal,PONDICHERRY
+South,"Karim Nagar",TELANGANA
+South,Karur,"TAMIL NADU"
+South,Kasargod,KERALA
+South,Khammam,TELANGANA
+South,Kodagu,KARNATAKA
+South,Kolar,KARNATAKA
+South,Kollam,KERALA
+South,Koppal,KARNATAKA
+South,Kottayam,KERALA
+South,Kozhikode,KERALA
+South,Krishna,"ANDHRA PRADESH"
+South,Krishnagiri,"TAMIL NADU"
+South,Kurnool,"ANDHRA PRADESH"
+South,Madurai,"TAMIL NADU"
+South,"Mahabub Nagar",TELANGANA
+South,Mahe,PONDICHERRY
+South,Malappuram,KERALA
+South,Mandya,KARNATAKA
+South,Medak,TELANGANA
+South,Mysore,KARNATAKA
+South,Nagapattinam,"TAMIL NADU"
+South,Nalgonda,TELANGANA
+South,Namakkal,"TAMIL NADU"
+South,Nellore,"ANDHRA PRADESH"
+South,Nilgiris,"TAMIL NADU"
+South,Nizamabad,TELANGANA
+South,Palakkad,KERALA
+South,Pathanamthitta,KERALA
+South,Perambalur,"TAMIL NADU"
+South,Pondicherry,PONDICHERRY
+South,Prakasam,"ANDHRA PRADESH"
+South,Pudukkottai,"TAMIL NADU"
+South,Raichur,KARNATAKA
+South,Ramanagar,KARNATAKA
+South,Ramanathapuram,"TAMIL NADU"
+South,Salem,"TAMIL NADU"
+South,Shimoga,KARNATAKA
+South,Sivaganga,"TAMIL NADU"
+South,Srikakulam,"ANDHRA PRADESH"
+South,Thanjavur,"TAMIL NADU"
+South,Theni,"TAMIL NADU"
+South,Thiruvananthapuram,KERALA
+South,Thrissur,KERALA
+South,Tiruchirappalli,"TAMIL NADU"
+South,Tirunelveli,"TAMIL NADU"
+South,Tiruvallur,"TAMIL NADU"
+South,Tiruvannamalai,"TAMIL NADU"
+South,Tiruvarur,"TAMIL NADU"
+South,Tumkur,KARNATAKA
+South,Tuticorin,"TAMIL NADU"
+South,Udupi,KARNATAKA
+South,"Uttara Kannada",KARNATAKA
+South,Vellore,"TAMIL NADU"
+South,Villupuram,"TAMIL NADU"
+South,Virudhunagar,"TAMIL NADU"
+South,Visakhapatnam,"ANDHRA PRADESH"
+South,Vizianagaram,"ANDHRA PRADESH"
+South,Warangal,TELANGANA
+South,Wayanad,KERALA
+South,"West Godavari","ANDHRA PRADESH"
+South,Yadgir,KARNATAKA
+West,"Ahmed Nagar",MAHARASHTRA
+West,Ahmedabad,GUJARAT
+West,Akola,MAHARASHTRA
+West,Amravati,MAHARASHTRA
+West,Amreli,GUJARAT
+West,Anand,GUJARAT
+West,Aurangabad,MAHARASHTRA
+West,Banaskantha,GUJARAT
+West,Beed,MAHARASHTRA
+West,Bhandara,MAHARASHTRA
+West,Bharuch,GUJARAT
+West,Bhavnagar,GUJARAT
+West,Buldhana,MAHARASHTRA
+West,Chandrapur,MAHARASHTRA
+West,"Dadra & Nagar Haveli","DADRA & NAGAR HAVELI"
+West,Dahod,GUJARAT
+West,Daman,"DAMAN & DIU"
+West,Dhule,MAHARASHTRA
+West,Diu,"DAMAN & DIU"
+West,Gadchiroli,MAHARASHTRA
+West,"Gandhi Nagar",GUJARAT
+West,Gondia,MAHARASHTRA
+West,Hingoli,MAHARASHTRA
+West,Jalgaon,MAHARASHTRA
+West,Jalna,MAHARASHTRA
+West,Jamnagar,GUJARAT
+West,Junagadh,GUJARAT
+West,Kachchh,GUJARAT
+West,Kheda,GUJARAT
+West,Kolhapur,MAHARASHTRA
+West,Latur,MAHARASHTRA
+West,Mahesana,GUJARAT
+West,Mumbai,MAHARASHTRA
+West,Nagpur,MAHARASHTRA
+West,Nanded,MAHARASHTRA
+West,Nandurbar,MAHARASHTRA
+West,Narmada,GUJARAT
+West,Nashik,MAHARASHTRA
+West,Navsari,GUJARAT
+West,"North Goa",GOA
+West,Osmanabad,MAHARASHTRA
+West,"Panch Mahals",GUJARAT
+West,Parbhani,MAHARASHTRA
+West,Patan,GUJARAT
+West,Porbandar,GUJARAT
+West,Pune,MAHARASHTRA
+West,Raigarh(MH),MAHARASHTRA
+West,Rajkot,GUJARAT
+West,Ratnagiri,MAHARASHTRA
+West,Sabarkantha,GUJARAT
+West,Sangli,MAHARASHTRA
+West,Satara,MAHARASHTRA
+West,Sindhudurg,MAHARASHTRA
+West,Solapur,MAHARASHTRA
+West,"South Goa",GOA
+West,Surat,GUJARAT
+West,"Surendra Nagar",GUJARAT
+West,Tapi,GUJARAT
+West,Thane,MAHARASHTRA
+West,"The Dangs",GUJARAT
+West,Vadodara,GUJARAT
+West,Valsad,GUJARAT
+West,Wardha,MAHARASHTRA
+West,Washim,MAHARASHTRA
+West,Yavatmal,MAHARASHTRA

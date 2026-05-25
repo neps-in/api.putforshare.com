@@ -1,0 +1,21 @@
+{
+  "isbn": "9788131720479",
+  "source": "openlibrary",
+  "book": {
+    "title": "Introduction to Automata Theory, Languages, and Computation",
+    "short_description": "",
+    "description": "",
+    "authors": [
+      "John E. Hopcroft"
+    ],
+    "publisher_name": "PEARSON INDIA",
+    "published_year": 2008,
+    "page_count": 554,
+    "isbn_10": "8131720470",
+    "isbn_13": "9788131720479",
+    "book_language": "",
+    "book_edition": "",
+    "min_retail_price": null,
+    "cover_image_url": "https://covers.openlibrary.org/b/id/12385150-L.jpg"
+  }
+}

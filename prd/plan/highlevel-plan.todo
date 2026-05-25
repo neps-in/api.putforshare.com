@@ -1,0 +1,83 @@
+# High level plan :
+    ☐ Help system and href to dash and nstore and landing-site
+
+# Dash:
+    ☐ Add right set of favicons 
+    ☐ There should be no blue color, 
+    ☐ change bg of + button in mobile screen in all listing page to suitable color from branding.md
+    
+    Address:
+        ☐ in the address form address type the choice should be
+            residence (7 AM To 9 PM Pickup/Delivery time)
+            commercial ( 10 AM to 6 PM Pickup/Delivery time)
+        ☐ Add locality field in frontend in address create/edit next to pincode column
+        ☐ When pincode is entered search for pincode from pincode table and fill only Town_city and
+        and state_region only remove filling of area_sector
+        ☐ Save - button color should be changed to Theme color and be consistent across all forms in dash/
+    
+    ☐ after login , in the left dashboard menu My Inventories should be placed at the last
+
+
+# UI / UX:
+    ☐ dash, nstore
+
+
+## Backend :
+    ☐ Install Celery + Redis [x] Done
+    - celery==5.4.0 — already installed (was in requirements.txt)
+    - redis==5.0.8 (Python client) — already installed
+    - Redis server — installed and started (enabled to auto-start on boot), responding to PING
+        responding to PING - PONG [x]
+    
+        Summary of what was fixed and confirmed:
+
+            ┌────────────────────────────────┬───────────────────────────────────────────────┐
+            │             Check              │                    Result                     │
+            ├────────────────────────────────┼───────────────────────────────────────────────┤
+            │ Worker ping                    │ pong from worker@pfs-dash                     │
+            ├────────────────────────────────┼───────────────────────────────────────────────┤
+            │ Task dispatch via Redis broker │ Task ID assigned, status PENDING → SUCCESS    │
+            ├────────────────────────────────┼───────────────────────────────────────────────┤
+            │ Task execution                 │ Drained 5 debounce queue entries, wrote to DB │
+            ├────────────────────────────────┼───────────────────────────────────────────────┤
+            │ Result backend (Redis)         │ Result retrieved in < 1s                      │
+            ├────────────────────────────────┼───────────────────────────────────────────────┤
+            │ Service user                   │ Fixed www-data → ubuntu to match gunicorn     │
+            └────────────────────────────────┴───────────────────────────────────────────────┘
+          
+            Both celery-worker and celery-beat are active and enabled for auto-start on reboot. 
+
+            ● All good. Here's what was done:
+
+                ┌──────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+                │       Step       │                                                                Detail                                                                 │
+                ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                │ Installed        │ django-anymail==15.0 (with [amazon-ses] extras — uses existing boto3)                                                                 │
+                ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                │ requirements.txt │ Pinned django-anymail==15.0                                                                                                           │
+                ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                │ INSTALLED_APPS   │ Added "anymail"                                                                                                                       │
+                ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                │ EMAIL_BACKEND    │ anymail.backends.amazon_ses.EmailBackend                                                                                              │
+                ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+                │ Auth             │ Uses the existing AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY env vars already in your settings via boto3 — no extra credentials needed │
+                └──────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+              
+                Env vars to set (in your .env / server environment):
+                DEFAULT_FROM_EMAIL=noreply@putforshare.com   # must be SES-verified
+                AWS_SES_REGION=ap-south-1                    # or override per-region
+
+    ☐ setup SES on aws
+    ☐ Send email using anyemail django
+    ☐ complete email notification for all emails
+
+
+    ● The service is gunicorn-api.putforshare.com.service. Run:
+
+        sudo systemctl restart gunicorn-api.putforshare.com.service
+      
+        Or for a zero-downtime graceful reload (sends SIGHUP to workers one by one):
+      
+        sudo systemctl reload gunicorn-api.putforshare.com.service
+      
+        reload is preferred in production as it keeps the socket alive and doesn't drop in-flight requests.

@@ -1,0 +1,523 @@
+==================================================
+FILE: ai-features-backlog.md
+==================================================
+
+AI Features
+
+Product Description generator
+
+
+==================================================
+FILE: backlog.md
+==================================================
+
+- slug auto-populate for inventory model
+- slug auto-populate for inventory model
+- book meta data fetch from different api (Google Books etc.) not implemented.
+
+## Image Processing Features
+
+1. Remove background on the go - with checkbox
+2. Image enhancer on the go - with right controls
+
+## Catalog Module:
+
+Add Variant for a product with following conditions
+
+1. Not all products has variants.
+2. Variant can be on color, size, modelname or model number
+
+https://qthrifts.com
+
+https://tailwindflex.com/@code-huit/order-sumamary
+
+# Notifications:
+
+use django anymail for email and aws ses as emailer
+
+Deliver on moments of truth with 1:1 customer support:
+
+– Complement customer care with smart Whatsapp chatbots that can handle bulk of the routine queries
+– Reduce response time and operational costs with canned responses and self-serve flows
+– Gracefully handover to live agents for complex queries or irate customers
+
+## Retain your customers with awesome notification and customer service experiences.
+
+Rich Media Communication
+Enrich your customer interactions by sharing images, electronic tickets, video tutorials, audio files, QR codes, the position of the closest store, and any sort of documents.
+
+## Interactive Buttons
+
+Create call-to-actions and quick reply buttons within WhatsApp to get immediate responses from your audience.
+
+## Notifications and Customer Care Messages
+
+Enable customers to initiate a conversation with you anytime, anywhere.
+
+## WhatsApp Chatbots
+
+Automate conversations with your customers to progress them in the sales funnel, increase online bookings, manage their transactions, and provide timely responses to their queries.
+
+---
+
+## Photos model
+
+1.  Add FK to Authors model and link to Photos model. One author one photo
+2.  Add FK to Publisher model and link to Photos model. One publisher one photo
+3.
+
+---
+
+Inventory Autofill
+
+https://openlibrary.org/developers/api#rate-limits
+
+https://developers.google.com/books
+
+Good Reviews API
+
+
+==================================================
+FILE: ._combined_output.txt
+==================================================
+
+==================================================
+FILE: ./ai-features-backlog.md
+==================================================
+
+AI Features
+
+Product Description generator
+
+
+==================================================
+FILE: ./backlog.md
+==================================================
+
+- slug auto-populate for inventory model
+- slug auto-populate for inventory model
+- book meta data fetch from different api (Google Books etc.) not implemented.
+
+## Image Processing Features
+
+1. Remove background on the go - with checkbox
+2. Image enhancer on the go - with right controls
+
+## Catalog Module:
+
+Add Variant for a product with following conditions
+
+1. Not all products has variants.
+2. Variant can be on color, size, modelname or model number
+
+https://qthrifts.com
+
+https://tailwindflex.com/@code-huit/order-sumamary
+
+# Notifications:
+
+use django anymail for email and aws ses as emailer
+
+Deliver on moments of truth with 1:1 customer support:
+
+– Complement customer care with smart Whatsapp chatbots that can handle bulk of the routine queries
+– Reduce response time and operational costs with canned responses and self-serve flows
+– Gracefully handover to live agents for complex queries or irate customers
+
+## Retain your customers with awesome notification and customer service experiences.
+
+Rich Media Communication
+Enrich your customer interactions by sharing images, electronic tickets, video tutorials, audio files, QR codes, the position of the closest store, and any sort of documents.
+
+## Interactive Buttons
+
+Create call-to-actions and quick reply buttons within WhatsApp to get immediate responses from your audience.
+
+## Notifications and Customer Care Messages
+
+Enable customers to initiate a conversation with you anytime, anywhere.
+
+## WhatsApp Chatbots
+
+Automate conversations with your customers to progress them in the sales funnel, increase online bookings, manage their transactions, and provide timely responses to their queries.
+
+---
+
+## Photos model
+
+1.  Add FK to Authors model and link to Photos model. One author one photo
+2.  Add FK to Publisher model and link to Photos model. One publisher one photo
+3.
+
+---
+
+Inventory Autofill
+
+https://openlibrary.org/developers/api#rate-limits
+
+https://developers.google.com/books
+
+Good Reviews API
+
+
+==================================================
+FILE: ./._combined_output.txt
+==================================================
+
+
+
+==================================================
+FILE: design-system-building.md
+==================================================
+
+# Design system
+
+1. Add favicon
+2. Add Header - two row header
+   1. row 1 - ht- 80px, bg color: #007073; and contains following
+      1. Add logo to left top in header
+      2. Add Brand to right to logo
+      3. Add Search bar in the center of navbar
+      4. Add to right CTA - Get Started
+   2. row to height - 40px bg: #007073 - lighter tint
+      1. Has these in navbar
+         1. Benefits - For Donors - For Sellers - For Buyers
+         2. Browse - Books - Categories - Tags
+         3. Seller Login
+         4. Book Donation
+         5. Stats Corner
+            1. User count
+            2. Books donated count
+            3. Tags count
+            4. Categories count
+            5. Contact Us
+            6. User Guide
+         6. About
+         7. Testimonials
+         8. Scholarship
+         9. Vision & Mission
+
+### Moltbook theme
+
+```css
+:root {
+  --bg-deep: #050810;
+  --bg-elevated: #111827;
+  --bg-surface: #0a0f1a;
+  --coral-bright: #ff4d4d;
+  --coral-dark: #991b1b;
+  --coral-mid: #e63946;
+  --cyan-bright: #00e5cc;
+  --cyan-mid: #14b8a6;
+  --github-hover-color: #f0f4ff;
+  --hero-title-end: #00e5cc;
+  --hero-title-start: #f0f4ff;
+  --logo-gradient-end: #991b1b;
+  --logo-gradient-start: #ff4d4d;
+  --pas-chip-bg: #e0e0e0;
+  --pas-chip-bg-hover: #d4d4d4;
+  --pas-chip-border: #c2c2c2;
+  --pas-chip-text: #1e1e1e;
+  --text-muted: #5a6480;
+  --text-primary: #f0f4ff;
+  --text-secondary: #8892b0;
+}
+html[data-theme="light"] {
+  --bg-deep: #fcfeff;
+  --bg-elevated: #f5f9ff;
+  --bg-surface: #ffffff;
+  --coral-bright: #ef4b58;
+  --coral-dark: #c43645;
+  --coral-mid: #de3f4d;
+  --cyan-bright: #008f87;
+  --cyan-mid: #00766e;
+  --github-hover-color: #0b1220;
+  --hero-title-end: #f04d5a;
+  --hero-title-start: #c93342;
+  --logo-gradient-end: #ea4c59;
+  --logo-gradient-start: #ff7079;
+  --text-muted: #5f7290;
+  --text-primary: #0b1220;
+  --text-secondary: #2e405c;
+}
+```
+
+
+==================================================
+FILE: logistics-v3.md
+==================================================
+
+# Shipment Charge Calculator
+
+## Frontend:
+
+In Every product detail page add button. Find my shipping charges.
+
+## Backend:
+
+- Calculate shipment charges by entering the src pincode and destination pincode to backend api.
+- Backend api should call shipper's api and retrieve the cost and Turn around time - delivery time.
+- Result price should be displayed to the customer in the frontend.
+- Delivery time-window logic for office/home not implemented.
+
+
+==================================================
+FILE: notifications-backlog.md
+==================================================
+
+- Cart abandonment notification.
+- Send promotions, offers, and back-in-stock alerts while respecting customer permissions
+- Set up campaigns, send abandonment notifications, appointment alerts and re-buy reminders.
+- Trigger order and booking confirmations, subscription reminders, delivery updates.
+- Set template messages for you to notify your customers with important updates.
+
+
+==================================================
+FILE: observations-cr.md
+==================================================
+
+# dashboard - admin dashboard,
+
+    you need to show cards with stats count.
+
+    In the catalogs card display active /  banned catalogs/ Total.
+     In users card display active users / banned users / total number of users.
+     In Shippers card display active shippers / shippers.
+     In staff card display total number of active staff / staffs
+     In Admins card display active admins / total number of admins
+     In pin codes card display  inactive pincodes / active number of pin codes /total number of pin codes.
+     In embargoes list count of pincodes in embargo.
+     In packages, total number of packages,
+     In storecredit effective store credit ,
+     In Pickup Fees total pickup fees that you can have,
+     In Inventories, total number of inventories, in-stock inventories, sold out inventories,
+     In Pickup Req.
+     Display - draft mode / booked / ready for pickup / picked / received / cancelled / total pickups created / and total number of pickup requests,
+
+# Listing & CRUD Operation
+
+## CRUD Operation
+
+1. All Create & Edit operation should have dirty check. If the user edited or input any text or any input and if he cancels, navigates to different section . Alert - Not saved should "return back and save" - Default CTA or ignore changes or cancel.
+2. Clicking a row will default to Show operation.
+3. All DELETE operation will be soft delete which will make archived to true.
+4. Once archived, it will not displayed in user listing and will be displayed only on admin listing.
+
+In the listing, do the following.
+
+## User listing
+
+1. In the user listing, display the following items in the same order, Clicking a row will default to show.
+
+   1. actions,() edit, delete, and view.
+   2. Clicking on the row will trigger show action.
+   3. These are the following list of items to be displayed for the users.
+      1. ID (sortable in ASC or DESC)
+      2. add inventory for the user - link. It should be a link to add inventory items with the user selected.
+      3. User detail. User detail will have user full name, username, email ID, and what kind of user he is, seller or buyer, or whatever it is.
+      4. Email verification email verification token, (sortable in ASC or DESC)
+      5. Mobile Number Verification - yes / no.(sortable in ASC or DESC)
+      6. Plan (sortable in ASC or DESC)
+      7. Donate book option, 50% or 100%.(sortable in ASC or DESC)
+      8. Number of inventories (sortable in ASC or DESC)
+      9. Number of address, (sortable in ASC or DESC)
+      10. Total store credit, (sortable in ASC or DESC)
+      11. Net earnings, (sortable in ASC or DESC)
+      12. UPI ID,(sortable in ASC or DESC)
+      13. UPI Verified yes/no
+      14. UPI Verified on (sortable in ASC or DESC)
+      15. Active,(sortable in ASC or DESC)
+      16. Staff,(sortable in ASC or DESC)
+      17. Super user,(sortable in ASC or DESC)
+      18. created on,(sortable in ASC or DESC)
+      19. updated on.(sortable in ASC or DESC)
+
+## User Show
+
+20. And when clicking on a specific user, we should display show
+21. the user's detail with the user profile photo and user basic details like username, email ID, mobile number, earnings.
+22. And we should have tabs like pickup request, inventories, sales orders, and the purchase orders.
+
+# Photos listing
+
+1. Photos listing should have the following row. Clicking a row will default to show.
+   1. Actions, edit and delete,
+   2. ID, (sortable in ASC or DESC)
+   3. image preview,
+   4. inventory associated with (sortable in ASC or DESC)
+   5. image URL (sortable in ASC or DESC)
+   6. file name (sortable in ASC or DESC)
+   7. alt tag (sortable in ASC or DESC)
+   8. status (sortable in ASC or DESC)
+   9. is archived (sortable in ASC or DESC)
+   10. created on (sortable in ASC or DESC)
+   11. updated on (sortable in ASC or DESC)
+
+# Inventory Listing
+
+1. Inventories should have a listing with the following fields in the same order.
+
+   1. action - edit, view, delete.
+   2. ID - table header PFS ID, (sortable in ASC or DESC)
+   3. Product name, (sortable in ASC or DESC)
+   4. Product category, (sortable in ASC or DESC)
+   5. Sold by, (sortable in ASC or DESC)
+   6. Photo,
+   7. Price, (sortable in ASC or DESC)
+   8. MRP, (sortable in ASC or DESC)
+   9. stock status, (sortable in ASC or DESC)
+   10. quantity, (sortable in ASC or DESC)
+   11. created on, (sortable in ASC or DESC)
+   12. updated on, (sortable in ASC or DESC)
+   13. last updated by, (sortable in ASC or DESC)
+   14. view counter, (sortable in ASC or DESC)
+   15. active - yes or no.(sortable in ASC or DESC)
+
+2. Inventory Create
+
+   1. To add an inventory, there should be a search box.
+      1. Provide or scan ISBN number text box.
+      2. Scan ISBN BARCODE Button
+      3. we should be able to take a photo and scan the ISBN number and fill ISBN Text box.
+      4. and then we should be able to retrieve the details from the API using BOOK Meta data API Retrieval section in this prd.
+      5. And there should be the following tabs and 1. product detail, 2. images, 3. offer, 4. Safety and Compliance. 5. 6. Product detail Tab. 1. Item name, 2. brand name, 3. Standard external product ID, which is the 1. ISBN-10, 2. ISBN-13, 3. UPC 4. GTIN 5. manufacturer, which will be the publisher, 6. product description, 7. item type name - book or soap or others 8. subject keyword, which will be the SEO keyword. There can be multiple SEO keywords added, and there can be a feature to suggest the list of keywords for this. 9. Number of page units and number of pages, 10. manufacturer contact information, 11. edition that comes under page, 12. and minimum reading age, 13. maximum reading age, minimum reading age units, example years, months, 14. maximum reading age units. 15. Language, 16. language type, published, language, English, 17. publication date, 18. genres, 19. unit count, 20. binding, paperback or coverbook, 21. book binding, 22. unit count, 23. product information, 24. std product information entity HSN code. 25. Subject code, 26. subject code, 27. edition number, 28. contact information, 29. author, author can be multiple authors, should be able to select from. 7. Image Tab. 1. You can add up to eight images, 2. first image will be the featured image. 8. Offer Tab 1. SKU, 2. product type, is it a book or whatever it is, 3. quantity, 4. price, 5. listing price, 6. maximum retail price. 7. There can be a way to automate the pricing - deffered. 8. Item condition, new, like new, very good, good, acceptable. 9. 9. Dimmensions Tab: 1. length, 2. width, 3. height 4. Units - following units, centimeter, feet, inches, millimeter. 5. weight, item weight in unit, milligrams, gram, kilogram, ounces, hundred pounds, pounds, tons.
+         . 10. safety and
+         compliance tab,
+         country,
+         region of origin,
+         dangerous goods regulation,
+
+   There should be an option to in inventory create save as draft and submit.
+
+# Addressbook
+
+## Search
+
+    Search by email ID, phone number, name, username, and all address field, and
+    pin code.
+
+## Listing
+
+The address book listing should have the following fields in the listing, and also there.
+
+the listing has the following fields in the same order.
+
+Action - Edit/ View / Delete, default is View or Show,
+
+ID,(sortable in ASC or DESC)
+Name,(sortable in ASC or DESC)
+UserName,(sortable in ASC or DESC)
+Email ID,(sortable in ASC or DESC)
+Mobile #,(sortable in ASC or DESC)
+Address.
+Landmark,(sortable in ASC or DESC)
+Pincode.(sortable in ASC or DESC)
+Address type and kind,(sortable in ASC or DESC)
+default shipping address,(sortable in ASC or DESC)
+default billing address,(sortable in ASC or DESC)
+Created on,(sortable in ASC or DESC)
+Updated on.(sortable in ASC or DESC)
+
+# Logistics - Packages
+
+## Listing
+
+1. All Package should have
+   1. id,
+   2. a name,
+   3. content info,
+   4. No oof items in the box
+   5. weight in kg, kg can be different units
+   6. length, breadth, height - in cm or different units
+
+## Create
+
+1.  id,
+2.  a name,
+3.  content info,
+4.  No oof items in the box
+5.  weight in kg, kg can be different units
+6.  length, breadth, height - in cm or different units
+7.  created_on, updated_on
+
+in addition to that accept how many boxes in this measurement and in the backend create those many rows or records with unique package id.
+
+## Edit
+
+1.  id,
+2.  name,
+3.  content info,
+4.  No oof items in the box
+5.  weight in kg, kg can be different units
+6.  length, breadth, height - in cm or different units
+
+# Pickup Req
+
+listing in the following order.
+
+1. action, edit/ view/ delete/ default to view or show.
+2. ID,
+3. created by,
+4. from pincode , to pincode.
+5. from address and to address,
+6. number of packages,
+7. total weight of all packages,
+8. fright charges,
+9. shipper,
+10. pickup scheduled date,
+11. pickup instruction any,
+12. pickup mode,
+13. created on,
+14. updated on,
+15. pickup status: as draft, booked, ready for pickup, picked up, request cancellation cancellation approved.
+16. Download shipping label.
+    User can have preferred units for display. but system and shipping labels will be in standard units used across industries
+    https://claude.ai/chat/01069e78-6839-4842-bc21-d7eea59291a3
+    https://chatgpt.com/c/69929c65-1f3c-8322-92ea-2a355cc6225d
+
+# Book Meta data API Retrieval
+
+Book API, there are different book APIs like Google Books. So we should call those APIs and get the referer information in JSON format. And these APIs returns different keys with values, okay? We have different API calls like Google Books and some other API vendors. We should normalize all those API into API responses with a single key, with proper key and value as we have in our database, and then populate the values in the text boxes. And we should download the image of when you are saving in an asynchronous way using Celery task.
+
+And after the image is downloaded, recreate the image in a different format with the high resolution in different formats like for a webp format and other formats like JPEG or PNG, and in different sizes.
+
+filename-thumbnail-h-height-w-width-px.ext
+
+
+==================================================
+FILE: recommended-backend-frontend-packages.md
+==================================================
+
+# Django Apps or packages to explore
+
+1. https://django-plans.readthedocs.io/en/latest/
+
+
+==================================================
+FILE: seo.md
+==================================================
+
+1. Create sitemap.xml for all urls,
+   1. new products added,
+   2. products edit
+   3. category list, and individual category
+
+
+==================================================
+FILE: validation-verification-backlog.md
+==================================================
+
+# Verify
+
+1. Change password
+2. Update profile
+3. LoginPage in store/src/App.jsx:630
+4. SignupPage in store/src/App.jsx:677
+5. ForgotPasswordPage in store/src/App.jsx:740
+6. ResetPasswordPage in store/src/App.jsx:786
+7. ChangePasswordPage in store/src/App.jsx:847
+8. ProfilePage in store/src/App.jsx:907
+
+---
+
+

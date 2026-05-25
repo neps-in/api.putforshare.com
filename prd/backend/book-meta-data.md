@@ -1,0 +1,5 @@
+Create three API extraction or metadata extraction functions or classes. One is Google Books API, wherein pull in all the metadata available from the Google Books for a given ISBN. Use another class for Open Library API. And use another class for ISBNDB in Django. Keep APIfy as a fallback scraping layer if you want to scrape from Amazon, Goodreads, or Flipkart.
+
+It's quite possible that sometimes Google Books will have most metadata for books for a particular book, and sometimes most of the metadata can be found on OpenDB, or sometimes you will get most of the metadata from ISBNDB. In that case, we need to strategize something like if we have picked the best metadata from all the sources, or retry in some other metadata, retry in a different source when the metadata is not available, or when most of the metadata is not available, or only when partial few metadata is available for a particular ISBN. And also, we should be able to have the choice for the user whether to choose Google data or OpenDB data or other manual input.
+
+Use celery Async for fetching the metadata

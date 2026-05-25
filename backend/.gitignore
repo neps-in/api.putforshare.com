@@ -1,0 +1,74 @@
+# ── Django ────────────────────────────────────────────
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django secrets & local config
+*.env
+.env.local
+.env.*.local
+local_settings.py
+instance/
+
+# Django collected static & media
+/staticfiles/
+/static_root/
+/mediafiles/
+/media/
+
+# Django database (SQLite for dev)
+db.sqlite3
+db.sqlite3-journal
+*.db
+
+# Migrations (keep or ignore — team choice; ignoring is safer for personal projects)
+# **/migrations/*.py
+# !**/migrations/__init__.py
+
+# Coverage
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+coverage.xml
+*.cover
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# mypy / type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,16 @@
+# PutForShare — Pending Work
+
+Format: short one-liner per item, with the file/path it touches and what "done" means.
+
+## Notifications
+
+- **Seed `merchant_feed_sync_failed` NotificationTemplate.**
+  - Built `prd/email-templates/merchant_feed_sync_failed.{html,txt}` extending `email_base.html`.
+  - Added to `seed_notification_templates.py` `TEMPLATES` list; row created in DB (2708 bytes).
+  - Extended `render_email_from_notification` to expose `notification`, `title`, `message`, `target_url`, `recipient` so the template can render the multi-line error block from `notification.message`.
+  - End-to-end render test confirms log ID, trigger source, error message, and PutForShare branding all appear.
+  - [x] Done [ ] Verified
+
+## Auth single-token caveat (informational, not urgent)
+
+- [ ] **Split `email_verification_token` into two purposes.** Currently both signup-verification and password-reset reuse the same `User.email_verification_token` field. A pending email-verification gets invalidated when the user requests a password reset (and vice versa). If this bites users, add a separate `password_reset_token` / `_expiry` pair and update `ForgotPasswordSerializer` + `ResetPasswordConfirmSerializer` accordingly.

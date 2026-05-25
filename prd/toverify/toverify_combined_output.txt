@@ -1,0 +1,69 @@
+==================================================
+FILE: photo-upload.md
+==================================================
+
+• Implemented end-to-end foundation for direct frontend-to-S3 image uploads with reusable photo linking across models.
+
+What I added
+
+1. Backend photo domain in backend/apps/photos/:
+
+- Photo model (metadata + S3 key/url + width/height + status): backend/apps/photos/models.py:11
+- Generic PhotoAttachment model (photo <-> any target) supporting 1-1, 1-_, _-\*: backend/apps/photos/models.py:50
+- Active manager (hides archived): backend/apps/photos/manager.py:1
+- S3 presign utilities (key generation + presigned PUT + public URL): backend/apps/photos/storage.py:14
+- Serializers + target resolution for user/product/book/soap/author/publisher/category/tag: backend/apps/photos/
+  serializers.py:10
+- API ViewSet with actions:
+  - POST /api/v1/photos/presign-upload/
+  - POST /api/v1/photos/{uuid}/mark-uploaded/
+  - POST /api/v1/photos/{uuid}/attach/
+  - POST /api/v1/photos/{uuid}/detach/
+  - GET /api/v1/photos/by-target/
+    in backend/apps/photos/views.py:22
+- Admin registration: backend/apps/photos/admin.py:1
+- Migration generated/applied: backend/apps/photos/migrations/0001_initial.py:1
+
+2. API routing/settings/deps:
+
+- Registered photos router: backend/apps/api/urls.py:36
+- Added S3/photo env settings: backend/config/settings.py:106
+- Added boto3 dependency: backend/requirements.txt:5
+
+3. Frontend direct upload flow:
+
+- API helpers for presign/complete/attach/list:
+  - requestPhotoUploadSignature
+  - markPhotoUploaded
+  - attachPhoto
+  - fetchTargetPhotos
+    in store/src/api.js:331
+- New upload UI page with:
+  - file upload
+  - camera capture (WebRTC)
+  - direct PUT to S3 presigned URL
+  - metadata finalize + target attach
+    in store/src/PhotoUploadPage.jsx:45
+- Route + nav link:
+  - header link Photo Upload: store/src/App.jsx:121
+  - route /photos/upload: store/src/App.jsx:1588
+- Styling for uploader/camera: store/src/styles.css:409
+
+Important note
+
+- npm registry is blocked in this environment, so I could not install a third-party camera package (react-webcam).
+- I implemented camera capture using browser getUserMedia in store/src/PhotoUploadPage.jsx:73 so it works now.
+
+Validation run
+
+- ./.venv/bin/python manage.py check passed.
+- ./.venv/bin/python manage.py migrate photos passed.
+- npm --prefix store run build passed.
+
+What you need to set
+
+- Configure backend env vars before using presigned uploads:
+  AWS_S3_BUCKET_NAME, AWS_S3_REGION_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, optional AWS_S3_PUBLIC_BASE_URL,
+  PHOTO_S3_UPLOAD_PREFIX, PHOTO_ALLOWED_CONTENT_TYPES, PHOTO_MAX_UPLOAD_BYTES.
+
+

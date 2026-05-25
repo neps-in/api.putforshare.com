@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>{% block title %}{{ company_name|default:"PutForShare" }}{% endblock %}</title>
+    <style>
+      /* Email-client safe resets */
+      body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+      body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f3f9f9; }
+
+      /* Mobile */
+      @media screen and (max-width: 600px) {
+        .email-container { width: 100% !important; }
+        .px-mobile { padding-left: 20px !important; padding-right: 20px !important; }
+        .btn a { display: block !important; }
+      }
+    </style>
+  </head>
+  <body style="margin:0; padding:0; background-color:#f3f9f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color:#424242;">
+    {# Preheader: hidden preview text shown by most clients in the inbox list. #}
+    <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#f3f9f9;">
+      {% block preheader %}{{ company_name|default:"PutForShare" }}{% endblock %}
+    </div>
+
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f3f9f9;">
+      <tr>
+        <td align="center" style="padding:32px 12px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" class="email-container" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:10px; overflow:hidden; border:1px solid #d8e6e6;">
+            {# ---- Header ---- #}
+            <tr>
+              <td align="center" style="padding:28px 24px 20px 24px; background-color:#007073;">
+                {% if logo_url %}
+                  <a href="{{ company_url|default:'https://putforshare.com' }}" style="text-decoration:none;">
+                    <img src="{{ logo_url }}" alt="{{ company_name|default:'PutForShare' }}" width="120" style="display:block; max-width:120px; height:auto;" />
+                  </a>
+                {% else %}
+                  <div style="color:#ffffff; font-size:22px; font-weight:700; letter-spacing:0.5px;">
+                    {{ company_name|default:"PutForShare" }}
+                  </div>
+                {% endif %}
+              </td>
+            </tr>
+
+            {# Thin accent stripe in brand gold. #}
+            <tr><td style="background-color:#f4c833; height:3px; line-height:3px; font-size:3px;">&nbsp;</td></tr>
+
+            {# ---- Body ---- #}
+            <tr>
+              <td class="px-mobile" style="padding:32px 40px 24px 40px; color:#424242; font-size:15px; line-height:1.55;">
+                {% block content %}{% endblock %}
+              </td>
+            </tr>
+
+            {# ---- Footer ---- #}
+            <tr>
+              <td class="px-mobile" style="padding:20px 40px 28px 40px; border-top:1px solid #d8e6e6; background-color:#f3f9f9; color:#666666; font-size:12px; line-height:1.5;">
+                <p style="margin:0 0 6px 0;">
+                  &copy; {% now "Y" %} <strong style="color:#262626;">{{ company_name|default:"PutForShare" }}</strong>. All rights reserved.
+                </p>
+                <p style="margin:0 0 6px 0;">
+                  Need help? Write to
+                  <a href="mailto:{{ company_email|default:'hi@putforshare.com' }}" style="color:#007073; text-decoration:none;">{{ company_email|default:"hi@putforshare.com" }}</a>.
+                </p>
+                <p style="margin:0; color:#888888;">
+                  You're receiving this email because an action was performed on your
+                  {{ company_name|default:"PutForShare" }} account.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

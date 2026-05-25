@@ -1,0 +1,123 @@
+{
+    "book": {
+        "publisher": "Springer",
+        "synopsis": "These Contributions, Written By The Foremost International Researchers And Practitioners Of Genetic Programming (gp), Explore The Synergy Between Theoretical And Empirical Results On Real-world Problems, Producing A Comprehensive View Of The State Of The Art In Gp. Topics In This Volume Include: Exploiting Subprograms In Genetic Programming, Schema Frequencies In Gp, Accessible Ai, Gp For Big Data, Lexicase Selection, Symbolic Regression Techniques, Co-evolution Of Gp And Lcs, And Applying Ecological Principles To Gp. It Also Covers Several Chapters On Best Practices And Lessons Learned From Hands-on Experience. Readers Will Discover Large-scale, Real-world Applications Of Gp To A Variety Of Problem Domains Via In-depth Presentations Of The Latest And Most Significant Results.",
+        "language": "en",
+        "image": "https://images.isbndb.com/covers/23412963483266.jpg",
+        "title_long": "Genetic Programming Theory and Practice XV (Genetic and Evolutionary Computation)",
+        "edition": "1",
+        "dimensions": "Height: 9.25195 inches, Length: 6.10235 inches, Weight: 0.6393405598 pounds, Width: 0.46 inches",
+        "dimensions_structured": {
+            "length": {
+                "unit": "inches",
+                "value": 6.10235
+            },
+            "width": {
+                "unit": "inches",
+                "value": 0.46
+            },
+            "weight": {
+                "unit": "pounds",
+                "value": 0.6393405598
+            },
+            "height": {
+                "unit": "inches",
+                "value": 9.25195
+            }
+        },
+        "pages": 202,
+        "date_published": "2018-12-22",
+        "subjects": [
+            "Computers & Technology",
+            "Computer Science",
+            "AI & Machine Learning",
+            "Programming",
+            "Algorithms",
+            "Engineering & Transportation",
+            "Engineering"
+        ],
+        "authors": [
+            "Wolfgang Banzhaf",
+            "Randal S. Olson",
+            "William Tozier",
+            "Rick Riolo"
+        ],
+        "title": "Genetic Programming Theory and Practice XV (Genetic and Evolutionary Computation)",
+        "isbn13": "9783030080310",
+        "msrp": 0,
+        "binding": "Paperback",
+        "isbn": "3030080315",
+        "isbn10": "3030080315"
+    }
+}
+
+---
+
+def search_by_isbn_isbndb(request, isbn):
+    hdr = {'Authorization': settings.ISBND_API_KEY
+}
+    url = f"https://api2.isbndb.com/book/{isbn}"
+    response = requests.get(url, headers=hdr)
+
+    if response.status_code == 200:
+        book_data = response.json()
+        print(json.dumps(book_data, indent=4))
+
+        if book_data:
+            book_info = book_data.get(f"ISBN:{isbn}",
+{})
+
+            isbn_10 = book_info.get("isbn10",
+['N/AAAAA'
+])
+            isbn_13 = book_info.get("isbn13",
+['N/AAABB'
+])
+
+            result = {
+    "title": f"{book_info.get('title', 'N/A')} {book_info.get('subtitle', '')}".strip(),
+    "authors": [author.get('name') for author in book_info.get("authors",
+        [])
+    ],
+                # "isbn_10": book_info.get("isbm_10",
+    "N/A"),
+    "isbn_10": isbn_10,
+    "isbn_13": isbn_13,
+                # "isbn_13": book_info.get("isbm_13",
+    "N/A"),
+    "page_count": book_info.get("number_of_pages",
+    "100"),
+    "publishers": [publisher.get('name') for publisher in book_info.get("publishers",
+        [])
+    ],
+    "published_year": book_info.get("publish_date",
+    "N/A"),
+    "cover_large": book_info.get("cover",
+    {}).get("large",
+    ""),
+    "cover_medium": book_info.get("cover",
+    {}).get("medium",
+    ""),
+    "cover_small": book_info.get("cover",
+    {}).get("small",
+    ""),
+    "description": book_info.get("description",
+    "N/A"),
+    "subjects": [subject.get('name') for subject in book_info.get("subjects",
+        [])
+    ],
+    "reviews_count": book_info.get("reviews_count",
+    "0"),
+}
+
+            return JsonResponse(result, json_dumps_params={'indent': 4
+})
+        else:
+            return JsonResponse({
+    "Error": f"No book found for ISBN: {isbn}"
+}, status=404)
+    else:
+        return JsonResponse({
+    "Error": f"Errorr occurred: {response.status_code}"
+}, status=response.status_code)
+

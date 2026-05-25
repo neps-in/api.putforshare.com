@@ -1,0 +1,680 @@
+==================================================
+FILE: 28-feb-2026-changes.md
+==================================================
+
+• 1. Built SEO sitemap support for /nstore with DRF-backed entities
+Changes:
+
+- Added seller sitemap backend support:
+  - GET /api/v1/inventory/sellers/with-product-count/
+  - GET /api/v1/inventory/sellers/<uuid>/products/
+- Added seller serializer/view/url + tests
+- Updated Next sitemap to include:
+  - products, tags, categories, authors, publishers, sellers
+- Added seller page route in Next:
+  - /seller/[uuid]/products
+    Files:
+- backend/apps/api/serializers.py
+- backend/apps/api/views.py
+- backend/apps/api/urls.py
+- backend/apps/api/tests.py
+- nstore/src/app/sitemap.js
+- nstore/src/lib/serverApi.js
+- nstore/src/app/seller/[uuid]/products/page.jsx
+
+2. Added /store production base-path support for Next + sitemap URLs
+   Changes:
+
+- Added configurable NEXT_BASE_PATH in Next config
+- Made sitemap prepend NEXT_PUBLIC_BASE_PATH/NEXT_BASE_PATH
+- Updated env examples
+  Files:
+- nstore/next.config.js
+- nstore/src/app/sitemap.js
+- nstore/.env.example
+
+3. Created env files for local + production
+   Changes:
+
+- Updated .env.local
+- Added .env.production preconfigured for /store
+  Files:
+- nstore/.env.local
+- nstore/.env.production
+
+4. Fixed Django CORS/CSRF for localhost:3000
+   Changes:
+
+- Made allowed origins env-configurable
+- Added sane defaults for both 3000 and 5173 hosts
+  Files:
+- backend/config/settings.py
+
+5. Redesigned /nstore/profile with professional UI
+   Changes:
+
+- Full profile page visual/UX overhaul
+- Better auth redirect handling and field errors
+  Files:
+- nstore/src/components/ProfilePageClient.jsx
+
+6. Implemented seller-only plan lock + upi_verified backend support
+   Changes:
+
+- Added User.upi_verified
+- Migration backfill:
+  - set upi_verified=true if upi_last_verified_on exists
+  - unlock non-seller plan_locked
+- Serializer logic: plan lock enforced only for sellers
+- Added tests for seller lock + upi_verified in /auth/me
+  Files:
+- backend/apps/users/models.py
+- backend/apps/users/migrations/0009_user_upi_verified_and_seller_plan_lock.py
+- backend/apps/api/serializers.py
+- backend/apps/api/tests.py
+- nstore/src/components/ProfilePageClient.jsx
+
+7. Updated /dash for upi_verified and seller lock parity
+   Changes:
+
+- Added UPI Verified toggle in admin user form
+- Added mobile/UPI verification chips in admin user show
+- Updated seller profile page behavior:
+  - seller-only plan lock logic
+  - plan lock helper text
+  - UPI verified status display
+    Files:
+- dash/src/index.jsx
+
+8. Header/nav updates in /nstore
+   Changes:
+
+- Added username before profile icon
+- Vertically aligned username with icon
+- Added Products menu item before Categories
+- Added logout item in profile menus with separator and logout last
+  Files:
+- nstore/src/components/Header.jsx
+
+9. Fixed hydration mismatch on /
+   Changes:
+
+- Prevented SSR/client auth state mismatch by deferring localStorage user load to useEffect
+  Files:
+- nstore/src/components/ClientShell.jsx
+
+10. Systematic debugging + fixes for empty storefront data
+    Root causes found:
+
+- backend connectivity issues to API
+- silent empty SSR fallbacks hiding failures
+- GraphQL path could return empty while REST had data
+  Changes:
+- Added explicit initial error propagation for categories/tags/authors/publishers
+- Added GraphQL→REST fallback for products/authors/publishers (both SSR + client API layers)
+- Added /product alias route to same listing as /
+  Files:
+- nstore/src/app/categories/page.jsx
+- nstore/src/app/tags/page.jsx
+- nstore/src/app/authors/page.jsx
+- nstore/src/app/publishers/page.jsx
+- nstore/src/components/CategoriesClient.jsx
+- nstore/src/components/TagsClient.jsx
+- nstore/src/components/AuthorsClient.jsx
+- nstore/src/components/PublishersClient.jsx
+- nstore/src/lib/serverApi.js
+- nstore/src/lib/api.js
+- nstore/src/app/product/page.jsx
+
+
+==================================================
+FILE: cred-context7.txt
+==================================================
+
+Context7 API Key
+
+contex7 ctx7sk-4a896cd9-f460-480c-8d43-fb17416ad014
+
+==================================================
+FILE: erDiagram.md
+==================================================
+
+erDiagram
+User ||--o{ Address : has
+User ||--o{ Product : sells
+User ||--o{ Order : places
+User ||--o{ OrderItem : sells
+User ||--o{ Cart : owns
+User ||--o{ CouponUsage : uses
+User ||--o{ Photo : uploads
+User ||--o{ Notification : receives
+User ||--o{ Notification : acts_as_actor
+User ||--|| UserNotificationPreference : preferences
+User ||--o{ Shipper : owns
+User ||--o{ PickupRequest : owns
+User ||--o{ PickupRequest : from_user
+User ||--o{ PickupRequest : to_user
+User ||--o{ Package : owns
+
+      Address ||--o{ Order : shipping_address
+      Address ||--o{ Order : billing_address
+      Address ||--o{ PickupRequest : from_address
+      Address ||--o{ PickupRequest : to_address
+
+      Category ||--o{ Product : categorizes
+
+      Product ||--o{ CartItem : in_cart
+      Product ||--o{ OrderItem : ordered_as
+      Product ||--o{ PackageProfile : packaged_as
+      Product ||--|| Book : book_details
+      Product ||--|| Soap : soap_details
+
+      Author }o--o{ Book : writes
+      Publisher ||--o{ Book : publishes
+
+      Cart ||--o{ CartItem : contains
+      CartItem }o--|| Product : for_product
+
+      Order ||--o{ OrderItem : contains
+      OrderItem }o--|| Product : for_product
+      OrderItem }o--|| User : seller
+
+      PaymentGateway ||--o{ Payment : processes
+      Order ||--o{ Payment : has
+      Payment ||--o{ Refund : has
+      Coupon ||--o{ CouponUsage : used_in
+      Order ||--o{ CouponUsage : applied_to
+      User ||--o{ CouponUsage : applied_by
+
+      PickupRequest ||--o{ Package : includes
+      Shipper ||--o{ PickupRequest : ships
+      Product ||--o{ PackageProfile : has
+
+      Photo ||--o{ PhotoAttachment : attaches
+      Photo }o--|| User : profile_image
+      Photo }o--|| Author : author_photo
+      Photo }o--|| Publisher : brand_image
+      PhotoAttachment }o--|| ContentType : generic_target
+
+      Notification ||--o{ NotificationDelivery : deliveries
+
+Notes:
+
+- Book and Soap use Django multi-table inheritance from Product (1–1 table links).
+- PhotoAttachment is a generic relation via ContentType and object_id.
+- Tags on Product use taggit and live in external taggit tables (not shown here).
+
+
+==================================================
+FILE: highlevel.md
+==================================================
+
+postgresql
+
+auth
+
+celery
+aws ses
+notification
+photos
+master
+
+## dash
+
+address
+packages
+pickup_req
+inventory - yes,
+book , soap, others,
+add inventory via api
+add photo by capturing using react component
+cart
+sales order
+
+## store
+
+home page
+category listing
+tag listing
+product listing
+search listing
+search in tag, category, title, description etc
+product detail
+add to cart
+checkout
+my purchase order
+my wishlist
+
+
+==================================================
+FILE: loading-prompt.md
+==================================================
+
+    Best for corporate, financial, or data-heavy dashboards where clarity is key.
+
+    "Initializing dashboard..."
+
+    "Fetching your latest data..."
+
+    "Syncing with the server..."
+
+    "Updating your workspace..."
+
+    "Optimizing your view..."
+
+    "Securing your connection..."
+
+    2. Conversational & Warm
+    Best for SaaS products, personal apps, or tools that want to feel like a "partner."
+
+    "Getting things ready for you..."
+
+    "Almost there!"
+
+    "One moment, we’re tidying up your data."
+
+    "Just a second, grabbing your insights..."
+
+    "Preparing your personalized view."
+
+    "Thanks for your patience!"
+
+    3. Witty & Playful
+    Best for creative tools, startups, or apps with a lighthearted brand identity.
+
+    "Reticulating splines..." (A classic industry nod)
+
+    "Brewing some fresh data..."
+
+    "Counting to infinity... please hold."
+
+    "Our hamsters are running as fast as they can."
+
+    "Loading the good stuff."
+
+    "Don't blink, we're almost done."
+
+    4. Transparent (Action-Oriented)
+    Best for complex dashboards where the wait might be slightly longer. Use these to explain why it’s taking time.
+
+    "Aggregating 24-hour metrics..."
+
+    "Connecting to the API..."
+
+    "Rendering data visualizations..."
+
+    "Compiling your custom report..."
+
+    "Verifying permissions..."
+
+
+==================================================
+FILE: prd-optimized-format.md
+==================================================
+
+Here's a format optimized for use with **Claude Code** that makes it easy to track, update, and programmatically parse:
+
+```markdown
+# PRD: [Project Name]
+
+## Status Dashboard
+
+**Last Updated:** 2024-02-14  
+**Overall Progress:** 45%  
+**Current Phase:** Development
+
+| Phase        | Progress | Status         |
+| ------------ | -------- | -------------- |
+| Requirements | 100%     | ✅ Complete    |
+| Design       | 100%     | ✅ Complete    |
+| Development  | 40%      | 🚧 In Progress |
+| Testing      | 0%       | ⏳ Pending     |
+| Deployment   | 0%       | ⏳ Pending     |
+
+---
+
+## Requirements
+
+### Functional Requirements
+
+- [x] FR-001: User authentication with OAuth2
+- [x] FR-002: Role-based access control
+- [ ] FR-003: User profile management
+- [ ] FR-004: Dashboard analytics
+- [ ] FR-005: Export data to CSV/PDF
+
+### Non-Functional Requirements
+
+- [x] NFR-001: Response time < 200ms
+- [ ] NFR-002: Support 10k concurrent users
+- [ ] NFR-003: 99.9% uptime SLA
+
+---
+
+## Technical Tasks
+
+### Backend
+
+- [x] BACK-001: Set up PostgreSQL database
+- [x] BACK-002: Create user schema
+- [x] BACK-003: Implement authentication endpoints
+- [ ] BACK-004: Create CRUD APIs for profiles
+- [ ] BACK-005: Add rate limiting middleware
+- [ ] BACK-006: Implement caching layer
+
+### Frontend
+
+- [x] FRONT-001: Initialize React project
+- [x] FRONT-002: Set up routing
+- [ ] FRONT-003: Build login/signup pages
+- [ ] FRONT-004: Create dashboard components
+- [ ] FRONT-005: Implement state management
+- [ ] FRONT-006: Add responsive design
+
+### Infrastructure
+
+- [ ] INFRA-001: Set up CI/CD pipeline
+- [ ] INFRA-002: Configure staging environment
+- [ ] INFRA-003: Set up monitoring (Datadog/New Relic)
+- [ ] INFRA-004: Configure auto-scaling
+
+---
+
+## Testing Checklist
+
+### Unit Tests
+
+- [ ] TEST-001: Auth service tests
+- [ ] TEST-002: User service tests
+- [ ] TEST-003: API endpoint tests
+- [ ] TEST-004: Frontend component tests
+
+### Integration Tests
+
+- [ ] TEST-005: End-to-end user flows
+- [ ] TEST-006: Database integration
+- [ ] TEST-007: Third-party API integration
+
+---
+
+## Decisions & Notes
+
+### 2024-02-14
+
+- ✅ Decided to use PostgreSQL over MongoDB
+- ✅ Selected React over Vue for frontend
+- 🚧 Still evaluating Redis vs Memcached for caching
+
+### 2024-02-10
+
+- ✅ Completed architecture review
+- ⚠️ Identified performance bottleneck in user query
+
+---
+
+## Blocked Items
+
+- [ ] BLOCKED-001: Waiting for API keys from vendor (Owner: @john)
+- [ ] BLOCKED-002: Design approval needed for dashboard (Owner: @sarah)
+```
+
+## Why This Format Works Well with Claude Code:
+
+1. **Structured IDs** (`FR-001`, `BACK-001`, etc.) - Easy to reference and search
+2. **Clear Checkboxes** - Claude Code can parse and update these programmatically
+3. **Progress Tracking** - Visual dashboard at the top
+4. **Dated Notes** - Maintains decision history
+5. **Blocked Items Section** - Highlights what needs attention
+
+## Claude Code Commands You Can Use:
+
+```bash
+# Ask Claude Code to update task status
+"Mark BACK-004 as complete in the PRD"
+
+# Generate progress report
+"Calculate the overall completion percentage from the PRD"
+
+# Add new tasks
+"Add a new backend task for email notifications to the PRD"
+
+# Update status dashboard
+"Update the status dashboard in the PRD based on completed checkboxes"
+```
+
+This format is both human-readable and machine-parseable, making it perfect for collaboration between you and Claude Code!
+
+
+==================================================
+FILE: prd-v3.md
+==================================================
+
+- Should coupons/discounts be added to checkout UI? -
+- Should wishlist/favorites be exposed to users?
+- Should the photo upload page be hidden behind a feature flag?
+
+
+==================================================
+FILE: sample-landing-page.md
+==================================================
+
+https://github.com/education/teachers/toolbox
+
+https://github.com/education/students
+
+https://github.com/education/partners
+
+
+==================================================
+FILE: store-prd.md
+==================================================
+
+# Storefront PRD (Frontend)
+
+## Summary
+
+Build a customer-facing storefront for Put For Share (pre-loved books and essentials). The frontend provides product discovery, browsing by taxonomy (categories/tags/authors/publishers), product details, cart, checkout with Razorpay, and account management (auth, profile, orders, addresses). It also includes an internal photo-upload utility for linking images to products, authors, publishers, etc.
+
+## Goals
+
+- Enable customers to discover and purchase products quickly (search, browse, filters, product detail).
+- Provide a full purchase journey: cart → checkout → payment → order success.
+- Support account lifecycle: signup, login, password reset, profile updates, address book, order history.
+- Provide a responsive, accessible UI that matches the brand styling used in the existing store.
+- Keep interactions fast with optimistic client-side cart updates and minimal friction.
+
+## Non-Goals
+
+- Admin/warehouse workflows.
+- Inventory creation or editing (beyond photo upload utility).
+- Analytics dashboards.
+- Multi-currency or multi-language support (future scope).
+
+## Target Users
+
+- Guest shoppers (browse, search, add to cart).
+- Registered customers (checkout, orders, profile, addresses).
+- Internal team members using the photo upload utility.
+
+## User Journeys
+
+1. **Browse & Search**: Landing → browse by category/tag/author/publisher → filter/sort → product detail.
+2. **Purchase**: Product list → add to cart → cart → checkout → Razorpay payment → order success.
+3. **Account**: Signup → login → profile updates → view orders → retry payment for failed orders.
+4. **Photo Upload**: Authenticated user → upload image → attach to target type.
+
+## Information Architecture / Routes
+
+- `/` Product listing (default products)
+- `/re-store` Rs 1 product listing (paginated)
+- `/under-10` Price-under listing (slider max price)
+- `/categories` Category listing
+- `/tags` Tag listing
+- `/authors` Author listing
+- `/publishers` Publisher listing
+- `/category/:uuid/products` Category product listing
+- `/tag/:slug/products` Tag product listing
+- `/author/:slug/books` Author product listing
+- `/publisher/:slug/books` Publisher product listing
+- `/product/:uuid` Product detail
+- `/cart` Cart page
+- `/checkout` Checkout (requires auth)
+- `/order-success` Order confirmation
+- `/orders` Order history
+- `/addresses` Address book
+- `/profile` Profile edit
+- `/login` Login
+- `/signup` Signup
+- `/forgot-password` Forgot password
+- `/reset-password` Reset password
+- `/change-password` Change password
+- `/photos/upload` Photo upload utility
+
+## Functional Requirements
+
+### Header & Navigation
+
+- Global header with brand, search, cart, profile, and "Browse By" dropdown.
+- Secondary nav with quick links (Re Store, 10 Rs Store, categories, tags, authors, publishers, etc.).
+- Header hidden on auth routes.
+
+### Product Listing
+
+- Search by name/short description/SKU (client-side filtering).
+- Sort: featured (default), price low-high, price high-low, name.
+- Stock filter: in-stock only.
+- Card view shows SKU, name, short description, sale price, stock status, add-to-cart.
+- Pagination for category/tag/author/publisher lists and special stores.
+
+### Product Detail
+
+- Show title, SKU, description, price, stock.
+- Category + tags links.
+- Book-specific metadata (ISBNs, language, edition, cover, pages, publisher, authors).
+
+### Cart & Cart Drawer
+
+- Add/remove/update quantities with stock constraints.
+- Drawer shows subtotal and quick link to cart.
+- Cart page shows item list and subtotal.
+
+### Checkout
+
+- Requires authentication; redirect to login if not logged in.
+- Select shipping address.
+- Order summary with subtotal/discount/total.
+- Initiate checkout and launch Razorpay modal.
+- Verify payment and navigate to order success on success.
+
+### Orders
+
+- List orders with status and items.
+- Retry payment for pending/failed orders.
+- Reorder for cancelled orders.
+
+### Auth
+
+- Signup (full name, username, email, password, TOS checkbox).
+- Login.
+- Forgot/reset password.
+- Change password.
+
+### Profile
+
+- Update full name, username, mobile, favourite book, UPI ID, plan.
+- Read-only fields for verification, inventories, earnings, created/updated dates.
+
+### Address Book
+
+- List addresses (read-only display).
+- Select address during checkout.
+
+### Photo Upload Utility
+
+- Auth-only.
+- Upload or capture image, presign S3 upload.
+- Attach photo to target (product/book/soap/user/author/publisher/category/tag) with relation type.
+
+## Integrations & APIs
+
+### GraphQL
+
+- Products list, product detail.
+- Categories/tags/authors/publishers with product counts.
+- Filtered products by category/tag/author/publisher.
+
+### REST
+
+- Re Store products: `inventory/re-store/products/`.
+- Under-price products: `inventory/under-price/products/`.
+- Addresses: `addresses/`.
+- Checkout preview: `checkout/preview/`.
+- Checkout initiate: `checkout/initiate/`.
+- Payment initiate: `payment/initiate/`.
+- Payment verify: `payment/verify/`.
+- Orders list: `orders/`.
+- Auth endpoints via shared `authClient`.
+- Photo upload: `photos/presign-upload/`, `photos/:uuid/mark-uploaded/`, `photos/:uuid/attach/`.
+
+## Data Model (Client)
+
+- Product: `uuid`, `sku`, `name`, `short_description`, `description`, `sale_price`, `stock_quantity`, `product_type`, `category`, `tag_details`, `book_details`.
+- Order: `uuid`, `status`, `total_payable`, `items[]`.
+- Cart item: product + `quantity` (client-managed).
+- User: `full_name`, `email`, `username`, `mobile`, `plan`, `favourite_book`, `upi_id`, `inventories`, `net_earnings`, `created_on`, `updated_on`.
+- Address: displayable fields, `default_shipping_address`.
+
+## UX/UI Requirements
+
+- Responsive layout with mobile-friendly toolbar and nav.
+- Skeleton loaders for product grids and details.
+- Brand styling with orange/teal palette and warm surfaces.
+- Auth pages use carousel variant for login/signup/forgot flows.
+- Cart drawer with overlay, animated open/close.
+- Focus-visible states on cards and inputs.
+
+## Error States
+
+- Backend unavailable → show error message on listing pages.
+- Empty states for lists (no products, no addresses, no orders).
+- Form errors mapped per field and top-level message.
+- Razorpay failure: show error and allow retry.
+
+## Accessibility
+
+- Keyboard navigation for cards and dropdowns.
+- ARIA labels on cart drawer, dropdowns, buttons.
+- Color contrast on badges and status pills.
+
+## Performance
+
+- Pagination for large lists.
+- Client-side search and sorting within the current page.
+- Avoid blocking renders; use loading placeholders.
+
+## Analytics (Optional)
+
+- Page view tracking by route.
+- Add-to-cart events.
+- Checkout start/complete.
+- Payment failure reasons.
+
+## Success Metrics
+
+- Conversion rate from product view to checkout.
+- Checkout completion rate.
+- Payment retry success rate.
+- Average time to first product interaction.
+
+## Risks & Mitigations
+
+- Payment SDK availability: handle missing Razorpay script and show actionable errors.
+- Stock accuracy: enforce max quantity in UI and prevent add beyond stock.
+- Auth token invalidation: on fetch failures, reset session and prompt login.
+
+## Open Questions
+
+- Do we need product images on listing cards (API currently not used)? - No tentatively
+- Should address creation/editing be added to storefront? - yes
+
+

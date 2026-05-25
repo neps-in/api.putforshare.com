@@ -1,0 +1,5 @@
+- tags - crud , listing [x],
+- list products by tags [x]
+- Cart model to be implemented [x]
+- Checkout & payment gateway integration . [x]
+- Create Author, Publisher models and CRUD, listing from PRD. [x]

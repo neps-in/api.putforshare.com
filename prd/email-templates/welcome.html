@@ -1,0 +1,52 @@
+{% extends "email_base.html" %}
+
+{% block title %}Welcome to {{ company_name|default:"PutForShare" }}{% endblock %}
+{% block preheader %}Welcome aboard, {{ first_name|default:"there" }} — your {{ company_name|default:"PutForShare" }} account is ready.{% endblock %}
+
+{% block content %}
+  <h1 style="margin:0 0 16px 0; color:#262626; font-size:24px; line-height:1.25; font-weight:700;">
+    Welcome aboard{% if first_name %}, {{ first_name }}{% endif %} 👋
+  </h1>
+
+  <p style="margin:0 0 14px 0;">
+    Thanks for joining <strong style="color:#007073;">{{ company_name|default:"PutForShare" }}</strong>.
+    Your account is all set up and ready to use.
+  </p>
+
+  <p style="margin:0 0 22px 0;">
+    {{ company_name|default:"PutForShare" }} helps you share what you have — books, gear, gadgets — with
+    people who'd love to use them. Here's a quick start:
+  </p>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px 0;">
+    <tr><td style="padding:6px 0;">📚 &nbsp;<strong style="color:#262626;">List items</strong> you'd like to put up for sharing.</td></tr>
+    <tr><td style="padding:6px 0;">🔎 &nbsp;<strong style="color:#262626;">Browse</strong> what others in your community are sharing.</td></tr>
+    <tr><td style="padding:6px 0;">🤝 &nbsp;<strong style="color:#262626;">Connect</strong> with borrowers and lenders, hassle-free.</td></tr>
+  </table>
+
+  {# Brand-teal CTA. Bulletproof button: table-based with VML fallback for Outlook. #}
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin:0 0 24px 0;">
+    <tr>
+      <td align="center" bgcolor="#007073" style="border-radius:6px;">
+        <a href="{{ action_url|default:'https://dash.putforshare.com/onboarding' }}"
+           style="display:inline-block; padding:13px 28px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:6px; background-color:#007073;">
+          Get started
+        </a>
+      </td>
+    </tr>
+  </table>
+
+  <p style="margin:0 0 6px 0; color:#666666; font-size:13px;">
+    If the button doesn't work, copy and paste this link into your browser:
+  </p>
+  <p style="margin:0 0 16px 0; word-break:break-all;">
+    <a href="{{ action_url|default:'https://dash.putforshare.com/onboarding' }}" style="color:#007073; text-decoration:underline; font-size:13px;">
+      {{ action_url|default:"https://dash.putforshare.com/onboarding" }}
+    </a>
+  </p>
+
+  <p style="margin:18px 0 0 0; color:#424242;">
+    Happy sharing,<br />
+    <strong style="color:#007073;">The {{ company_name|default:"PutForShare" }} Team</strong>
+  </p>
+{% endblock %}

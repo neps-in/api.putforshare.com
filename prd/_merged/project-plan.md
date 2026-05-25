@@ -1,0 +1,12725 @@
+# Merged content — prd/project-plan/
+
+_10 file(s) combined on this page._
+
+
+---
+
+# README.md : project-plan
+
+_Source: `prd/project-plan/README.md`_
+
+# Pre-Owned Gadgets Marketplace - Complete Documentation Package
+
+## 📦 Project Overview
+
+A mobile-responsive web marketplace for buying and selling pre-owned gadgets in India. Built with Django REST Framework (backend), PostgreSQL (database), and React + Tailwind CSS (frontend).
+
+**Version:** 2.1  
+**Last Updated:** February 2026  
+**Status:** Ready for Development
+
+---
+
+## 📚 Documentation Files
+
+### Core Planning Documents
+
+1. **prd.md** - Product Requirements Document
+   - Complete business objectives and KPIs
+   - User journeys and scenarios
+   - Functional requirements
+   - GTM and rollout plan
+   - **Start here** for understanding the product
+
+2. **sprint-plan.md** - 10-Week Development Sprint Plan
+   - 5 two-week sprints with detailed task breakdowns
+   - Story point estimates (248 total points)
+   - Sprint 1: Authentication & User Management (55 points)
+   - Sprint 2: Inventory, Categories & Tags (58 points)
+   - Sprint 3: Search, Browse & Product Details (35 points)
+   - Sprint 4: Payment Integration & Escrow (50 points)
+   - Sprint 5: Polish, Testing & Launch Prep (50 points)
+
+### Technical Architecture
+
+3. **database-schema.md** - Complete Database Design
+   - All 10+ Django models with fields and relationships
+   - ERD diagram (Mermaid format)
+   - Indexes and constraints for performance
+   - Migration strategy and sample data
+   - Query optimization tips
+
+4. **erd-diagram.mermaid** - Entity Relationship Diagram
+   - Visual database schema
+   - Can be rendered in GitHub, Notion, or Mermaid Live Editor
+   - Shows all tables and relationships
+
+### Implementation Guides
+
+5. **media-management-guide.md** - Media Model Complete Guide
+   - Central repository for all images (profile photos, inventory images)
+   - API endpoints (upload, list, update, archive)
+   - Frontend React components
+   - Image reuse and optimization
+   - Security and performance best practices
+
+6. **django-anymail-aws-ses-guide.md** - Email Service Setup
+   - Complete AWS SES configuration
+   - Django-anymail integration
+   - Email templates (verification, password reset, transactions)
+   - Testing and troubleshooting
+   - Cost estimation (62,000 free emails/month)
+
+### Change Documentation
+
+7. **schema-updates-v2.md** - Major Schema Changes Summary
+   - Enhanced User model (22 fields)
+   - Media model introduction
+   - Auto-generated nicknames
+   - Auto role assignment logic
+   - Change password feature
+   - Tailwind CSS integration
+   - Sprint impact analysis (+16 story points)
+
+8. **sprint-updates-summary.md** - Sprint 1 & 2 Updates
+   - Role-based authentication changes
+   - Hierarchical categories (django-treebeard)
+   - Flexible tagging (django-taggit)
+   - Technical dependencies
+
+9. **naming-conventions.md** - Terminology Updates
+   - Listing → Inventory
+   - SellerProfile → UserProfile
+   - Updated API endpoints, models, and routes
+   - Search & replace guide
+
+---
+
+## 🏗️ Tech Stack
+
+### Backend
+- **Framework:** Django 4.2+ with Django REST Framework
+- **Database:** PostgreSQL 14+
+- **Authentication:** JWT (JSON Web Tokens)
+- **Email:** Django-anymail + AWS SES
+- **Storage:** AWS S3 + CloudFront CDN
+- **Categories:** django-treebeard (hierarchical)
+- **Tags:** django-taggit
+- **Payments:** Razorpay
+
+### Frontend
+- **Framework:** React 18+
+- **Styling:** Tailwind CSS
+- **Routing:** React Router
+- **State:** React Context API
+- **HTTP Client:** Fetch API
+
+### Infrastructure
+- **Hosting:** AWS (Mumbai region - ap-south-1)
+- **Server:** EC2 or Railway/Render
+- **Database:** AWS RDS PostgreSQL or managed PostgreSQL
+- **Email:** AWS SES (62,000 free emails/month)
+- **Media Storage:** AWS S3 + CloudFront
+
+---
+
+## 📊 Database Schema Summary
+
+### Core Models (10 total)
+
+**Accounts App:**
+- `User` - 22 fields (UUID, email, username, mobile, UPI, seller_plan, etc.)
+- `UserProfile` - Extended profile with auto-generated nicknames
+- `Media` - Central repository for all images (reusable)
+- `ProfileImage` - Links users to profile photos
+
+**Categories App:**
+- `Category` - Hierarchical categories (django-treebeard)
+
+**Inventory App:**
+- `Inventory` - Product listings with full-text search
+- `InventoryImage` - Links inventory to media (many-to-many)
+- `Tag` - Flexible tagging (django-taggit)
+
+**Transactions App:**
+- `Transaction` - Payment transactions with escrow
+- `Dispute` - Buyer/seller dispute resolution
+
+---
+
+## 🎯 Key Features
+
+### User Management
+✅ Role-based authentication (BUYER, SELLER, ADMIN)  
+✅ Auto role assignment based on inventory  
+✅ Email + Google OAuth login  
+✅ Email and mobile verification  
+✅ Auto-generated Reddit-style nicknames  
+✅ Change password functionality  
+
+### Inventory Management
+✅ Create, edit, delete inventory items  
+✅ 1-5 images per item (reusable from Media library)  
+✅ Hierarchical categories with unlimited nesting  
+✅ Flexible tagging system  
+✅ Price comparison (marked price vs offer price)  
+✅ Condition tracking (Like New, Good, Fair)  
+
+### Search & Discovery
+✅ Full-text search on title, description, tags  
+✅ Filter by category, price range, condition, tags  
+✅ Sort by price (low-high, high-low) or newest  
+✅ Hide sold items automatically  
+✅ Related items suggestions  
+
+### Payments & Escrow
+✅ Razorpay integration for payments  
+✅ Escrow system (funds held until confirmed)  
+✅ Admin-managed payment releases  
+✅ Dispute resolution workflow  
+✅ Direct bank transfers to sellers  
+
+### Seller Features
+✅ Seller plans (SELF_SELL, SMART_SELL, DONATE)  
+✅ Donation options (50% or 100%)  
+✅ Net earnings tracking  
+✅ Bank details (encrypted storage)  
+✅ UPI ID verification  
+
+---
+
+## 🚀 Getting Started
+
+### 1. Review Core Documents (1-2 hours)
+- Read `prd.md` for business context
+- Review `database-schema.md` for technical architecture
+- Check `sprint-plan.md` for development timeline
+
+### 2. Set Up Development Environment
+- Install Python 3.10+, Node.js 18+, PostgreSQL 14+
+- Create virtual environment: `python -m venv venv`
+- Install dependencies (see sprint-plan.md Sprint 0)
+
+### 3. Configure Third-Party Services
+- AWS account (S3, SES, EC2)
+- Razorpay test account
+- Google OAuth credentials
+- Follow `django-anymail-aws-ses-guide.md` for email setup
+
+### 4. Start Sprint 1 Development
+- Implement User model with 22 fields
+- Set up JWT authentication
+- Create Media model
+- Build signup/login flows
+- **Estimated:** 2 weeks (55 story points)
+
+---
+
+## 📈 Project Timeline
+
+**Total Duration:** 10 weeks (5 sprints × 2 weeks)  
+**Total Story Points:** 248 points
+
+| Sprint | Focus | Duration | Points |
+|--------|-------|----------|--------|
+| Sprint 0 | Pre-development setup | 3-5 days | N/A |
+| Sprint 1 | Auth & User Management | 2 weeks | 55 |
+| Sprint 2 | Inventory, Categories & Tags | 2 weeks | 58 |
+| Sprint 3 | Search & Browse | 2 weeks | 35 |
+| Sprint 4 | Payment & Escrow | 2 weeks | 50 |
+| Sprint 5 | Polish & Launch | 2 weeks | 50 |
+
+**Beta Launch:** Week 10  
+**Full Launch:** Week 12-20 (after beta feedback)
+
+---
+
+## 💰 Cost Estimation
+
+### Development Costs (One-Time)
+- Team: ₹50,000 - ₹3,00,000 (8-10 weeks, India-based)
+- Third-party setup: ₹500 - ₹2,000 (domain, tools)
+
+### Monthly Operational Costs
+- **Hosting:** ₹500 - ₹2,000 (AWS Lightsail/DigitalOcean)
+- **Database:** ₹0 - ₹3,000 (PostgreSQL on same server or RDS)
+- **Storage (S3):** ₹500 - ₹2,000 (100GB with image reuse)
+- **CDN:** ₹300 - ₹1,000 (CloudFront)
+- **Email (SES):** ₹0 - ₹300 (62,000 free/month from EC2)
+- **Payment Processing:** 2% per transaction (₹200/month for 100 transactions)
+
+**Total Monthly:** ₹1,500 - ₹8,700  
+**First Year Total:** ₹18,000 - ₹1,04,400 operations + ₹50,000 - ₹3,00,000 development
+
+---
+
+## 🎯 Success Metrics (8-12 weeks post-launch)
+
+**KPIs:**
+- 1,000 active inventory listings
+- 100 completed transactions
+- 1% buyer repeat purchase rate
+
+**Qualitative:**
+- Positive beta user feedback (NPS >7)
+- <5% dispute rate
+- Zero critical security incidents
+
+---
+
+## 📝 Key Design Decisions
+
+### Why Media Model?
+- **30-40% storage savings** through image reuse
+- One upload, use in multiple inventories
+- Centralized management and analytics
+
+### Why Auto Role Assignment?
+- Simpler UX (no manual role selection)
+- Always accurate (reflects actual behavior)
+- Automatic BUYER ↔ SELLER transitions
+
+### Why Hierarchical Categories?
+- Better organization (Phones → iPhone → iPhone 13)
+- Precise filtering
+- SEO-friendly structure
+
+### Why Escrow Payments?
+- Build trust in C2C marketplace
+- Reduce fraud and disputes
+- Protect both buyers and sellers
+
+### Why Tailwind CSS?
+- Rapid development with utility classes
+- Small bundle size (PurgeCSS)
+- Responsive by default
+- Industry standard
+
+---
+
+## 🔧 Development Tools
+
+**Recommended:**
+- **IDE:** VS Code with Python, React extensions
+- **API Testing:** Postman or Insomnia
+- **Database Client:** pgAdmin or DBeaver
+- **Version Control:** Git + GitHub
+- **Project Management:** Jira or GitHub Projects
+- **Design:** Figma for mockups
+- **Communication:** Slack or Discord
+
+---
+
+## 📖 How to Use This Documentation
+
+### For Product Managers
+1. Start with `prd.md`
+2. Review `sprint-plan.md` for timeline
+3. Use for stakeholder communication
+
+### For Backend Developers
+1. Read `database-schema.md` thoroughly
+2. Follow `sprint-plan.md` Sprint 1 backend tasks
+3. Reference `django-anymail-aws-ses-guide.md` for email
+4. Check `media-management-guide.md` for image handling
+
+### For Frontend Developers
+1. Review `prd.md` for user flows
+2. Follow `sprint-plan.md` Sprint 1 frontend tasks
+3. Use Tailwind CSS (see sprint-plan.md)
+4. Reference `media-management-guide.md` for image upload components
+
+### For DevOps Engineers
+1. Review infrastructure requirements in `prd.md`
+2. Follow Sprint 0 tasks in `sprint-plan.md`
+3. Set up AWS services per `django-anymail-aws-ses-guide.md`
+4. Configure S3, CloudFront, SES, EC2
+
+### For QA Engineers
+1. Review test cases in `sprint-plan.md` (each sprint)
+2. Check `database-schema.md` for data validation rules
+3. Test API endpoints from `media-management-guide.md`
+
+---
+
+## 🔐 Security & Compliance
+
+**Implemented:**
+- ✅ Encrypted bank details (Fernet encryption)
+- ✅ HTTPS enforced (all connections)
+- ✅ Password hashing (bcrypt)
+- ✅ JWT authentication
+- ✅ Role-based access control
+- ✅ SQL injection prevention (Django ORM)
+- ✅ XSS protection (React escaping)
+- ✅ CSRF protection (Django middleware)
+
+**To Implement:**
+- [ ] Rate limiting (prevent abuse)
+- [ ] File upload virus scanning
+- [ ] 2FA for admin accounts (optional)
+- [ ] Security audit before launch
+
+**Compliance:**
+- India-based hosting (data residency)
+- RBI payment guidelines (escrow model)
+- Privacy Policy and Terms of Service
+- GDPR-style data rights (export, delete)
+
+---
+
+## 🐛 Known Limitations (V1)
+
+**Excluded from V1:**
+- ❌ In-app messaging (buyer-seller coordination offline)
+- ❌ Shipping integration (local meetups only)
+- ❌ Seller ratings/reviews
+- ❌ Bidding/auction system
+- ❌ Recommendation engine
+- ❌ Mobile apps (web-only, responsive)
+
+**Planned for V2:**
+- 📅 Shipping integration
+- 📅 In-app chat
+- 📅 Seller ratings
+- 📅 AI-powered recommendations
+- 📅 Mobile apps (React Native)
+
+---
+
+## 📞 Support & Feedback
+
+**During Development:**
+- Daily standups (15 min)
+- Sprint reviews (1 hour)
+- Retrospectives (1 hour)
+
+**Post-Launch:**
+- Beta feedback via Google Forms
+- User support via email
+- Bug tracking via GitHub Issues
+
+---
+
+## 🎓 Learning Resources
+
+**Django:**
+- Django Docs: https://docs.djangoproject.com/
+- DRF Docs: https://www.django-rest-framework.org/
+
+**React:**
+- React Docs: https://react.dev/
+- Tailwind CSS: https://tailwindcss.com/
+
+**PostgreSQL:**
+- PostgreSQL Docs: https://www.postgresql.org/docs/
+
+**AWS:**
+- S3 Guide: https://docs.aws.amazon.com/s3/
+- SES Guide: https://docs.aws.amazon.com/ses/
+
+**Django Packages:**
+- django-treebeard: https://django-treebeard.readthedocs.io/
+- django-taggit: https://django-taggit.readthedocs.io/
+- django-anymail: https://anymail.dev/
+
+---
+
+## ✅ Pre-Launch Checklist
+
+### Technical
+- [ ] All migrations run successfully
+- [ ] Sample data seeded (50-100 inventory items)
+- [ ] All tests passing (unit + integration)
+- [ ] Security audit completed
+- [ ] Performance testing (100 concurrent users)
+- [ ] Browser compatibility verified
+- [ ] Mobile responsive tested
+
+### Business
+- [ ] Terms of Service finalized
+- [ ] Privacy Policy finalized
+- [ ] Safety Guidelines published
+- [ ] Payment gateway live mode activated
+- [ ] AWS SES production access approved
+- [ ] Domain configured with SSL
+- [ ] Beta users recruited (20-30)
+
+### Operations
+- [ ] Monitoring configured (Sentry, Analytics)
+- [ ] Backup strategy implemented
+- [ ] Rollback plan documented
+- [ ] Admin accounts created
+- [ ] Customer support email set up
+- [ ] Incident response plan ready
+
+---
+
+## 📦 File Manifest
+
+```
+documentation/
+├── README.md (this file)
+├── prd.md
+├── sprint-plan.md
+├── database-schema.md
+├── erd-diagram.mermaid
+├── media-management-guide.md
+├── django-anymail-aws-ses-guide.md
+├── schema-updates-v2.md
+├── sprint-updates-summary.md
+└── naming-conventions.md
+```
+
+**Total:** 10 files  
+**Total Size:** ~180KB
+
+---
+
+## 🚀 Quick Start Commands
+
+```bash
+# Clone repository (when created)
+git clone <repo-url>
+cd marketplace
+
+# Backend setup
+python -m venv venv
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+pip install -r requirements.txt
+
+# Create .env file
+cp .env.example .env
+# Edit .env with your credentials
+
+# Database setup
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+
+# Frontend setup
+cd frontend
+npm install
+npm run dev
+
+# Run development server
+cd ..
+python manage.py runserver
+```
+
+---
+
+## 📅 Version History
+
+**v2.1 (Feb 2026)** - Current
+- Renamed Listing → Inventory
+- Renamed SellerProfile → UserProfile
+- Complete documentation package
+
+**v2.0 (Feb 2026)**
+- Enhanced User model (22 fields)
+- Media model introduction
+- Auto role assignment
+- Tailwind CSS integration
+
+**v1.0 (Feb 2026)**
+- Initial PRD and sprint plan
+- Basic database schema
+- Role-based authentication
+
+---
+
+## 🎉 Ready to Build!
+
+All documentation is complete and ready for development. Follow the sprint plan, start with Sprint 0 setup, and you'll have a fully functional marketplace in 10 weeks.
+
+**Good luck with your launch! 🚀**
+
+---
+
+**Package Version:** 2.1  
+**Last Updated:** February 09, 2026  
+**Prepared by:** Claude (AI Product Manager)  
+**For:** Pre-Owned Gadgets Marketplace Project
+
+
+---
+
+# database-schema.md : project-plan
+
+_Source: `prd/project-plan/database-schema.md`_
+
+# Database Schema Design: Pre-Owned Gadgets Marketplace
+
+## Overview
+
+This document defines the complete database schema for the marketplace including:
+- Entity Relationship Diagram (ERD)
+- Django models with all fields and relationships
+- Indexes and constraints for performance
+- Sample data structure
+
+**Database:** PostgreSQL 14+  
+**ORM:** Django 4.2+  
+**Region:** India (ap-south-1)
+
+---
+
+## Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    User ||--o{ UserProfile : has
+    User ||--o{ Inventory : creates
+    User ||--o{ Transaction : "buyer/seller"
+    User ||--o{ Dispute : raises
+    
+    Category ||--o{ Category : "parent/child"
+    Category ||--o{ Inventory : categorizes
+    
+    Inventory ||--o{ InventoryImage : has
+    Inventory ||--|{ Tag : "tagged_with"
+    Inventory ||--o| Transaction : "sold_in"
+    
+    Transaction ||--o| Dispute : has
+    
+    User {
+        int id PK
+        string email UK
+        string password
+        string role
+        boolean is_email_verified
+        datetime date_joined
+        datetime last_login
+    }
+    
+    UserProfile {
+        int id PK
+        int user_id FK
+        string full_name
+        string brand_name
+        string nickname
+        string bank_account_number
+        string ifsc_code
+        string bank_name
+        string branch_address
+        boolean consent_given
+        datetime created_at
+    }
+    
+    Category {
+        int id PK
+        string path UK
+        int depth
+        int numchild
+        string name
+        string slug UK
+        string description
+        string icon_url
+        boolean is_active
+        datetime created_at
+    }
+    
+    Inventory {
+        int id PK
+        int seller_id FK
+        int category_id FK
+        string title
+        text description
+        decimal marked_price
+        decimal offer_price
+        decimal discount_percentage
+        string condition
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+    
+    InventoryImage {
+        int id PK
+        int inventory_id FK
+        string image_url
+        int order
+        datetime uploaded_at
+    }
+    
+    Tag {
+        int id PK
+        string name UK
+        string slug UK
+    }
+    
+    Transaction {
+        int id PK
+        int buyer_id FK
+        int seller_id FK
+        int inventory_id FK
+        decimal amount
+        string payment_id
+        string status
+        text admin_notes
+        datetime created_at
+        datetime updated_at
+        datetime released_at
+    }
+    
+    Dispute {
+        int id PK
+        int transaction_id FK
+        int raised_by_id FK
+        string reason
+        text description
+        string status
+        text resolution_notes
+        datetime created_at
+        datetime resolved_at
+    }
+```
+
+---
+
+## Django Models
+
+### App Structure
+
+```
+marketplace/
+├── accounts/           # User, UserProfile
+├── categories/         # Category (django-treebeard)
+├── inventorys/          # Inventory, InventoryImage, Tag (django-taggit)
+├── transactions/      # Transaction, Dispute
+└── core/              # Shared utilities
+```
+
+---
+
+## 1. Accounts App
+
+### models.py
+
+```python
+import uuid
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.core.validators import RegexValidator
+from cryptography.fernet import Fernet
+from django.conf import settings
+
+
+class User(AbstractUser):
+    """
+    Custom user model with role-based authentication
+    """
+    
+    class Role(models.TextChoices):
+        BUYER = 'BUYER', 'Buyer'
+        SELLER = 'SELLER', 'Seller'
+        ADMIN = 'ADMIN', 'Admin'
+    
+    class SellerPlan(models.TextChoices):
+        SELF_SELL = 'SELF_SELL', 'Self Sell'
+        SMART_SELL = 'SMART_SELL', 'Smart Sell'
+        DONATE = 'DONATE', 'Donate'
+    
+    class DonationPercentage(models.IntegerChoices):
+        FIFTY = 50, '50%'
+        HUNDRED = 100, '100%'
+    
+    # Core Identity
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+    email = models.EmailField(unique=True, db_index=True)
+    username = models.CharField(max_length=150, unique=True, db_index=True)
+    
+    # Personal Information
+    full_name = models.CharField(max_length=255)
+    
+    # Email Verification
+    is_email_verified = models.BooleanField(default=False)
+    email_verification_token = models.CharField(max_length=100, blank=True, db_index=True)
+    email_verification_expiry = models.DateTimeField(null=True, blank=True)
+    
+    # Mobile Verification
+    mobile = models.CharField(
+        max_length=15,
+        blank=True,
+        validators=[
+            RegexValidator(
+                regex=r'^\+?1?\d{9,15}$',
+                message='Phone number must be entered in the format: "+919876543210"'
+            )
+        ]
+    )
+    mobile_verified = models.BooleanField(default=False)
+    mobile_last_verified_on = models.DateTimeField(null=True, blank=True)
+    
+    # Payment Information
+    upi_id = models.CharField(max_length=100, blank=True)
+    upi_id_last_verified_on = models.DateTimeField(null=True, blank=True)
+    
+    # Seller Configuration
+    seller_plan = models.CharField(
+        max_length=20,
+        choices=SellerPlan.choices,
+        blank=True,
+        help_text="Seller's chosen plan"
+    )
+    donation_percentage = models.IntegerField(
+        choices=DonationPercentage.choices,
+        null=True,
+        blank=True,
+        help_text="Donation percentage if seller_plan is DONATE"
+    )
+    net_earnings = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0.00,
+        help_text="Total earnings in INR"
+    )
+    
+    # Role & Status
+    role = models.CharField(
+        max_length=10,
+        choices=Role.choices,
+        default=Role.BUYER,
+        db_index=True,
+        help_text="Auto-assigned: BUYER by default, SELLER if has inventory"
+    )
+    
+    # Personal Preference
+    favorite_book = models.CharField(max_length=255, blank=True)
+    
+    # Status Fields
+    active = models.BooleanField(default=True, db_index=True)
+    archived = models.BooleanField(default=False, db_index=True)
+    
+    # Timestamps
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'full_name']
+    
+    class Meta:
+        db_table = 'users'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+        indexes = [
+            models.Index(fields=['email', 'is_email_verified']),
+            models.Index(fields=['role', 'active']),
+            models.Index(fields=['uuid']),
+            models.Index(fields=['mobile', 'mobile_verified']),
+            models.Index(fields=['active', 'archived']),
+        ]
+    
+    def __str__(self):
+        return f"{self.email} ({self.get_role_display()})"
+    
+    def auto_assign_role(self):
+        """
+        Auto-assign role based on inventory:
+        - Has inventorys → SELLER
+        - No inventorys → BUYER
+        """
+        if self.role == self.Role.ADMIN:
+            return  # Don't change admin role
+        
+        has_inventory = self.inventorys.filter(status='ACTIVE').exists()
+        new_role = self.Role.SELLER if has_inventory else self.Role.BUYER
+        
+        if self.role != new_role:
+            self.role = new_role
+            self.save(update_fields=['role', 'updated_on'])
+    
+    def verify_email(self, token):
+        """Verify email with token"""
+        from django.utils import timezone
+        if (self.email_verification_token == token and 
+            self.email_verification_expiry and 
+            self.email_verification_expiry > timezone.now()):
+            self.is_email_verified = True
+            self.email_verification_token = ''
+            self.email_verification_expiry = None
+            self.save(update_fields=['is_email_verified', 'email_verification_token', 
+                                    'email_verification_expiry', 'updated_on'])
+            return True
+        return False
+    
+    def verify_mobile(self):
+        """Mark mobile as verified"""
+        from django.utils import timezone
+        self.mobile_verified = True
+        self.mobile_last_verified_on = timezone.now()
+        self.save(update_fields=['mobile_verified', 'mobile_last_verified_on', 'updated_on'])
+    
+    def verify_upi_id(self):
+        """Mark UPI ID as verified"""
+        from django.utils import timezone
+        self.upi_id_last_verified_on = timezone.now()
+        self.save(update_fields=['upi_id_last_verified_on', 'updated_on'])
+    
+    def add_earnings(self, amount):
+        """Add to net earnings"""
+        self.net_earnings += amount
+        self.save(update_fields=['net_earnings', 'updated_on'])
+
+
+class UserProfile(models.Model):
+    """
+    Extended profile for sellers with bank details
+    Auto-generates unique cool nicknames (Reddit-style)
+    """
+    
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='user_profile'
+    )
+    
+    # Personal Information
+    full_name = models.CharField(max_length=255)
+    brand_name = models.CharField(max_length=255, blank=True)
+    nickname = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        help_text="Auto-generated unique cool name (Reddit-style)"
+    )
+    
+    # Bank Details (Encrypted)
+    bank_account_number = models.BinaryField()  # Encrypted
+    ifsc_code = models.CharField(
+        max_length=11,
+        validators=[
+            RegexValidator(
+                regex=r'^[A-Z]{4}0[A-Z0-9]{6}$',
+                message='Invalid IFSC code format'
+            )
+        ]
+    )
+    bank_name = models.CharField(max_length=255)
+    branch_address = models.TextField(blank=True)
+    
+    # Consent
+    consent_given = models.BooleanField(default=False)
+    consent_timestamp = models.DateTimeField(null=True, blank=True)
+    
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'user_profiles'
+        verbose_name = 'Seller Profile'
+        verbose_name_plural = 'Seller Profiles'
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.nickname}"
+    
+    def save(self, *args, **kwargs):
+        """Auto-generate nickname if not set"""
+        if not self.nickname:
+            self.nickname = self.generate_unique_nickname()
+        super().save(*args, **kwargs)
+    
+    @staticmethod
+    def generate_unique_nickname():
+        """
+        Generate unique Reddit-style nicknames
+        Format: AdjectiveNoun#### (e.g., CoolPanda4782)
+        """
+        import random
+        
+        adjectives = [
+            'Cool', 'Swift', 'Bright', 'Smart', 'Epic', 'Mega', 'Ultra', 'Super',
+            'Wild', 'Bold', 'Quick', 'Lucky', 'Happy', 'Mighty', 'Noble', 'Proud',
+            'Cosmic', 'Electric', 'Golden', 'Silver', 'Quantum', 'Turbo', 'Stellar'
+        ]
+        
+        nouns = [
+            'Panda', 'Tiger', 'Eagle', 'Falcon', 'Phoenix', 'Dragon', 'Lion', 'Wolf',
+            'Hawk', 'Bear', 'Fox', 'Shark', 'Panther', 'Cobra', 'Raven', 'Lynx',
+            'Viper', 'Jaguar', 'Otter', 'Badger', 'Racoon', 'Falcon', 'Condor'
+        ]
+        
+        while True:
+            adjective = random.choice(adjectives)
+            noun = random.choice(nouns)
+            number = random.randint(1000, 9999)
+            nickname = f"{adjective}{noun}{number}"
+            
+            # Check uniqueness
+            if not UserProfile.objects.filter(nickname=nickname).exists():
+                return nickname
+    
+    def set_bank_account(self, account_number):
+        """Encrypt and store bank account number"""
+        cipher = Fernet(settings.ENCRYPTION_KEY)
+        encrypted = cipher.encrypt(account_number.encode())
+        self.bank_account_number = encrypted
+    
+    def get_bank_account(self):
+        """Decrypt and return bank account number"""
+        cipher = Fernet(settings.ENCRYPTION_KEY)
+        decrypted = cipher.decrypt(self.bank_account_number)
+        return decrypted.decode()
+    
+    @property
+    def is_complete(self):
+        """Check if profile is 100% complete"""
+        return all([
+            self.full_name,
+            self.bank_account_number,
+            self.ifsc_code,
+            self.bank_name,
+            self.consent_given,
+        ])
+
+
+class Media(models.Model):
+    """
+    Central media repository for all images (profile photos, inventory images, etc.)
+    One media can be associated with multiple inventorys or profiles (reusable)
+    """
+    
+    class FileType(models.TextChoices):
+        IMAGE_JPEG = 'image/jpeg', 'JPEG Image'
+        IMAGE_PNG = 'image/png', 'PNG Image'
+        IMAGE_WEBP = 'image/webp', 'WebP Image'
+        IMAGE_GIF = 'image/gif', 'GIF Image'
+    
+    # Core Identity
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+    
+    # File Information
+    file_name = models.CharField(max_length=255)
+    alt_tag = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Alt text for accessibility"
+    )
+    file_type = models.CharField(
+        max_length=20,
+        choices=FileType.choices,
+        help_text="Auto-captured from content type"
+    )
+    
+    # Storage
+    s3_url = models.URLField(
+        max_length=500,
+        unique=True,
+        help_text="Full S3 URL with CDN"
+    )
+    
+    # Metadata
+    created_on = models.DateTimeField(auto_now_add=True, db_index=True)
+    
+    # Status
+    status = models.BooleanField(
+        default=True,
+        db_index=True,
+        help_text="Active/Inactive"
+    )
+    archived = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text="Soft delete"
+    )
+    
+    class Meta:
+        db_table = 'media'
+        verbose_name = 'Media'
+        verbose_name_plural = 'Media'
+        ordering = ['-created_on']
+        indexes = [
+            models.Index(fields=['uuid']),
+            models.Index(fields=['status', 'archived']),
+            models.Index(fields=['file_type', 'status']),
+            models.Index(fields=['created_on']),
+        ]
+    
+    def __str__(self):
+        return f"{self.file_name} ({self.uuid})"
+    
+    def get_usage_count(self):
+        """Get count of how many times this media is used"""
+        profile_usage = self.profile_images.count()
+        inventory_usage = self.inventory_images.count()
+        return profile_usage + inventory_usage
+    
+    def is_reusable(self):
+        """Check if media can be reused (not archived, active)"""
+        return self.status and not self.archived
+    
+    @classmethod
+    def create_from_upload(cls, file, alt_tag=''):
+        """
+        Create Media instance from uploaded file
+        Handles S3 upload and metadata extraction
+        """
+        import mimetypes
+        from django.core.files.storage import default_storage
+        
+        # Detect file type
+        content_type, _ = mimetypes.guess_type(file.name)
+        if content_type not in dict(cls.FileType.choices):
+            raise ValueError(f"Unsupported file type: {content_type}")
+        
+        # Generate unique filename
+        import uuid as uuid_lib
+        file_uuid = uuid_lib.uuid4()
+        extension = file.name.split('.')[-1]
+        unique_filename = f"media/{file_uuid}.{extension}"
+        
+        # Upload to S3
+        s3_path = default_storage.save(unique_filename, file)
+        s3_url = default_storage.url(s3_path)
+        
+        # Create Media record
+        media = cls.objects.create(
+            file_name=file.name,
+            alt_tag=alt_tag,
+            file_type=content_type,
+            s3_url=s3_url,
+        )
+        
+        return media
+```
+
+---
+
+## 2. Categories App
+
+### models.py
+
+```python
+from django.db import models
+from treebeard.mp_tree import MP_Node
+
+
+class Category(MP_Node):
+    """
+    Hierarchical category model using django-treebeard
+    Supports unlimited nesting (Phones > iPhone > iPhone 13)
+    """
+    
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True, db_index=True)
+    description = models.TextField(blank=True)
+    icon_url = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    node_order_by = ['name']  # Treebeard: order children alphabetically
+    
+    class Meta:
+        db_table = 'categories'
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        indexes = [
+            models.Index(fields=['slug', 'is_active']),
+            models.Index(fields=['path']),  # Treebeard materialized path
+        ]
+    
+    def __str__(self):
+        return self.get_full_path()
+    
+    def get_full_path(self):
+        """Get full category path (e.g., 'Phones > iPhone > iPhone 13')"""
+        ancestors = self.get_ancestors()
+        path_parts = [cat.name for cat in ancestors] + [self.name]
+        return ' > '.join(path_parts)
+    
+    def get_inventory_count(self):
+        """Get count of active inventorys in this category and subcategories"""
+        from inventorys.models import Inventory
+        descendant_ids = [self.id] + [cat.id for cat in self.get_descendants()]
+        return Inventory.objects.filter(
+            category_id__in=descendant_ids,
+            status=Inventory.Status.ACTIVE
+        ).count()
+    
+    def can_delete(self):
+        """Check if category can be deleted (no active inventorys)"""
+        return self.get_inventory_count() == 0
+```
+
+---
+
+## 3. Inventorys App
+
+### models.py
+
+```python
+from django.db import models
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
+from taggit.managers import TaggableManager
+from accounts.models import User
+from categories.models import Category
+
+
+class Inventory(models.Model):
+    """
+    Product inventory model with full-text search
+    """
+    
+    class Condition(models.TextChoices):
+        LIKE_NEW = 'LIKE_NEW', 'Like New'
+        GOOD = 'GOOD', 'Good'
+        FAIR = 'FAIR', 'Fair'
+    
+    class Status(models.TextChoices):
+        DRAFT = 'DRAFT', 'Draft'
+        ACTIVE = 'ACTIVE', 'Active'
+        SOLD = 'SOLD', 'Sold'
+    
+    # Relationships
+    seller = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='inventorys',
+        limit_choices_to={'role': User.Role.SELLER}
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name='inventorys'
+    )
+    
+    # Basic Information
+    title = models.CharField(max_length=200, db_index=True)
+    description = models.TextField()
+    
+    # Pricing
+    marked_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Original/MRP price in INR"
+    )
+    offer_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Selling price in INR",
+        db_index=True
+    )
+    discount_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        editable=False,
+        help_text="Auto-calculated discount %"
+    )
+    
+    # Condition & Status
+    condition = models.CharField(
+        max_length=10,
+        choices=Condition.choices,
+        db_index=True
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.DRAFT,
+        db_index=True
+    )
+    
+    # Tags (django-taggit)
+    tags = TaggableManager(blank=True)
+    
+    # Full-text search vector
+    search_vector = SearchVectorField(null=True, editable=False)
+    
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'inventorys'
+        verbose_name = 'Inventory'
+        verbose_name_plural = 'Inventorys'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['seller', 'status']),
+            models.Index(fields=['category', 'status']),
+            models.Index(fields=['offer_price', 'status']),
+            GinIndex(fields=['search_vector']),  # Full-text search index
+        ]
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(offer_price__lte=models.F('marked_price')),
+                name='offer_price_lte_marked_price'
+            ),
+        ]
+    
+    def __str__(self):
+        return f"{self.title} - ₹{self.offer_price}"
+    
+    def save(self, *args, **kwargs):
+        """Auto-calculate discount percentage before saving"""
+        if self.marked_price and self.offer_price:
+            discount = ((self.marked_price - self.offer_price) / self.marked_price) * 100
+            self.discount_percentage = round(discount, 2)
+        super().save(*args, **kwargs)
+    
+    def mark_as_sold(self):
+        """Mark inventory as sold"""
+        self.status = self.Status.SOLD
+        self.save(update_fields=['status', 'updated_at'])
+    
+    def get_primary_image(self):
+        """Get first image or None"""
+        return self.images.first()
+    
+    def get_image_urls(self):
+        """Get all image URLs as list"""
+        return list(self.images.order_by('order').values_list('image_url', flat=True))
+
+
+class InventoryImage(models.Model):
+    """
+    Association between Inventory and Media (many-to-many through model)
+    One inventory can have multiple images (1-5)
+    One image (Media) can be used in multiple inventorys (reusable)
+    """
+    inventory = models.ForeignKey(
+        Inventory,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    media = models.ForeignKey(
+        'accounts.Media',  # Reference to Media model
+        on_delete=models.PROTECT,  # Don't delete media if used in inventory
+        related_name='inventory_images'
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'inventory_images'
+        ordering = ['order']
+        unique_together = [('inventory', 'order')]
+        indexes = [
+            models.Index(fields=['inventory', 'order']),
+            models.Index(fields=['media']),
+        ]
+    
+    def __str__(self):
+        return f"Image {self.order + 1} for {self.inventory.title}"
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+
+
+class ProfileImage(models.Model):
+    """
+    Association between User Profile and Media
+    One user can have one profile image
+    One image (Media) can be used by multiple users (reusable)
+    """
+    user = models.OneToOneField(
+        'accounts.User',
+        on_delete=models.CASCADE,
+        related_name='profile_image'
+    )
+    media = models.ForeignKey(
+        'accounts.Media',
+        on_delete=models.PROTECT,
+        related_name='profile_images'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'profile_images'
+    
+    def __str__(self):
+        return f"Profile image for {self.user.email}"
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+
+
+class InventoryView(models.Model):
+    """
+    Track inventory views for analytics (optional for V1)
+    """
+    inventory = models.ForeignKey(
+        Inventory,
+        on_delete=models.CASCADE,
+        related_name='views'
+    )
+    viewer_ip = models.GenericIPAddressField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'inventory_views'
+        indexes = [
+            models.Index(fields=['inventory', 'viewed_at']),
+        ]
+```
+
+---
+
+## 4. Transactions App
+
+### models.py
+
+```python
+from django.db import models
+from accounts.models import User
+from inventorys.models import Inventory
+
+
+class Transaction(models.Model):
+    """
+    Payment transaction with escrow
+    """
+    
+    class Status(models.TextChoices):
+        PENDING = 'PENDING', 'Payment Pending'
+        ESCROW = 'ESCROW', 'In Escrow'
+        RELEASED = 'RELEASED', 'Payment Released'
+        REFUNDED = 'REFUNDED', 'Refunded'
+        DISPUTED = 'DISPUTED', 'Disputed'
+    
+    # Relationships
+    buyer = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='purchases'
+    )
+    seller = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='sales'
+    )
+    inventory = models.OneToOneField(
+        Inventory,
+        on_delete=models.PROTECT,
+        related_name='transaction'
+    )
+    
+    # Payment Details
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Transaction amount in INR"
+    )
+    payment_id = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        help_text="Razorpay payment ID"
+    )
+    
+    # Status & Notes
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PENDING,
+        db_index=True
+    )
+    admin_notes = models.TextField(blank=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    released_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'transactions'
+        verbose_name = 'Transaction'
+        verbose_name_plural = 'Transactions'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['buyer', 'status']),
+            models.Index(fields=['seller', 'status']),
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['payment_id']),
+        ]
+    
+    def __str__(self):
+        return f"Transaction {self.payment_id} - ₹{self.amount}"
+    
+    def move_to_escrow(self):
+        """Move payment to escrow after successful payment"""
+        self.status = self.Status.ESCROW
+        self.inventory.mark_as_sold()
+        self.save(update_fields=['status', 'updated_at'])
+    
+    def release_payment(self, admin_user):
+        """Release payment from escrow to seller"""
+        from django.utils import timezone
+        self.status = self.Status.RELEASED
+        self.released_at = timezone.now()
+        self.admin_notes += f"\nPayment released by {admin_user.email} at {self.released_at}"
+        self.save(update_fields=['status', 'released_at', 'admin_notes', 'updated_at'])
+    
+    def refund_payment(self, admin_user, reason):
+        """Refund payment to buyer"""
+        self.status = self.Status.REFUNDED
+        self.admin_notes += f"\nRefunded by {admin_user.email}. Reason: {reason}"
+        self.save(update_fields=['status', 'admin_notes', 'updated_at'])
+    
+    def mark_disputed(self):
+        """Mark transaction as disputed"""
+        self.status = self.Status.DISPUTED
+        self.save(update_fields=['status', 'updated_at'])
+
+
+class Dispute(models.Model):
+    """
+    Dispute raised by buyer or seller
+    """
+    
+    class Reason(models.TextChoices):
+        NOT_AS_DESCRIBED = 'NOT_AS_DESCRIBED', 'Item not as described'
+        PAYMENT_ISSUE = 'PAYMENT_ISSUE', 'Payment issue'
+        MEETUP_FAILED = 'MEETUP_FAILED', 'Meetup failed'
+        OTHER = 'OTHER', 'Other'
+    
+    class Status(models.TextChoices):
+        NEW = 'NEW', 'New'
+        IN_REVIEW = 'IN_REVIEW', 'In Review'
+        RESOLVED = 'RESOLVED', 'Resolved'
+    
+    # Relationships
+    transaction = models.OneToOneField(
+        Transaction,
+        on_delete=models.CASCADE,
+        related_name='dispute'
+    )
+    raised_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        help_text="User who raised the dispute"
+    )
+    
+    # Dispute Details
+    reason = models.CharField(max_length=20, choices=Reason.choices)
+    description = models.TextField()
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.NEW,
+        db_index=True
+    )
+    
+    # Resolution
+    resolution_notes = models.TextField(blank=True)
+    resolved_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='resolved_disputes',
+        limit_choices_to={'role': User.Role.ADMIN}
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'disputes'
+        verbose_name = 'Dispute'
+        verbose_name_plural = 'Disputes'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['transaction']),
+        ]
+    
+    def __str__(self):
+        return f"Dispute on {self.transaction.payment_id} by {self.raised_by.email}"
+    
+    def resolve(self, admin_user, resolution_notes, action):
+        """
+        Resolve dispute
+        action: 'release' or 'refund'
+        """
+        from django.utils import timezone
+        
+        self.status = self.Status.RESOLVED
+        self.resolution_notes = resolution_notes
+        self.resolved_by = admin_user
+        self.resolved_at = timezone.now()
+        self.save()
+        
+        # Execute action on transaction
+        if action == 'release':
+            self.transaction.release_payment(admin_user)
+        elif action == 'refund':
+            self.transaction.refund_payment(admin_user, resolution_notes)
+```
+
+---
+
+## Database Indexes Summary
+
+### Performance-Critical Indexes
+
+```sql
+-- Users
+CREATE INDEX idx_users_email_verified ON users(email, is_email_verified);
+CREATE INDEX idx_users_role_active ON users(role, is_active);
+
+-- Categories (Treebeard handles path index automatically)
+CREATE INDEX idx_categories_slug_active ON categories(slug, is_active);
+
+-- Inventorys (Most Important)
+CREATE INDEX idx_inventorys_status_created ON inventorys(status, created_at);
+CREATE INDEX idx_inventorys_seller_status ON inventorys(seller_id, status);
+CREATE INDEX idx_inventorys_category_status ON inventorys(category_id, status);
+CREATE INDEX idx_inventorys_price_status ON inventorys(offer_price, status);
+CREATE INDEX idx_inventorys_search_vector ON inventorys USING GIN(search_vector);
+
+-- Transactions
+CREATE INDEX idx_transactions_buyer_status ON transactions(buyer_id, status);
+CREATE INDEX idx_transactions_seller_status ON transactions(seller_id, status);
+CREATE INDEX idx_transactions_status_created ON transactions(status, created_at);
+CREATE INDEX idx_transactions_payment_id ON transactions(payment_id);
+
+-- Disputes
+CREATE INDEX idx_disputes_status_created ON disputes(status, created_at);
+```
+
+---
+
+## Constraints & Validation
+
+### Database-Level Constraints
+
+```sql
+-- Inventorys: Offer price must be <= Marked price
+ALTER TABLE inventorys ADD CONSTRAINT offer_price_lte_marked_price 
+CHECK (offer_price <= marked_price);
+
+-- InventoryImages: Unique order per inventory
+ALTER TABLE inventory_images ADD CONSTRAINT unique_inventory_order 
+UNIQUE (inventory_id, order);
+
+-- Transactions: Amount must be positive
+ALTER TABLE transactions ADD CONSTRAINT positive_amount 
+CHECK (amount > 0);
+```
+
+---
+
+## Sample Data Structure
+
+### Example Records
+
+```python
+# User
+{
+    "id": 1,
+    "email": "john@example.com",
+    "role": "SELLER",
+    "is_email_verified": True,
+    "date_joined": "2026-01-15T10:30:00Z"
+}
+
+# UserProfile
+{
+    "id": 1,
+    "user_id": 1,
+    "full_name": "John Doe",
+    "brand_name": "John's Gadgets",
+    "bank_account_number": b"encrypted_data",
+    "ifsc_code": "HDFC0001234",
+    "bank_name": "HDFC Bank",
+    "consent_given": True
+}
+
+# Category (Hierarchical)
+{
+    "id": 1,
+    "path": "0001",
+    "depth": 1,
+    "name": "Phones",
+    "slug": "phones",
+    "is_active": True
+}
+{
+    "id": 2,
+    "path": "00010001",
+    "depth": 2,
+    "name": "iPhone",
+    "slug": "iphone",
+    "is_active": True
+}
+
+# Inventory
+{
+    "id": 1,
+    "seller_id": 1,
+    "category_id": 2,
+    "title": "iPhone 13 Pro 256GB - Sierra Blue",
+    "description": "Excellent condition, barely used...",
+    "marked_price": "129900.00",
+    "offer_price": "85000.00",
+    "discount_percentage": "34.55",
+    "condition": "LIKE_NEW",
+    "status": "ACTIVE",
+    "created_at": "2026-02-01T14:20:00Z"
+}
+
+# InventoryImage
+{
+    "id": 1,
+    "inventory_id": 1,
+    "image_url": "https://s3.ap-south-1.amazonaws.com/bucket/inventory-1-img-1.jpg",
+    "order": 0
+}
+
+# Transaction
+{
+    "id": 1,
+    "buyer_id": 2,
+    "seller_id": 1,
+    "inventory_id": 1,
+    "amount": "85000.00",
+    "payment_id": "pay_L8zNxUqEzqVc8a",
+    "status": "ESCROW",
+    "created_at": "2026-02-05T16:45:00Z"
+}
+```
+
+---
+
+## Migration Strategy
+
+### Initial Migrations Order
+
+1. **Create accounts app**
+   ```bash
+   python manage.py makemigrations accounts
+   python manage.py migrate accounts
+   ```
+
+2. **Create categories app (django-treebeard)**
+   ```bash
+   python manage.py makemigrations categories
+   python manage.py migrate categories
+   ```
+
+3. **Create inventorys app (django-taggit)**
+   ```bash
+   python manage.py makemigrations inventorys
+   python manage.py migrate inventorys
+   ```
+
+4. **Create transactions app**
+   ```bash
+   python manage.py makemigrations transactions
+   python manage.py migrate transactions
+   ```
+
+5. **Add full-text search vector**
+   ```bash
+   python manage.py migrate
+   ```
+
+---
+
+## Database Seeding
+
+### Create Seed Data Script
+
+```python
+# management/commands/seed_data.py
+
+from django.core.management.base import BaseCommand
+from accounts.models import User, UserProfile
+from categories.models import Category
+from inventorys.models import Inventory, InventoryImage
+from django.utils.text import slugify
+
+
+class Command(BaseCommand):
+    help = 'Seed database with sample data'
+    
+    def handle(self, *args, **kwargs):
+        # Create users
+        admin = User.objects.create_superuser(
+            email='admin@marketplace.com',
+            password='admin123',
+            role=User.Role.ADMIN
+        )
+        
+        # Create categories (hierarchical)
+        phones = Category.add_root(name='Phones', slug='phones')
+        phones.add_child(name='iPhone', slug='iphone')
+        phones.add_child(name='Android', slug='android')
+        
+        laptops = Category.add_root(name='Laptops', slug='laptops')
+        laptops.add_child(name='MacBooks', slug='macbooks')
+        laptops.add_child(name='Windows', slug='windows')
+        
+        self.stdout.write(self.style.SUCCESS('✓ Database seeded'))
+```
+
+---
+
+## Performance Optimization
+
+### Query Optimization Tips
+
+1. **Use select_related for ForeignKey**
+   ```python
+   Inventory.objects.select_related('seller', 'category').filter(status='ACTIVE')
+   ```
+
+2. **Use prefetch_related for reverse ForeignKey**
+   ```python
+   Inventory.objects.prefetch_related('images', 'tags').all()
+   ```
+
+3. **Use only() to limit fields**
+   ```python
+   Inventory.objects.only('id', 'title', 'offer_price').filter(status='ACTIVE')
+   ```
+
+4. **Use values() for bulk operations**
+   ```python
+   Inventory.objects.values('id', 'title').filter(status='ACTIVE')
+   ```
+
+---
+
+## Backup Strategy
+
+### Automated Backups
+
+```bash
+# Daily backup to S3
+0 2 * * * pg_dump marketplace_db | gzip | aws s3 cp - s3://backups/$(date +\%Y-\%m-\%d).sql.gz
+```
+
+### Retention Policy
+- Daily: Keep 7 days
+- Weekly: Keep 4 weeks
+- Monthly: Keep 12 months
+
+---
+
+**END OF DATABASE SCHEMA**
+
+_Last Updated: February 2026_
+_Version: 1.0 - Complete Schema Design_
+
+
+---
+
+# django-anymail-aws-ses-guide.md : project-plan
+
+_Source: `prd/project-plan/django-anymail-aws-ses-guide.md`_
+
+# Django-Anymail AWS SES Configuration Guide
+
+## Overview
+
+This guide covers setting up **django-anymail** with **AWS SES (Simple Email Service)** for the pre-owned gadgets marketplace. Django-anymail provides a clean, unified interface for sending transactional emails through AWS SES.
+
+---
+
+## Why Django-Anymail + AWS SES?
+
+✅ **Cost-Effective:** 62,000 free emails/month when sending from EC2  
+✅ **Reliable:** 99.9% uptime SLA from AWS  
+✅ **Easy Integration:** Native Django email backend  
+✅ **Tracking:** Built-in support for opens, clicks, bounces  
+✅ **Scalable:** Handles millions of emails per day  
+✅ **India-Optimized:** Use Mumbai (ap-south-1) region for low latency  
+
+---
+
+## Step 1: AWS SES Setup
+
+### 1.1 Create AWS Account
+If you don't have one: https://aws.amazon.com/
+
+### 1.2 Verify Email Address or Domain
+
+**Option A: Verify Single Email (Quick Start)**
+1. Go to AWS Console → SES → Verified Identities
+2. Click "Create Identity"
+3. Choose "Email address"
+4. Enter: `noreply@yourdomain.com`
+5. Click verification link in email from AWS
+
+**Option B: Verify Domain (Recommended for Production)**
+1. Go to AWS Console → SES → Verified Identities
+2. Click "Create Identity"
+3. Choose "Domain"
+4. Enter your domain: `yourdomain.com`
+5. Add DNS records (TXT, CNAME, MX) to your domain registrar
+6. Wait for verification (usually 15 mins - 24 hours)
+
+### 1.3 Request Production Access
+
+**Important:** AWS SES starts in **Sandbox Mode** (can only send to verified emails).
+
+To send to any email address:
+1. Go to AWS Console → SES → Account Dashboard
+2. Click "Request production access"
+3. Fill form:
+   - **Mail Type:** Transactional
+   - **Use Case:** E-commerce marketplace transactional emails (signup, password reset, order confirmations)
+   - **Expected Volume:** 1,000 emails/month initially
+   - **Compliance:** Confirm you won't send spam
+4. Submit request
+5. Wait for approval (usually 24-48 hours)
+
+### 1.4 Create IAM User for SES
+
+For security, don't use root AWS credentials:
+
+1. Go to AWS Console → IAM → Users
+2. Click "Create User"
+3. Username: `ses-marketplace-sender`
+4. Click "Next"
+5. Attach policy: `AmazonSESFullAccess` (or create custom policy with only SendEmail permission)
+6. Click "Create User"
+7. Go to user → Security Credentials → Create Access Key
+8. Choose "Application running outside AWS"
+9. **Save credentials securely:**
+   - Access Key ID: `AKIA...`
+   - Secret Access Key: `wJalr...`
+
+---
+
+## Step 2: Install Django-Anymail
+
+### 2.1 Install Package
+
+```bash
+pip install django-anymail[amazon-ses] --break-system-packages
+```
+
+The `[amazon-ses]` extra includes the boto3 library needed for AWS SES.
+
+### 2.2 Verify Installation
+
+```bash
+python -c "import anymail; print(anymail.__version__)"
+```
+
+Should output version number (e.g., `10.2`)
+
+---
+
+## Step 3: Django Configuration
+
+### 3.1 Update settings.py
+
+Add to `INSTALLED_APPS`:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Third-party apps
+    'rest_framework',
+    'anymail',  # Add this
+    
+    # Your apps
+    'accounts',
+    'listings',
+    'transactions',
+]
+```
+
+Add email configuration (at end of settings.py):
+
+```python
+# Email Configuration (Django-Anymail + AWS SES)
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        "aws_access_key_id": os.environ.get('AWS_SES_ACCESS_KEY_ID'),
+        "aws_secret_access_key": os.environ.get('AWS_SES_SECRET_ACCESS_KEY'),
+        "region_name": "ap-south-1",  # Mumbai region for India
+    },
+}
+
+EMAIL_BACKEND = 'anymail.backends.amazon_ses.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'  # Must be verified in SES
+SERVER_EMAIL = 'admin@yourdomain.com'  # For error emails
+```
+
+### 3.2 Environment Variables
+
+Create `.env` file (never commit this!):
+
+```bash
+# AWS SES Credentials
+AWS_SES_ACCESS_KEY_ID=AKIA...your_key...
+AWS_SES_SECRET_ACCESS_KEY=wJalr...your_secret...
+
+# Email Settings
+DEFAULT_FROM_EMAIL=noreply@yourdomain.com
+SERVER_EMAIL=admin@yourdomain.com
+```
+
+Load in settings.py using `python-decouple` or `django-environ`:
+
+```python
+from decouple import config
+
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        "aws_access_key_id": config('AWS_SES_ACCESS_KEY_ID'),
+        "aws_secret_access_key": config('AWS_SES_SECRET_ACCESS_KEY'),
+        "region_name": "ap-south-1",
+    },
+}
+```
+
+---
+
+## Step 4: Create Email Templates
+
+### 4.1 Directory Structure
+
+```
+your_project/
+├── templates/
+│   └── emails/
+│       ├── welcome.html
+│       ├── welcome.txt
+│       ├── verification.html
+│       ├── verification.txt
+│       ├── password_reset.html
+│       ├── password_reset.txt
+│       ├── payment_success.html
+│       ├── payment_success.txt
+│       ├── payment_released.html
+│       └── payment_released.txt
+```
+
+### 4.2 Example Template: Email Verification
+
+**templates/emails/verification.html:**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .button { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 12px 24px; 
+            text-decoration: none; 
+            border-radius: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Verify Your Email</h2>
+        <p>Hi {{ user.first_name|default:"there" }},</p>
+        <p>Thanks for signing up! Please verify your email address by clicking the button below:</p>
+        <p>
+            <a href="{{ verification_url }}" class="button">Verify Email</a>
+        </p>
+        <p>Or copy and paste this link into your browser:</p>
+        <p>{{ verification_url }}</p>
+        <p>This link expires in 24 hours.</p>
+        <p>If you didn't create an account, you can safely ignore this email.</p>
+        <p>Best regards,<br>The Marketplace Team</p>
+    </div>
+</body>
+</html>
+```
+
+**templates/emails/verification.txt:** (Plain text fallback)
+```
+Hi {{ user.first_name|default:"there" }},
+
+Thanks for signing up! Please verify your email address by clicking the link below:
+
+{{ verification_url }}
+
+This link expires in 24 hours.
+
+If you didn't create an account, you can safely ignore this email.
+
+Best regards,
+The Marketplace Team
+```
+
+---
+
+## Step 5: Send Emails in Django
+
+### 5.1 Basic Email Sending
+
+```python
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+def send_verification_email(user, verification_url):
+    subject = 'Verify Your Email'
+    
+    # Render HTML email
+    html_message = render_to_string('emails/verification.html', {
+        'user': user,
+        'verification_url': verification_url,
+    })
+    
+    # Plain text fallback
+    plain_message = render_to_string('emails/verification.txt', {
+        'user': user,
+        'verification_url': verification_url,
+    })
+    
+    send_mail(
+        subject=subject,
+        message=plain_message,
+        from_email=None,  # Uses DEFAULT_FROM_EMAIL
+        recipient_list=[user.email],
+        html_message=html_message,
+        fail_silently=False,
+    )
+```
+
+### 5.2 Using Anymail Features
+
+For advanced features (tracking, metadata, tags):
+
+```python
+from anymail.message import AnymailMessage
+
+def send_transaction_email(buyer, seller, transaction):
+    msg = AnymailMessage(
+        subject='Payment Received - In Escrow',
+        body='Your payment has been received...',
+        from_email='noreply@yourdomain.com',
+        to=[buyer.email],
+        tags=['transaction', 'escrow'],  # For filtering in SES dashboard
+        metadata={'transaction_id': transaction.id},  # Track with events
+    )
+    
+    # Add HTML version
+    msg.attach_alternative(
+        '<html><body><h1>Payment Received</h1>...</body></html>',
+        'text/html'
+    )
+    
+    msg.send()
+```
+
+### 5.3 Async Email Sending (Recommended)
+
+Don't block HTTP requests waiting for email to send:
+
+**Option A: Django Background Tasks (Simple)**
+```bash
+pip install django-background-tasks --break-system-packages
+```
+
+```python
+from background_task import background
+
+@background(schedule=0)
+def send_email_async(user_id, verification_url):
+    user = User.objects.get(id=user_id)
+    send_verification_email(user, verification_url)
+
+# In your view:
+send_email_async(user.id, verification_url)
+```
+
+**Option B: Celery (Production)**
+```python
+from celery import shared_task
+
+@shared_task
+def send_verification_email_task(user_id, verification_url):
+    user = User.objects.get(id=user_id)
+    send_verification_email(user, verification_url)
+
+# In your view:
+send_verification_email_task.delay(user.id, verification_url)
+```
+
+---
+
+## Step 6: Testing
+
+### 6.1 Test in Sandbox Mode
+
+While SES is in sandbox mode, you can only send to verified emails:
+
+1. Verify your personal email in SES
+2. Send test email to yourself
+3. Check spam folder if not received
+
+### 6.2 Use Anymail Test Backend
+
+For local development without actually sending emails:
+
+```python
+# settings_local.py or settings.py (development)
+if DEBUG:
+    EMAIL_BACKEND = 'anymail.backends.test.EmailBackend'
+    ANYMAIL = {}
+```
+
+Check sent emails in test mode:
+```python
+from django.core.mail import send_mail
+from anymail.backends.test import TestEmailBackend
+
+send_mail('Test', 'Body', 'from@example.com', ['to@example.com'])
+
+# Access sent messages
+print(TestEmailBackend.messages)
+```
+
+### 6.3 Django Shell Testing
+
+```bash
+python manage.py shell
+```
+
+```python
+from django.core.mail import send_mail
+
+send_mail(
+    'Test Email',
+    'This is a test message.',
+    'noreply@yourdomain.com',
+    ['your-email@example.com'],
+    fail_silently=False,
+)
+
+# Check for errors
+# If successful, check your email inbox
+```
+
+---
+
+## Step 7: Monitoring & Troubleshooting
+
+### 7.1 AWS SES Dashboard
+
+Monitor email sending:
+1. Go to AWS Console → SES → Account Dashboard
+2. View:
+   - Sends (last 24 hours)
+   - Bounces
+   - Complaints
+   - Reputation metrics
+
+### 7.2 Common Issues
+
+**Issue: "Email address is not verified"**
+- Solution: Verify sender email in SES console
+- Or: Request production access to send to unverified emails
+
+**Issue: "AccessDenied" error**
+- Solution: Check IAM user has `ses:SendEmail` permission
+- Verify AWS credentials in `.env` file
+
+**Issue: Emails go to spam**
+- Solution: Add SPF, DKIM, DMARC records to your domain DNS
+- AWS provides these in SES → Verified Identities → Domain → DKIM
+
+**Issue: Slow email delivery**
+- Solution: Use async sending (Celery or background tasks)
+- Check SES region (use ap-south-1 for India)
+
+### 7.3 SES Event Tracking
+
+Track bounces, complaints, opens, clicks:
+
+```python
+# settings.py
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        # ... existing config ...
+    },
+    "SEND_DEFAULTS": {
+        "track_clicks": True,
+        "track_opens": True,
+    },
+}
+```
+
+Set up SNS notifications in AWS SES for bounce/complaint handling.
+
+---
+
+## Step 8: Production Checklist
+
+Before launch:
+
+- [ ] Domain verified in AWS SES
+- [ ] Production access approved by AWS
+- [ ] SPF, DKIM, DMARC DNS records added
+- [ ] IAM user created with minimal permissions (only SES)
+- [ ] Environment variables secured (not in code)
+- [ ] Email templates tested (HTML + plain text)
+- [ ] Unsubscribe links added (if sending marketing emails)
+- [ ] Bounce/complaint handling configured
+- [ ] Email sending is async (Celery or background tasks)
+- [ ] Monitoring set up (AWS CloudWatch alerts)
+
+---
+
+## Cost Estimation
+
+**AWS SES Pricing (ap-south-1 region):**
+
+| Scenario | Monthly Emails | Cost |
+|----------|----------------|------|
+| Sending from EC2 | 0 - 62,000 | **FREE** |
+| Sending from EC2 | 100,000 | ~₹300 ($0.10 per 1,000 beyond 62k) |
+| Not from EC2 | 10,000 | ~₹80 ($0.10 per 1,000) |
+| Not from EC2 | 100,000 | ~₹800 |
+
+**Recommendation:** Host Django on AWS EC2 to maximize free tier.
+
+**V1 Estimate:**
+- Signups: 100/month × 1 email = 100
+- Transactions: 100/month × 3 emails (buyer confirmation, seller notification, payment released) = 300
+- Password resets: 20/month × 1 email = 20
+- **Total: ~420 emails/month = FREE tier**
+
+---
+
+## Email Types for Marketplace
+
+### Transactional Emails (Required)
+
+1. **Welcome Email** - On signup
+2. **Email Verification** - With link to verify
+3. **Password Reset** - With reset link
+4. **Payment Confirmation** - Buyer: payment received, in escrow
+5. **Seller Notification** - Seller: item sold, buyer contact info
+6. **Payment Released** - Seller: payment transferred to bank
+7. **Dispute Notification** - Admin: new dispute raised
+8. **Dispute Resolution** - Buyer/Seller: dispute resolved
+
+### Optional (Future)
+
+9. **Listing Approved** - Seller: listing is live
+10. **Price Drop Alert** - Buyer: item they viewed dropped in price
+11. **Weekly Digest** - New listings in favorite categories
+
+---
+
+## Sample Email Sending Functions
+
+```python
+# utils/emails.py
+
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
+def send_templated_email(subject, template_name, context, recipient_list):
+    """
+    Send email using HTML and plain text templates
+    """
+    html_message = render_to_string(f'emails/{template_name}.html', context)
+    plain_message = render_to_string(f'emails/{template_name}.txt', context)
+    
+    send_mail(
+        subject=subject,
+        message=plain_message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=recipient_list,
+        html_message=html_message,
+        fail_silently=False,
+    )
+
+def send_verification_email(user, verification_url):
+    send_templated_email(
+        subject='Verify Your Email',
+        template_name='verification',
+        context={'user': user, 'verification_url': verification_url},
+        recipient_list=[user.email],
+    )
+
+def send_payment_confirmation(transaction):
+    send_templated_email(
+        subject='Payment Received - In Escrow',
+        template_name='payment_success',
+        context={'transaction': transaction, 'buyer': transaction.buyer},
+        recipient_list=[transaction.buyer.email],
+    )
+
+def send_payment_released(transaction):
+    send_templated_email(
+        subject='Payment Released to Your Account',
+        template_name='payment_released',
+        context={'transaction': transaction, 'seller': transaction.seller},
+        recipient_list=[transaction.seller.email],
+    )
+```
+
+---
+
+## Resources
+
+- **Django-Anymail Docs:** https://anymail.dev/
+- **AWS SES Docs:** https://docs.aws.amazon.com/ses/
+- **SES Pricing:** https://aws.amazon.com/ses/pricing/
+- **Django Email Docs:** https://docs.djangoproject.com/en/stable/topics/email/
+
+---
+
+## Support
+
+If you encounter issues:
+1. Check AWS SES logs in CloudWatch
+2. Enable Django email logging: `EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'` for local testing
+3. Review django-anymail GitHub issues: https://github.com/anymail/django-anymail/issues
+
+---
+
+**Last Updated:** February 2026  
+**Version:** 1.0 - AWS SES Configuration Guide
+
+
+---
+
+# media-management-guide.md : project-plan
+
+_Source: `prd/project-plan/media-management-guide.md`_
+
+# Media Management Guide
+
+## Overview
+
+The Media model serves as a **central repository** for all images in the marketplace. This approach enables:
+- **Image Reuse** - Upload once, use in multiple inventories or profiles
+- **Cost Savings** - Reduce S3 storage by 30-40% through deduplication
+- **Centralized Management** - Archive/delete from one location
+- **Analytics** - Track which images are most popular
+- **Performance** - CDN caching for frequently used images
+
+---
+
+## Media Model Structure
+
+### Complete Model Definition
+
+```python
+import uuid
+from django.db import models
+
+class Media(models.Model):
+    """
+    Central media repository for all images (profile photos, inventory images, etc.)
+    One media can be associated with multiple inventories or profiles (reusable)
+    """
+    
+    class FileType(models.TextChoices):
+        IMAGE_JPEG = 'image/jpeg', 'JPEG Image'
+        IMAGE_PNG = 'image/png', 'PNG Image'
+        IMAGE_WEBP = 'image/webp', 'WebP Image'
+        IMAGE_GIF = 'image/gif', 'GIF Image'
+    
+    # Core Identity
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True,
+        help_text="Unique identifier for this media file"
+    )
+    
+    # File Information
+    file_name = models.CharField(
+        max_length=255,
+        help_text="Original filename uploaded by user"
+    )
+    alt_tag = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Alt text for accessibility (SEO and screen readers)"
+    )
+    file_type = models.CharField(
+        max_length=20,
+        choices=FileType.choices,
+        help_text="Auto-captured from content type during upload"
+    )
+    
+    # Storage
+    s3_url = models.URLField(
+        max_length=500,
+        unique=True,
+        help_text="Full S3 URL with CDN (e.g., https://cdn.example.com/media/uuid.jpg)"
+    )
+    
+    # Metadata
+    created_on = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True,
+        help_text="When this media was uploaded"
+    )
+    
+    # Status
+    status = models.BooleanField(
+        default=True,
+        db_index=True,
+        help_text="Active (True) or Inactive (False)"
+    )
+    archived = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text="Soft delete flag - archived media can be restored"
+    )
+    
+    class Meta:
+        db_table = 'media'
+        verbose_name = 'Media'
+        verbose_name_plural = 'Media'
+        ordering = ['-created_on']
+        indexes = [
+            models.Index(fields=['uuid']),
+            models.Index(fields=['status', 'archived']),
+            models.Index(fields=['file_type', 'status']),
+            models.Index(fields=['created_on']),
+        ]
+    
+    def __str__(self):
+        return f"{self.file_name} ({self.uuid})"
+    
+    def get_usage_count(self):
+        """Get count of how many times this media is used"""
+        profile_usage = self.profile_images.count()
+        inventory_usage = self.inventory_images.count()
+        return profile_usage + inventory_usage
+    
+    def is_reusable(self):
+        """Check if media can be reused (not archived, active)"""
+        return self.status and not self.archived
+    
+    @classmethod
+    def create_from_upload(cls, file, alt_tag=''):
+        """
+        Create Media instance from uploaded file
+        Handles S3 upload and metadata extraction
+        
+        Args:
+            file: Django UploadedFile object
+            alt_tag: Optional alt text for accessibility
+            
+        Returns:
+            Media: Created media instance
+            
+        Raises:
+            ValueError: If file type is not supported
+        """
+        import mimetypes
+        from django.core.files.storage import default_storage
+        
+        # Detect file type from content
+        content_type, _ = mimetypes.guess_type(file.name)
+        if content_type not in dict(cls.FileType.choices):
+            raise ValueError(f"Unsupported file type: {content_type}")
+        
+        # Generate unique filename
+        import uuid as uuid_lib
+        file_uuid = uuid_lib.uuid4()
+        extension = file.name.split('.')[-1]
+        unique_filename = f"media/{file_uuid}.{extension}"
+        
+        # Upload to S3
+        s3_path = default_storage.save(unique_filename, file)
+        s3_url = default_storage.url(s3_path)
+        
+        # Create Media record
+        media = cls.objects.create(
+            file_name=file.name,
+            alt_tag=alt_tag,
+            file_type=content_type,
+            s3_url=s3_url,
+        )
+        
+        return media
+```
+
+---
+
+## Association Models
+
+### InventoryImage (Many-to-Many)
+
+Links Inventory items to Media (one inventory can have multiple images, one image can be used in multiple inventories)
+
+```python
+class InventoryImage(models.Model):
+    """
+    Association between Inventory and Media (many-to-many through model)
+    One inventory can have multiple images (1-5)
+    One image (Media) can be used in multiple inventories (reusable)
+    """
+    inventory = models.ForeignKey(
+        Inventory,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    media = models.ForeignKey(
+        Media,
+        on_delete=models.PROTECT,  # Don't delete media if used in inventory
+        related_name='inventory_images'
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'inventory_images'
+        ordering = ['order']
+        unique_together = [('inventory', 'order')]
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+```
+
+### ProfileImage (One-to-One)
+
+Links User profiles to Media (one user has one profile picture, one image can be used by multiple users)
+
+```python
+class ProfileImage(models.Model):
+    """
+    Association between User Profile and Media
+    One user can have one profile image
+    One image (Media) can be used by multiple users (reusable)
+    """
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile_image'
+    )
+    media = models.ForeignKey(
+        Media,
+        on_delete=models.PROTECT,
+        related_name='profile_images'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'profile_images'
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+```
+
+---
+
+## API Endpoints
+
+### 1. Upload Media
+
+**Endpoint:** `POST /api/media/upload`
+
+**Description:** Upload a new image to S3 and create Media record
+
+**Request:**
+```http
+POST /api/media/upload
+Content-Type: multipart/form-data
+Authorization: Bearer <jwt_token>
+
+file: <binary_image_data>
+alt_tag: "iPhone 13 Pro front view" (optional)
+```
+
+**Response (Success - 201 Created):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "file_name": "iphone13.jpg",
+  "alt_tag": "iPhone 13 Pro front view",
+  "file_type": "image/jpeg",
+  "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+  "created_on": "2026-02-08T10:30:00Z",
+  "status": true,
+  "archived": false
+}
+```
+
+**Response (Error - 400 Bad Request):**
+```json
+{
+  "error": "Unsupported file type: image/svg+xml"
+}
+```
+
+**Validation:**
+- File type must be: JPEG, PNG, WebP, or GIF
+- Max file size: 100MB (configurable)
+- User must be authenticated
+
+---
+
+### 2. Get Media by UUID
+
+**Endpoint:** `GET /api/media/:uuid`
+
+**Description:** Retrieve media details by UUID
+
+**Request:**
+```http
+GET /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+Authorization: Bearer <jwt_token>
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "file_name": "iphone13.jpg",
+  "alt_tag": "iPhone 13 Pro front view",
+  "file_type": "image/jpeg",
+  "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+  "created_on": "2026-02-08T10:30:00Z",
+  "status": true,
+  "archived": false,
+  "usage_count": 3
+}
+```
+
+---
+
+### 3. List Media
+
+**Endpoint:** `GET /api/media`
+
+**Description:** List all media uploaded by current user
+
+**Request:**
+```http
+GET /api/media?status=true&limit=20&offset=0
+Authorization: Bearer <jwt_token>
+```
+
+**Query Parameters:**
+- `status` (optional): Filter by active status (true/false)
+- `archived` (optional): Filter by archived status (true/false)
+- `file_type` (optional): Filter by file type (image/jpeg, image/png, etc.)
+- `limit` (optional): Number of results per page (default: 20)
+- `offset` (optional): Pagination offset (default: 0)
+
+**Response (Success - 200 OK):**
+```json
+{
+  "count": 45,
+  "next": "/api/media?limit=20&offset=20",
+  "previous": null,
+  "results": [
+    {
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "file_name": "iphone13.jpg",
+      "alt_tag": "iPhone 13 Pro front view",
+      "file_type": "image/jpeg",
+      "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+      "created_on": "2026-02-08T10:30:00Z",
+      "status": true,
+      "archived": false,
+      "usage_count": 3
+    },
+    // ... more media objects
+  ]
+}
+```
+
+---
+
+### 4. Update Media
+
+**Endpoint:** `PATCH /api/media/:uuid`
+
+**Description:** Update media metadata (alt_tag, status, archived)
+
+**Request:**
+```http
+PATCH /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+Content-Type: application/json
+Authorization: Bearer <jwt_token>
+
+{
+  "alt_tag": "Updated alt text",
+  "status": true
+}
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "file_name": "iphone13.jpg",
+  "alt_tag": "Updated alt text",
+  "file_type": "image/jpeg",
+  "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+  "created_on": "2026-02-08T10:30:00Z",
+  "status": true,
+  "archived": false
+}
+```
+
+**Note:** Cannot update `file_name`, `file_type`, or `s3_url` (immutable)
+
+---
+
+### 5. Archive Media
+
+**Endpoint:** `DELETE /api/media/:uuid`
+
+**Description:** Soft delete (archive) media
+
+**Request:**
+```http
+DELETE /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+Authorization: Bearer <jwt_token>
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "message": "Media archived successfully",
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "archived": true
+}
+```
+
+**Response (Error - 409 Conflict):**
+```json
+{
+  "error": "Cannot archive media. Still in use by 3 inventories.",
+  "usage_count": 3
+}
+```
+
+**Behavior:**
+- Sets `archived = True`
+- Does NOT delete from S3 (for data recovery)
+- Only allowed if `usage_count = 0` (not used in any inventory/profile)
+
+---
+
+### 6. Get Media Usage
+
+**Endpoint:** `GET /api/media/:uuid/usage`
+
+**Description:** Get all inventories and profiles using this media
+
+**Request:**
+```http
+GET /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890/usage
+Authorization: Bearer <jwt_token>
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "total_usage": 3,
+  "inventories": [
+    {
+      "id": 101,
+      "title": "iPhone 13 Pro 256GB",
+      "url": "/inventories/101"
+    },
+    {
+      "id": 205,
+      "title": "iPhone 13 Pro 128GB",
+      "url": "/inventories/205"
+    }
+  ],
+  "profiles": [
+    {
+      "user_id": 42,
+      "email": "john@example.com",
+      "url": "/users/42/profile"
+    }
+  ]
+}
+```
+
+---
+
+## Frontend Implementation
+
+### Upload Component (React)
+
+```jsx
+import { useState } from 'react';
+
+function MediaUpload({ onUploadSuccess }) {
+  const [file, setFile] = useState(null);
+  const [altTag, setAltTag] = useState('');
+  const [uploading, setUploading] = useState(false);
+  
+  const handleUpload = async () => {
+    if (!file) return;
+    
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('alt_tag', altTag);
+    
+    try {
+      const response = await fetch('/api/media/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: formData
+      });
+      
+      const media = await response.json();
+      onUploadSuccess(media);
+      
+      // Reset form
+      setFile(null);
+      setAltTag('');
+    } catch (error) {
+      console.error('Upload failed:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+  
+  return (
+    <div className="bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-bold mb-4">Upload Image</h3>
+      
+      {/* File Input */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">
+          Select Image
+        </label>
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={(e) => setFile(e.target.files[0])}
+          className="w-full px-4 py-2 border rounded"
+        />
+      </div>
+      
+      {/* Alt Tag Input */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">
+          Alt Text (Optional)
+        </label>
+        <input
+          type="text"
+          value={altTag}
+          onChange={(e) => setAltTag(e.target.value)}
+          placeholder="Describe the image for accessibility"
+          className="w-full px-4 py-2 border rounded"
+        />
+      </div>
+      
+      {/* Preview */}
+      {file && (
+        <div className="mb-4">
+          <img
+            src={URL.createObjectURL(file)}
+            alt="Preview"
+            className="max-w-xs rounded"
+          />
+        </div>
+      )}
+      
+      {/* Upload Button */}
+      <button
+        onClick={handleUpload}
+        disabled={!file || uploading}
+        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+      >
+        {uploading ? 'Uploading...' : 'Upload'}
+      </button>
+    </div>
+  );
+}
+```
+
+### Media Gallery Component
+
+```jsx
+function MediaGallery({ onSelectMedia }) {
+  const [media, setMedia] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+  
+  const fetchMedia = async () => {
+    try {
+      const response = await fetch('/api/media?status=true', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      setMedia(data.results);
+    } catch (error) {
+      console.error('Fetch failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  if (loading) return <div>Loading media...</div>;
+  
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {media.map((item) => (
+        <div
+          key={item.uuid}
+          onClick={() => onSelectMedia(item)}
+          className="cursor-pointer border rounded hover:border-blue-500"
+        >
+          <img
+            src={item.s3_url}
+            alt={item.alt_tag || item.file_name}
+            className="w-full h-40 object-cover rounded-t"
+          />
+          <div className="p-2">
+            <p className="text-sm truncate">{item.file_name}</p>
+            <p className="text-xs text-gray-500">
+              Used: {item.usage_count} times
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+---
+
+## Backend Implementation
+
+### Django View (Media Upload)
+
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from accounts.models import Media
+
+class MediaUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        """
+        Upload media file to S3 and create Media record
+        """
+        file = request.FILES.get('file')
+        alt_tag = request.data.get('alt_tag', '')
+        
+        if not file:
+            return Response(
+                {'error': 'No file provided'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate file size (100MB max)
+        if file.size > 100 * 1024 * 1024:
+            return Response(
+                {'error': 'File size exceeds 100MB limit'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Create Media instance (handles S3 upload)
+            media = Media.create_from_upload(file, alt_tag)
+            
+            # Serialize and return
+            serializer = MediaSerializer(media)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        except ValueError as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+```
+
+### Django Serializer
+
+```python
+from rest_framework import serializers
+from accounts.models import Media
+
+class MediaSerializer(serializers.ModelSerializer):
+    usage_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Media
+        fields = [
+            'uuid', 'file_name', 'alt_tag', 'file_type',
+            's3_url', 'created_on', 'status', 'archived',
+            'usage_count'
+        ]
+        read_only_fields = ['uuid', 'file_type', 's3_url', 'created_on']
+    
+    def get_usage_count(self, obj):
+        return obj.get_usage_count()
+```
+
+---
+
+## Usage Examples
+
+### Creating Inventory with Media
+
+```python
+# Backend: Create inventory with existing media
+from inventory.models import Inventory, InventoryImage
+from accounts.models import Media
+
+# Get or upload media
+media_uuid = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+media = Media.objects.get(uuid=media_uuid)
+
+# Create inventory
+inventory = Inventory.objects.create(
+    seller=request.user,
+    title='iPhone 13 Pro',
+    # ... other fields
+)
+
+# Associate media with inventory
+InventoryImage.objects.create(
+    inventory=inventory,
+    media=media,
+    order=0  # First image
+)
+```
+
+### Reusing Media Across Inventories
+
+```python
+# Same media can be used in multiple inventories
+media = Media.objects.get(uuid='a1b2c3d4-e5f6-7890-abcd-ef1234567890')
+
+# Use in inventory 1
+InventoryImage.objects.create(
+    inventory=inventory1,
+    media=media,
+    order=0
+)
+
+# Reuse in inventory 2
+InventoryImage.objects.create(
+    inventory=inventory2,
+    media=media,
+    order=0
+)
+
+# Check usage
+print(media.get_usage_count())  # Output: 2
+```
+
+### Setting Profile Image
+
+```python
+# Backend: Set user profile image
+from accounts.models import ProfileImage, Media
+
+media = Media.objects.get(uuid='a1b2c3d4-e5f6-7890-abcd-ef1234567890')
+
+# Create or update profile image
+profile_image, created = ProfileImage.objects.update_or_create(
+    user=request.user,
+    defaults={'media': media}
+)
+```
+
+---
+
+## Best Practices
+
+### 1. Image Optimization
+
+```python
+# Before uploading to S3, compress images
+from PIL import Image
+import io
+
+def optimize_image(file, max_size=(1920, 1920), quality=85):
+    """
+    Optimize image before uploading
+    """
+    img = Image.open(file)
+    
+    # Convert RGBA to RGB if needed
+    if img.mode == 'RGBA':
+        img = img.convert('RGB')
+    
+    # Resize if larger than max_size
+    img.thumbnail(max_size, Image.LANCZOS)
+    
+    # Save to buffer
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG', quality=quality, optimize=True)
+    buffer.seek(0)
+    
+    return buffer
+```
+
+### 2. Generate Thumbnails
+
+```python
+# Create multiple sizes for responsive images
+def create_thumbnail(media, size=(300, 300)):
+    """
+    Create thumbnail version of media
+    """
+    # Download from S3
+    response = requests.get(media.s3_url)
+    img = Image.open(io.BytesIO(response.content))
+    
+    # Create thumbnail
+    img.thumbnail(size, Image.LANCZOS)
+    
+    # Upload as new media
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG', quality=80)
+    buffer.seek(0)
+    
+    # ... upload to S3 and create Media record
+```
+
+### 3. Lazy Loading
+
+```jsx
+// Frontend: Lazy load images
+<img
+  src={media.s3_url}
+  alt={media.alt_tag}
+  loading="lazy"
+  className="w-full h-auto"
+/>
+```
+
+### 4. CDN Caching
+
+```python
+# settings.py
+AWS_S3_CUSTOM_DOMAIN = 'cdn.example.com'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',  # 24 hours
+}
+```
+
+---
+
+## Security Considerations
+
+### 1. File Type Validation
+
+```python
+# Validate file signature (magic bytes) not just extension
+import magic
+
+def validate_image_file(file):
+    """
+    Validate file is actually an image
+    """
+    mime = magic.from_buffer(file.read(1024), mime=True)
+    file.seek(0)
+    
+    allowed_types = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    
+    if mime not in allowed_types:
+        raise ValueError(f"Invalid file type: {mime}")
+```
+
+### 2. Virus Scanning
+
+```python
+# Use ClamAV or cloud service to scan uploads
+import pyclamd
+
+def scan_for_viruses(file):
+    """
+    Scan uploaded file for viruses
+    """
+    cd = pyclamd.ClamdUnixSocket()
+    
+    file_content = file.read()
+    file.seek(0)
+    
+    result = cd.scan_stream(file_content)
+    
+    if result:
+        raise ValueError("File contains malware")
+```
+
+### 3. Access Control
+
+```python
+# Only allow users to access their own media
+class MediaViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        # Users can only see media they uploaded
+        # or media used in their inventories
+        return Media.objects.filter(
+            Q(inventory_images__inventory__seller=self.request.user) |
+            Q(profile_images__user=self.request.user)
+        ).distinct()
+```
+
+---
+
+## Performance Optimization
+
+### 1. Database Indexes
+
+Already configured in the model:
+```python
+indexes = [
+    models.Index(fields=['uuid']),           # Fast UUID lookup
+    models.Index(fields=['status', 'archived']),  # Filter queries
+    models.Index(fields=['file_type', 'status']), # Type filtering
+    models.Index(fields=['created_on']),     # Ordering
+]
+```
+
+### 2. Query Optimization
+
+```python
+# Prefetch related inventory images
+media_list = Media.objects.prefetch_related(
+    'inventory_images',
+    'profile_images'
+).filter(status=True)
+
+# Annotate with usage count
+from django.db.models import Count
+
+media_list = Media.objects.annotate(
+    usage_count=Count('inventory_images') + Count('profile_images')
+)
+```
+
+### 3. Caching
+
+```python
+from django.core.cache import cache
+
+def get_media(uuid):
+    """
+    Get media with caching
+    """
+    cache_key = f'media:{uuid}'
+    media = cache.get(cache_key)
+    
+    if not media:
+        media = Media.objects.get(uuid=uuid)
+        cache.set(cache_key, media, timeout=3600)  # 1 hour
+    
+    return media
+```
+
+---
+
+## Analytics & Reporting
+
+### Most Used Media
+
+```python
+# Get top 10 most reused images
+from django.db.models import Count
+
+popular_media = Media.objects.annotate(
+    usage=Count('inventory_images') + Count('profile_images')
+).filter(
+    status=True,
+    archived=False
+).order_by('-usage')[:10]
+```
+
+### Storage Usage
+
+```python
+# Calculate total storage used
+total_storage = Media.objects.filter(
+    status=True,
+    archived=False
+).count() * 5  # Assume avg 5MB per image
+
+print(f"Total storage: {total_storage} MB")
+```
+
+### Unused Media Cleanup
+
+```python
+# Find unused media older than 30 days
+from datetime import timedelta
+from django.utils import timezone
+
+unused_media = Media.objects.annotate(
+    usage=Count('inventory_images') + Count('profile_images')
+).filter(
+    usage=0,
+    created_on__lt=timezone.now() - timedelta(days=30)
+)
+
+# Archive unused media
+unused_media.update(archived=True)
+```
+
+---
+
+## Testing
+
+### Unit Tests
+
+```python
+from django.test import TestCase
+from accounts.models import Media
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+class MediaModelTestCase(TestCase):
+    def test_create_from_upload(self):
+        """Test creating media from uploaded file"""
+        # Create fake image file
+        image = SimpleUploadedFile(
+            "test.jpg",
+            b"file_content",
+            content_type="image/jpeg"
+        )
+        
+        # Create media
+        media = Media.create_from_upload(image, alt_tag="Test image")
+        
+        # Assertions
+        self.assertIsNotNone(media.uuid)
+        self.assertEqual(media.file_name, "test.jpg")
+        self.assertEqual(media.file_type, "image/jpeg")
+        self.assertEqual(media.alt_tag, "Test image")
+        self.assertTrue(media.status)
+        self.assertFalse(media.archived)
+    
+    def test_unsupported_file_type(self):
+        """Test uploading unsupported file type"""
+        svg_file = SimpleUploadedFile(
+            "test.svg",
+            b"<svg></svg>",
+            content_type="image/svg+xml"
+        )
+        
+        with self.assertRaises(ValueError):
+            Media.create_from_upload(svg_file)
+    
+    def test_get_usage_count(self):
+        """Test usage count calculation"""
+        media = Media.objects.create(
+            file_name="test.jpg",
+            file_type="image/jpeg",
+            s3_url="https://example.com/test.jpg"
+        )
+        
+        # Initially 0
+        self.assertEqual(media.get_usage_count(), 0)
+        
+        # Create inventory image
+        InventoryImage.objects.create(
+            inventory=some_inventory,
+            media=media,
+            order=0
+        )
+        
+        # Now 1
+        self.assertEqual(media.get_usage_count(), 1)
+```
+
+---
+
+## Summary
+
+### Media Model Features ✅
+
+1. **UUID** - Unique identifier ✅
+2. **file_name** - Original filename ✅
+3. **alt_tag** - Accessibility text ✅
+4. **file_type** - Auto-captured from content type ✅
+5. **s3_url** - Full S3 URL with CDN ✅
+6. **created_on** - Upload timestamp ✅
+7. **status** - Boolean active/inactive ✅
+8. **archived** - Boolean soft delete ✅
+
+### Benefits
+
+✅ **30-40% storage savings** through image reuse  
+✅ **Centralized management** of all media  
+✅ **Better performance** with CDN caching  
+✅ **Analytics** on image usage  
+✅ **Soft delete** for data recovery  
+✅ **Scalable** architecture  
+
+---
+
+**Ready for implementation in Sprint 2!**
+
+**Version:** 1.0 - Media Management Guide  
+**Last Updated:** February 2026
+
+
+---
+
+# naming-conventions.md : project-plan
+
+_Source: `prd/project-plan/naming-conventions.md`_
+
+# Naming Convention Updates
+
+## Overview
+
+All documentation has been updated with new naming conventions for clarity and consistency.
+
+---
+
+## Changes Made
+
+### 1. Listing → Inventory
+
+**Rationale:** "Inventory" better represents the stock/items that sellers have available for sale.
+
+| Old Name | New Name |
+|----------|----------|
+| Listing | Inventory |
+| listing | inventory |
+| listings | inventories |
+| ListingImage | InventoryImage |
+| listing_images | inventory_images |
+
+**Files Updated:**
+- ✅ database-schema.md
+- ✅ schema-updates-v2.md
+- ✅ sprint-plan.md
+- ✅ prd.md
+- ✅ sprint-updates-summary.md
+- ✅ erd-diagram.mermaid
+
+### 2. SellerProfile → UserProfile
+
+**Rationale:** "UserProfile" is more generic and can accommodate buyer information too if needed in the future.
+
+| Old Name | New Name |
+|----------|----------|
+| SellerProfile | UserProfile |
+| seller_profile | user_profile |
+| seller_profiles | user_profiles |
+
+**Files Updated:**
+- ✅ database-schema.md
+- ✅ schema-updates-v2.md
+- ✅ sprint-plan.md
+- ✅ prd.md
+- ✅ erd-diagram.mermaid
+
+---
+
+## Updated Model Names
+
+### Django Apps Structure
+
+```
+marketplace/
+├── accounts/           # User, UserProfile, Media, ProfileImage
+├── categories/         # Category (django-treebeard)
+├── inventory/          # Inventory, InventoryImage, Tag (django-taggit)
+└── transactions/       # Transaction, Dispute
+```
+
+### Database Tables
+
+| Model | Table Name |
+|-------|------------|
+| User | users |
+| UserProfile | user_profiles |
+| Media | media |
+| ProfileImage | profile_images |
+| Category | categories |
+| Inventory | inventories |
+| InventoryImage | inventory_images |
+| Transaction | transactions |
+| Dispute | disputes |
+
+---
+
+## Updated API Endpoints
+
+### Before vs After
+
+**Inventory Endpoints:**
+```
+OLD: GET  /api/listings
+NEW: GET  /api/inventories
+
+OLD: POST /api/listings
+NEW: POST /api/inventories
+
+OLD: GET  /api/listings/:id
+NEW: GET  /api/inventories/:id
+
+OLD: PUT  /api/listings/:id
+NEW: PUT  /api/inventories/:id
+
+OLD: GET  /api/listings/my-listings
+NEW: GET  /api/inventories/my-inventories
+```
+
+**Profile Endpoints:**
+```
+OLD: GET  /api/profile (returns SellerProfile)
+NEW: GET  /api/profile (returns UserProfile)
+
+OLD: PUT  /api/profile (updates SellerProfile)
+NEW: PUT  /api/profile (updates UserProfile)
+```
+
+---
+
+## Updated Frontend Routes
+
+**React Router Paths:**
+```javascript
+// Before
+/listings
+/listings/:id
+/my-listings
+/create-listing
+
+// After
+/inventories
+/inventories/:id
+/my-inventories
+/create-inventory
+```
+
+**Component Names:**
+```javascript
+// Before
+<ListingCard />
+<ListingDetail />
+<CreateListing />
+<MyListings />
+
+// After
+<InventoryCard />
+<InventoryDetail />
+<CreateInventory />
+<MyInventories />
+```
+
+---
+
+## Updated Database Relationships
+
+### Foreign Keys
+
+```python
+# User → Inventory
+class Inventory(models.Model):
+    seller = models.ForeignKey(User, related_name='inventories')
+
+# Inventory → InventoryImage
+class InventoryImage(models.Model):
+    inventory = models.ForeignKey(Inventory, related_name='images')
+
+# Transaction → Inventory
+class Transaction(models.Model):
+    inventory = models.OneToOneField(Inventory, related_name='transaction')
+```
+
+### Related Names
+
+| Model | Related Name | Access Example |
+|-------|--------------|----------------|
+| User.inventories | inventories | `user.inventories.all()` |
+| Inventory.images | images | `inventory.images.all()` |
+| Inventory.transaction | transaction | `inventory.transaction` |
+| User.user_profile | user_profile | `user.user_profile` |
+
+---
+
+## Updated ERD
+
+```mermaid
+erDiagram
+    User ||--o{ UserProfile : has
+    User ||--o{ Inventory : creates
+    User ||--o{ Transaction : "buyer/seller"
+    
+    Category ||--o{ Inventory : categorizes
+    
+    Inventory ||--o{ InventoryImage : has
+    Inventory ||--|{ Tag : "tagged_with"
+    Inventory ||--o| Transaction : "sold_in"
+    
+    Media ||--o{ InventoryImage : "used_in"
+    Media ||--o{ ProfileImage : "used_as"
+    
+    Transaction ||--o| Dispute : has
+```
+
+---
+
+## Search & Replace Guide
+
+If you need to update any additional files or code:
+
+### Using sed (Linux/Mac)
+```bash
+# Replace Listing → Inventory
+sed -i 's/Listing/Inventory/g' yourfile.py
+sed -i 's/listing/inventory/g' yourfile.py
+sed -i 's/listings/inventories/g' yourfile.py
+
+# Replace SellerProfile → UserProfile
+sed -i 's/SellerProfile/UserProfile/g' yourfile.py
+sed -i 's/seller_profile/user_profile/g' yourfile.py
+```
+
+### Using VS Code
+1. Press `Ctrl+H` (Find and Replace)
+2. Enable regex with `.*` button
+3. Find: `Listing`
+4. Replace: `Inventory`
+5. Replace All in Files
+
+### Python/Django Code
+```python
+# Update model imports
+from inventory.models import Inventory, InventoryImage  # was listings.models
+from accounts.models import UserProfile  # was SellerProfile
+
+# Update queries
+inventories = Inventory.objects.filter(status='ACTIVE')  # was Listing
+user_profile = user.user_profile  # was user.seller_profile
+```
+
+---
+
+## Updated User Stories
+
+### Before
+> "As a seller, I want to create a listing so I can sell my gadget"
+
+### After
+> "As a seller, I want to create an inventory item so I can sell my gadget"
+
+---
+
+### Before
+> "As a buyer, I want to search listings so I can find gadgets"
+
+### After
+> "As a buyer, I want to search inventory so I can find gadgets"
+
+---
+
+## Validation Checklist
+
+After renaming, verify:
+
+- [ ] All model names updated (Inventory, UserProfile, InventoryImage)
+- [ ] All table names updated (inventories, user_profiles, inventory_images)
+- [ ] All API endpoints updated (/api/inventories, /api/profile)
+- [ ] All frontend routes updated (/inventories, /my-inventories)
+- [ ] All component names updated (InventoryCard, etc.)
+- [ ] All related_name fields updated (user.inventories, user.user_profile)
+- [ ] All imports updated in Python files
+- [ ] All imports updated in JavaScript/React files
+- [ ] Database migrations reflect new names
+- [ ] Tests updated with new names
+- [ ] Documentation updated (README, API docs, etc.)
+
+---
+
+## Benefits of New Names
+
+### "Inventory" over "Listing"
+✅ **Clearer Intent** - Represents stock/items available  
+✅ **Industry Standard** - Common in e-commerce platforms  
+✅ **Future-Proof** - Better for inventory management features  
+✅ **Professional** - More business-oriented terminology  
+
+### "UserProfile" over "SellerProfile"
+✅ **Generic** - Can store both buyer and seller info  
+✅ **Extensible** - Easy to add buyer-specific fields later  
+✅ **Consistent** - Matches Django convention (User + UserProfile)  
+✅ **Flexible** - Accommodates role changes (buyer ↔ seller)  
+
+---
+
+## Migration Notes
+
+### Database Rename Migration
+
+When you run migrations, Django will rename tables:
+
+```python
+# Generated migration file
+class Migration(migrations.Migration):
+    operations = [
+        migrations.RenameModel(
+            old_name='Listing',
+            new_name='Inventory',
+        ),
+        migrations.RenameModel(
+            old_name='ListingImage',
+            new_name='InventoryImage',
+        ),
+        migrations.RenameModel(
+            old_name='SellerProfile',
+            new_name='UserProfile',
+        ),
+    ]
+```
+
+This will execute SQL like:
+```sql
+ALTER TABLE listings RENAME TO inventories;
+ALTER TABLE listing_images RENAME TO inventory_images;
+ALTER TABLE seller_profiles RENAME TO user_profiles;
+```
+
+---
+
+## Quick Reference Card
+
+| Concept | Old Term | New Term |
+|---------|----------|----------|
+| Item for sale | Listing | **Inventory** |
+| Multiple items | Listings | **Inventories** |
+| Seller details | SellerProfile | **UserProfile** |
+| Item photo | ListingImage | **InventoryImage** |
+| App folder | listings/ | **inventory/** |
+| API path | /api/listings | **/api/inventories** |
+| React route | /listings | **/inventories** |
+| Database table | listings | **inventories** |
+| Related name | user.listings | **user.inventories** |
+
+---
+
+**All documentation files have been updated with these new naming conventions.**
+
+**Version:** 2.1 - Naming Convention Updates  
+**Last Updated:** February 2026
+
+
+---
+
+# prd.md : project-plan
+
+_Source: `prd/project-plan/prd.md`_
+
+# Product Requirements Document: Pre-Owned Gadgets Marketplace
+
+## CONTENTS
+1. [Abstract](#abstract)
+2. [Business Objectives](#business-objectives)
+3. [KPI](#kpi)
+4. [Success Criteria](#success-criteria)
+5. [User Journeys](#user-journeys)
+6. [Scenarios](#scenarios)
+7. [User Flow](#user-flow)
+8. [Functional Requirements](#functional-requirements)
+9. [Model Requirements](#model-requirements)
+10. [Data Requirements](#data-requirements)
+11. [Prompt Requirements](#prompt-requirements)
+12. [Testing & Measurement](#testing--measurement)
+13. [Risks & Mitigations](#risks--mitigations)
+14. [Costs](#costs)
+15. [Assumptions & Dependencies](#assumptions--dependencies)
+16. [Compliance/Privacy/Legal](#complianceprivacylegal)
+17. [GTM/Rollout Plan](#gtmrollout-plan)
+
+---
+
+## 📝 Abstract
+
+A mobile-responsive web marketplace connecting budget-conscious buyers with sellers of pre-owned gadgets and electronics in India. The platform enables individual sellers to declutter and earn income by inventory working gadgets at below-retail prices, while buyers discover affordable electronics through powerful search capabilities. V1 focuses on local, in-person transactions with escrow payment protection, email verification for sellers, and admin-managed dispute resolution. Built with Django REST Framework backend, PostgreSQL database, and React frontend.
+
+**Purpose:** Make quality electronics accessible at affordable prices while creating a trusted marketplace for pre-owned gadgets.
+
+**Rationale:** New gadgets are expensive. This platform solves affordability by connecting buyers directly with sellers of working, pre-owned items at significantly lower prices than market retail.
+
+---
+
+## 🎯 Business Objectives
+
+- **Enable affordable access to technology** by creating a trusted marketplace for pre-owned gadgets priced below retail
+- **Build supply-side liquidity** by making it easy for individuals to monetize unused electronics through simple inventory and secure payments
+- **Establish marketplace trust** through escrow payments, email verification, and admin oversight to reduce fraud and build buyer confidence
+- **Capture local transaction demand** by facilitating safe, in-person exchanges without complex shipping logistics in V1
+- **Create sustainable growth engine** through repeat buyers finding quality deals and motivated sellers earning consistent income
+
+---
+
+## 📊 KPI
+
+| GOAL | METRIC | TARGET (8-12 weeks) | QUESTION |
+|------|--------|---------------------|----------|
+| Supply Growth | Active Inventorys | 1,000 | Are we attracting enough sellers to build inventory? |
+| Transaction Volume | Completed Transactions | 100 | Is the marketplace converting browsers into buyers? |
+| Buyer Retention | D7 Repeat Rate | 1% | Are buyers coming back for second purchases? |
+
+---
+
+## 🏆 Success Criteria
+
+**Quantitative:**
+- Achieve 1,000 active inventorys within 8-12 weeks of launch
+- Complete 100 successful transactions with escrow payment releases
+- Reach 1% buyer repeat purchase rate (buyers making 2+ purchases)
+- Maintain <5% dispute rate on completed transactions
+
+**Qualitative:**
+- Positive beta user feedback on trust and ease of use
+- Sellers report simple inventory process and timely payment receipt
+- Buyers find relevant gadgets through search within 3 queries
+- Zero critical security or payment incidents during beta period
+
+---
+
+## 🚶‍♀️ User Journeys
+
+### Primary Journey: Budget-Conscious Buyer (Ravi)
+
+Ravi is a college student looking for a reliable laptop under ₹20,000. He visits the marketplace, searches for "laptop under 20000", filters by "Good" condition, and browses inventorys sorted by lowest price. He finds a suitable Dell laptop listed at ₹18,500 (marked down from ₹25,000). After viewing photos and description, he completes the purchase. Payment goes to escrow. He contacts the seller via provided contact info, arranges a meetup at a safe public location, inspects the laptop, and completes the exchange. The admin releases payment to the seller after verification. Ravi returns two weeks later to search for a wireless mouse.
+
+### Secondary Journey: Decluttering Seller (Priya)
+
+Priya wants to sell her old iPhone 12 before upgrading. She signs up with email verification, logs in, and completes her seller profile including bank details (account number, IFSC code). She creates a inventory: uploads 4 photos, titles it "iPhone 12 128GB - Excellent Condition", writes a detailed description, sets marked price at ₹35,000 and offer price at ₹28,000, selects "Like New" condition and "Phones" category. Within 3 days, a buyer purchases it. After meeting the buyer and completing the exchange, she notifies the admin. Payment is released to her bank account within 24 hours.
+
+---
+
+## 📖 Scenarios
+
+**Buyer Scenarios:**
+- Search for specific gadget model and find it within top 5 results
+- Filter inventorys by price range to stay within budget
+- View multiple photos and detailed condition description before deciding
+- Complete purchase with confidence knowing payment is held in escrow
+- Coordinate meetup with seller using provided contact information
+- Browse active inventorys without seeing sold-out items
+
+**Seller Scenarios:**
+- Complete signup and email verification to establish trust
+- Add comprehensive profile with bank details for payment receipt
+- List gadget with multiple photos showing actual condition
+- Show competitive pricing with marked price vs. offer price
+- Edit or update inventory details if item condition or price changes
+- Receive payment directly to bank account after successful transaction
+
+**Admin Scenarios:**
+- Review and release escrow payments after transaction verification
+- Handle buyer-seller disputes through manual intervention
+- Add new product categories as marketplace expands
+- Monitor inventory quality and user activity for fraud detection
+- Manage user accounts and moderate content
+
+---
+
+## 🕹️ User Flow
+
+### Buyer Happy Path
+1. Land on homepage → Browse featured/recent inventorys
+2. Use search bar (keyword: "iPhone 13") → View results sorted by price
+3. Apply filters (price range, condition) → Refine results
+4. Click inventory → View photos, description, marked price, offer price, condition, seller info
+5. Click "Buy Now" → Sign up/Login (Email+Password or Google OAuth)
+6. Complete payment → Funds held in escrow
+7. Receive seller contact info → Arrange meetup offline
+8. Complete exchange → Admin releases payment to seller
+
+### Seller Happy Path
+1. Land on homepage → Click "Sell Your Gadget"
+2. Sign up (Email+Password or Google OAuth) → Verify email
+3. Login → Complete profile (name, brand, bank details)
+4. Click "Add Inventory" → Upload photos (1-5), enter title, description, marked price, offer price, select condition, select category
+5. Submit inventory → Item goes live immediately
+6. Buyer purchases → Receive notification with buyer contact
+7. Arrange meetup → Complete exchange
+8. Notify admin → Payment released to bank account within 24 hours
+
+### Alternative Flows
+- **Forgot Password:** Email reset link → User resets password → Login successful
+- **Failed Payment:** Payment gateway error → User retries or uses alternative method
+- **Edit Inventory:** Seller updates price/description → Changes reflected immediately
+- **Dispute:** Buyer/seller reports issue → Admin investigates → Resolution (refund or payment release)
+
+---
+
+## 🧰 Functional Requirements
+
+### Authentication & User Management
+
+| SECTION | SUB-SECTION | USER STORY & EXPECTED BEHAVIORS | SCREENS |
+|---------|-------------|----------------------------------|---------|
+| Signup | Email | **Story:** As a new user, I want to create an account with email and password so I can access the marketplace.<br>**Behaviors:** Email validation, password strength requirements (min 8 chars, 1 uppercase, 1 number), email verification link sent, account inactive until verified | Signup form, Email verification success |
+| Signup | Google OAuth | **Story:** As a new user, I want to sign up with my Google account for quick access.<br>**Behaviors:** OAuth redirect to Google, permission consent, auto-create account, email pre-verified, redirect to profile completion | Google OAuth consent, Profile setup |
+| Login | Email | **Story:** As a returning user, I want to log in with my email and password.<br>**Behaviors:** Email and password validation, show error for unverified email, redirect to dashboard on success | Login form, Dashboard |
+| Login | Google OAuth | **Story:** As a returning user, I want to log in with my Google account quickly.<br>**Behaviors:** OAuth redirect, auto-login if previously connected, redirect to dashboard | Google OAuth, Dashboard |
+| Forgot Password | - | **Story:** As a user who forgot my password, I want to reset it via email.<br>**Behaviors:** Enter email, send reset link (valid 24hrs), click link to reset page, enter new password, confirm and redirect to login | Forgot password form, Reset link email, Password reset form |
+
+### Seller Profile Management
+
+**User Story:** As a seller, I want to maintain a complete profile with payment details so buyers trust me and I can receive payments.
+
+**Expected Behaviors:**
+- Profile fields: Full Name (required), Brand Name (optional), Nickname (optional), Bank Account Number (required, encrypted), IFSC Code (required, validated format), Bank Name (required), Branch Address (optional)
+- Bank details encrypted at rest
+- Edit profile anytime
+- Profile completion indicator (encourage 100% completion)
+- Consent checkbox for storing bank details (required before saving)
+
+**Screens:** Profile setup form, Profile view/edit page
+
+### Product Inventory Management
+
+**User Story:** As a seller, I want to create detailed inventorys with photos and pricing so buyers have all information needed to make a purchase decision.
+
+**Expected Behaviors:**
+- Upload 1-5 photos (JPG, PNG, WEBP only, max 100MB each)
+- Photo preview before upload
+- Fields: Title (required, max 100 chars), Description (required, max 1000 chars), Marked Price (required, INR), Offer Price (required, INR, must be ≤ Marked Price), Condition dropdown (Like New, Good, Fair - required), Category dropdown (dynamic, required)
+- Auto-calculate discount percentage: ((Marked Price - Offer Price) / Marked Price) × 100
+- Save as draft or publish immediately
+- Edit inventory: All fields editable except photos (delete and re-upload)
+- Mark as sold (removes from search results)
+- Image storage: AWS S3 with CDN
+
+**Screens:** Create inventory form, Edit inventory form, Inventory preview, My inventorys dashboard
+
+### Search & Browse
+
+**User Story:** As a buyer, I want to search for gadgets by keyword and filter results so I can find exactly what I need within my budget.
+
+**Expected Behaviors:**
+- Search bar: Full-text search on title + description (PostgreSQL full-text search)
+- Auto-hide sold items from all results
+- Sort options: Price Low-to-High (default), Price High-to-Low, Newest First
+- Filter options: Price range slider (₹0 - ₹100,000), Condition checkboxes (Like New, Good, Fair), Category checkboxes (dynamic based on available categories)
+- Search results: Grid view with thumbnail, title, offer price, marked price (strikethrough), discount %, condition badge
+- Pagination: 20 items per page
+- Empty state: "No results found" with suggestion to modify search
+
+**Screens:** Homepage with search, Search results page, Filter sidebar
+
+### Product Detail Page
+
+**User Story:** As a buyer, I want to view complete product details including all photos and seller info so I can decide if I want to purchase.
+
+**Expected Behaviors:**
+- Image gallery: Thumbnail strip + large preview, click to zoom
+- Product info: Title, Description, Offer Price (prominent), Marked Price (strikethrough), Discount % badge, Condition badge, Category tag
+- Seller info: Brand name or nickname, "Verified Email" badge
+- "Buy Now" button (prominent CTA)
+- Breadcrumb navigation: Home > Category > Product Title
+- Related inventorys: Show 4 similar items (same category, similar price range)
+
+**Screens:** Product detail page
+
+### Payment & Escrow
+
+**User Story:** As a buyer, I want to pay securely knowing my money is protected until I receive the item.
+
+**Expected Behaviors:**
+- Click "Buy Now" → Redirect to payment gateway (Razorpay or equivalent)
+- Payment options: UPI, Cards, Net Banking, Wallets
+- Payment success → Funds moved to escrow account (not seller account)
+- Generate transaction ID
+- Send confirmation emails to buyer and seller with contact info exchange
+- Buyer receives: Seller name, phone number (if provided)
+- Seller receives: Buyer name, phone number (if provided)
+- Transaction status: "Payment in Escrow - Awaiting Admin Release"
+
+**User Story:** As a seller, I want to receive payment in my bank account after successful transaction.
+
+**Expected Behaviors:**
+- Admin dashboard shows "Pending Release" transactions
+- Admin reviews transaction, confirms with buyer/seller if needed
+- Admin clicks "Release Payment" → Escrow transfers to seller's bank account
+- Payment typically released within 24 hours of transaction completion
+- Seller receives payment confirmation email with transaction details
+
+**Screens:** Payment gateway integration, Payment success page, Transaction history (buyer & seller), Admin escrow management dashboard
+
+### Category Management (Admin)
+
+**User Story:** As a super admin, I want to add and manage product categories so the marketplace can expand to new gadget types.
+
+**Expected Behaviors:**
+- Admin panel: View all categories in table
+- Add category: Category name (required, unique), Description (optional), Icon/image (optional)
+- Edit category: Update name or description
+- Delete category: Only if no active inventorys use it (show warning + count)
+- Categories appear in seller inventory form and buyer filter dropdown
+- Default categories: Phones, Laptops, Tablets, Accessories, Other
+
+**Screens:** Admin category management page
+
+### Dispute Resolution (Admin)
+
+**User Story:** As an admin, I want to handle disputes between buyers and sellers so transactions can be resolved fairly.
+
+**Expected Behaviors:**
+- Buyer or seller can flag transaction as "Disputed"
+- Dispute form: Reason dropdown (Item not as described, Payment issue, Meetup failed, Other), Description (required)
+- Admin receives dispute notification
+- Admin dashboard shows all disputes with status: New, In Review, Resolved
+- Admin actions: Contact buyer/seller via email, Request additional info, Refund to buyer (from escrow), Release to seller, Partial refund
+- Resolution notes logged in transaction history
+- Email notifications sent to both parties on resolution
+
+**Screens:** Dispute flag form (buyer/seller), Admin dispute management dashboard
+
+---
+
+## 📐 Model Requirements
+
+**Not applicable.** This product does not utilize AI/ML models in V1. Search is powered by PostgreSQL full-text search capabilities. Future versions may incorporate ML for recommendations, fraud detection, or dynamic pricing suggestions.
+
+---
+
+## 🧮 Data Requirements
+
+### User Data
+- **Storage:** PostgreSQL database, India-based hosting (AWS Mumbai or equivalent region)
+- **Retention:** Indefinite unless user requests account deletion (GDPR-style right to be forgotten)
+- **PII Protection:** Bank details encrypted at rest (AES-256), password hashing (bcrypt), HTTPS enforced for all connections
+- **Access Controls:** Role-based access (Buyer, Seller, Admin), users can only view/edit their own data, admins have read-only access to support disputes
+
+### Product Inventory Data
+- **Storage:** PostgreSQL for metadata, AWS S3 for images
+- **Freshness:** Real-time updates, sold items immediately hidden from search
+- **Retention:** Active inventorys indefinite, sold inventorys archived after 90 days (retain for analytics)
+- **Image CDN:** CloudFront or equivalent for fast image delivery
+
+### Transaction Data
+- **Storage:** PostgreSQL with transaction log table for audit trail
+- **Retention:** 7 years (Indian tax and legal compliance)
+- **Audit Trail:** All status changes logged (payment received, escrow held, payment released, disputed, resolved)
+- **Access:** Buyer and seller can view their own transactions, admin full access for dispute resolution
+
+### Sample Data for Launch
+- **Purpose:** Populate marketplace for beta testing and demo
+- **Quantity:** 50-100 sample gadget inventorys across all categories
+- **Coverage:** Price range ₹500 - ₹80,000, all condition types, realistic photos and descriptions
+- **Sample Users:** 10-15 buyer accounts, 5-10 seller accounts with verified emails
+
+---
+
+## 💬 Prompt Requirements
+
+**Not applicable.** This product does not utilize LLM/AI prompting in V1. All content is user-generated. Future versions may incorporate AI for inventory description enhancement, fraud detection, or customer support chatbots.
+
+---
+
+## 🧪 Testing & Measurement
+
+### Pre-Launch Testing
+
+**Functional Testing:**
+- **Auth flows:** Email signup with verification, Google OAuth, login, logout, password reset
+- **Seller flows:** Profile completion, inventory creation (all field validations), photo upload (size/format limits), edit inventory, mark as sold
+- **Buyer flows:** Search (keyword accuracy), filter (price range, condition, category), sort, product detail view, payment integration
+- **Payment:** End-to-end payment with test gateway, escrow holding, admin release, bank transfer simulation
+- **Admin:** Category CRUD, escrow management, dispute handling
+- **Edge cases:** Duplicate inventorys, invalid bank details, payment failures, concurrent edits, SQL injection attempts
+
+**Performance Testing:**
+- Search response time: <500ms for 1,000 inventorys
+- Page load: <2s on 4G connection
+- Image load: Progressive loading with thumbnails
+- Concurrent users: Support 100 simultaneous users without degradation
+
+**Security Testing:**
+- Penetration testing for auth bypass attempts
+- SQL injection and XSS vulnerability scans
+- Bank detail encryption verification
+- HTTPS enforcement and certificate validation
+- Rate limiting on API endpoints (prevent scraping)
+
+**Browser Compatibility:**
+- Chrome (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Edge (latest 2 versions)
+- Mobile responsive: iOS Safari, Android Chrome
+
+### Post-Launch Monitoring
+
+**A/B Testing (Future):**
+- V1 ships with single experience, no A/B tests
+- Post-launch: Test search result ordering, pricing display format, CTA button copy
+
+**Live Performance Tracking:**
+- **Uptime:** 99.5% target, monitor via UptimeRobot or equivalent
+- **Error rate:** <1% of requests, alert if >2%
+- **Payment success rate:** >95%, alert if drops below 90%
+- **Search quality:** Track zero-result searches, investigate patterns
+- **Page speed:** Monitor with Google Analytics, target <3s average load time
+
+**Alerting:**
+- Payment gateway downtime: Immediate alert
+- Database connection failures: Immediate alert
+- Spike in dispute reports: Daily summary
+- Fraud pattern detection: Weekly review (manual in V1)
+
+**Analytics Tracking:**
+- Google Analytics 4 implementation
+- Track: Signups, inventorys created, searches performed, search-to-view rate, view-to-purchase rate, repeat purchase rate
+- Funnel: Homepage → Search → Product View → Purchase → Transaction Complete
+- Identify drop-off points for optimization
+
+---
+
+## ⚠️ Risks & Mitigations
+
+| RISK | LIKELIHOOD | IMPACT | MITIGATION |
+|------|------------|---------|------------|
+| **Fraud/Scams:** Fake inventorys or payment disputes destroy buyer trust | High | Critical | • Email verification for all sellers<br>• Escrow payment (not direct transfer)<br>• Admin review before payment release<br>• Dispute resolution process<br>• Future: Seller ratings, inventory review queue |
+| **Cold Start Problem:** No sellers = empty marketplace | High | Critical | • Pre-populate with 50-100 curated sample inventorys<br>• Beta launch with personal network (guaranteed initial sellers)<br>• Seller incentives: Featured inventorys for early adopters<br>• Community targeting: College campuses, tech groups |
+| **Poor Search Quality:** Buyers can't find relevant items | Medium | High | • PostgreSQL full-text search with ranking<br>• Test with 100+ inventorys before launch<br>• Track zero-result searches and iterate<br>• Plan migration to Elasticsearch if scale demands |
+| **Payment/Escrow Issues:** Failed payments or delayed releases frustrate users | Medium | High | • Use established payment gateway (Razorpay)<br>• Clear SLA: Payment released within 24 hours<br>• Automated email notifications at each status change<br>• Admin escalation process for delays |
+| **Low Buyer Trust:** Perception of risk in pre-owned marketplace | Medium | High | • "Verified Email" badges for sellers<br>• Escrow messaging in all payment flows<br>• Clear dispute resolution policy (visible on all pages)<br>• Encourage local meetups in public places (safety tips) |
+| **Technical Scalability:** Database/storage limits at high volume | Low | Medium | • AWS infrastructure with auto-scaling capability<br>• S3 for unlimited image storage<br>• Monitor database performance, plan sharding if needed<br>• CDN for image delivery reduces server load |
+| **Regulatory Compliance:** Non-compliance with RBI payment regulations | Low | Critical | • Legal review of escrow model before launch<br>• Partner with licensed payment gateway<br>• Document fund flow and audit trail<br>• Periodic compliance audits |
+
+---
+
+## 💰 Costs
+
+### Development Costs (One-Time)
+
+**Personnel (Estimated Timeline: 8-10 weeks):**
+- Backend Developer (Django REST): 6 weeks @ market rate
+- Frontend Developer (React): 6 weeks @ market rate
+- UI/UX Designer: 2 weeks @ market rate
+- QA/Testing: 2 weeks @ market rate
+- DevOps Setup: 1 week @ market rate
+
+**Assumption:** Using existing team or freelancers. Costs vary by region (₹50,000 - ₹3,00,000 total estimate for India-based team).
+
+**Third-Party Services Setup:**
+- Payment Gateway Integration: Razorpay setup (free, 2% transaction fee applies post-launch)
+- Email Service: AWS SES + django-anymail setup (free tier)
+- Domain Registration: ₹500 - ₹1,000/year
+- SSL Certificate: Free (Let's Encrypt)
+
+**Total Development Cost Estimate:** ₹50,000 - ₹3,00,000 (highly variable based on team structure)
+
+### Operational Costs (Monthly)
+
+**Infrastructure (Low-Cost Options):**
+- **Hosting:** AWS Lightsail or DigitalOcean Droplet: ₹500 - ₹2,000/month (scales with traffic)
+- **Database:** PostgreSQL on same server (V1), upgrade to RDS if needed: ₹0 - ₹3,000/month
+- **Storage:** AWS S3 for images: ₹500 - ₹2,000/month (100GB estimate, grows with inventorys)
+- **CDN:** CloudFront: ₹300 - ₹1,000/month (for image delivery)
+- **Email Service:**
+- AWS SES via django-anymail: First 62,000 emails/month FREE (when sending from EC2)
+- If not from EC2: $0.10 per 1,000 emails
+- Estimated: ₹0 - ₹300/month (well within free tier for beta/V1)
+
+**Payment Processing:**
+- Razorpay: 2% per transaction (₹100 transaction = ₹2 fee, deducted from seller payment or added to buyer total)
+- Estimated: ₹200/month (100 transactions × ₹100 avg × 2%)
+
+**Monitoring & Analytics:**
+- Google Analytics: Free
+- Uptime Monitoring: Free tier (UptimeRobot)
+- Error Tracking (Sentry): Free tier
+
+**Total Monthly Operational Cost:** ₹1,500 - ₹8,700/month
+
+**Cost Optimization Strategies:**
+- Start with smallest server, scale up based on traffic
+- Use AWS free tier for first 12 months if eligible
+- Image compression before S3 upload (reduces storage costs)
+- Consider Railway.app or Render.com for even lower hosting costs (₹300-500/month)
+
+---
+
+## 🔗 Assumptions & Dependencies
+
+### Assumptions
+
+1. **Market Assumption:** Sufficient demand exists for pre-owned gadgets in target geography (India)
+2. **Transaction Model:** V1 buyers and sellers are comfortable with local, in-person exchanges (no shipping)
+3. **Trust Model:** Email verification + escrow is sufficient trust signal for beta launch
+4. **Payment Timeline:** Sellers accept 24-hour payment release window as reasonable
+5. **Admin Bandwidth:** Manual escrow release and dispute resolution is feasible at <100 transactions/month
+6. **Search Scale:** PostgreSQL full-text search is adequate for up to 10,000 inventorys
+7. **Storage Growth:** 100 inventorys/week average, each with 3 photos × 5MB = 1.5GB/week growth rate
+8. **Browser Usage:** Target users have modern browsers (Chrome, Firefox, Safari, Edge)
+9. **Mobile Usage:** 60%+ users access via mobile, desktop experience is secondary
+10. **Beta Network:** Founder has access to 50+ potential beta users (buyers and sellers)
+11. **Sample Data:** Team can create realistic sample inventorys for marketplace seeding
+12. **Legal Compliance:** Current escrow model complies with Indian payment regulations (requires legal validation)
+13. **Geographic Focus:** Initial launch targets one city/region for concentrated growth
+14. **Category Growth:** 5 default categories sufficient for first 6 months
+
+### Dependencies
+
+**External Services:**
+- Payment gateway (Razorpay or equivalent) account active and integrated
+- AWS account with S3 bucket configured for India region
+- AWS SES configured with verified sender and production access
+- django-anymail installed for email delivery via SES
+- Domain registration and DNS configuration
+- Google OAuth credentials for social login
+
+**Internal Resources:**
+- Development team availability for 8-10 week build timeline
+- Legal review of Terms of Service, Privacy Policy, and escrow model
+- Admin availability for daily escrow release and dispute management (1-2 hours/day)
+- Marketing/community access for beta user recruitment
+
+**Content & Legal:**
+- Privacy Policy drafted and reviewed
+- Terms of Service drafted and reviewed
+- Refund/Dispute Policy documented
+- Consent forms for bank detail storage
+- Safety guidelines for local meetups
+
+**Technical:**
+- India-based hosting infrastructure provisioned
+- Database backup and disaster recovery plan
+- SSL certificate installed and auto-renewal configured
+- Monitoring and alerting configured before launch
+
+---
+
+## 🔒 Compliance/Privacy/Legal
+
+### Regulatory Compliance
+
+**Indian Payment Regulations:**
+- Escrow model must comply with RBI guidelines for marketplace facilitators
+- Payment gateway partner (Razorpay) handles PCI-DSS compliance
+- Transaction records retained for 7 years per Indian tax laws
+- GST applicability: Consult CA for marketplace commission structure (if applicable in future)
+
+**Action Required:** Legal review of escrow fund flow model before launch to ensure RBI compliance.
+
+### Data Protection & Privacy
+
+**Data Governance:**
+- **Storage Location:** All user data stored on India-based servers (AWS Mumbai or equivalent)
+- **Encryption:** Bank details encrypted at rest (AES-256), all connections via HTTPS (TLS 1.2+)
+- **Access Controls:** Role-based permissions, admin access logged and audited
+- **User Rights:** Users can request data export or account deletion (GDPR-style compliance)
+
+**Privacy Policy Requirements:**
+- **Consent:** Explicit consent checkbox before collecting bank details
+- **Disclosure:** Clearly state what data is collected (email, name, bank details, photos, transaction history)
+- **Usage:** Explain how data is used (facilitate transactions, payment processing, dispute resolution)
+- **Sharing:** Contact info shared between buyer/seller post-purchase, no third-party marketing sharing
+- **Retention:** User data retained indefinitely unless deletion requested, transaction data 7 years
+- **Cookies:** Disclose analytics cookies (Google Analytics), provide opt-out
+
+**Action Required:** Draft and publish Privacy Policy before launch, link prominently in footer and signup flow.
+
+### Terms of Service
+
+**Key Clauses:**
+- **User Conduct:** Prohibit fake inventorys, fraud, harassment, illegal goods
+- **Transaction Terms:** Escrow holding period, admin release timeline (24 hours), dispute process
+- **Liability:** Platform is facilitator only, not responsible for item condition or user disputes (best-effort resolution)
+- **Fees:** Payment gateway fees disclosed (2% transaction fee), no platform commission in V1
+- **Termination:** Platform can suspend/ban users violating terms
+- **Governing Law:** Indian jurisdiction for dispute resolution
+
+**Action Required:** Draft and publish Terms of Service before launch, require acceptance during signup.
+
+### Intellectual Property
+
+**User Content:**
+- Users retain copyright on photos and descriptions
+- Users grant platform license to display content for marketplace purposes
+- Platform can remove infringing content (counterfeit goods, trademark violations)
+
+### Risk Mitigation
+
+**Fraud Prevention:**
+- Email verification reduces fake accounts
+- Admin review before payment release catches suspicious transactions
+- Dispute process handles bad actors
+
+**Safety Guidelines:**
+- Publish safety tips for local meetups (public places, daytime, bring friend)
+- Recommend buyers inspect item before exchange
+- Encourage reporting suspicious inventorys or users
+
+**Action Required:** Create and publish Safety Guidelines page before launch.
+
+---
+
+## 📣 GTM/Rollout Plan
+
+### Milestones
+
+**Week 1-2: Foundation**
+- Finalize tech stack setup (Django, PostgreSQL, React scaffolding)
+- Design system and UI mockups approved
+- Payment gateway sandbox integration complete
+
+**Week 3-4: Core Development**
+- Auth flows (email, Google OAuth, password reset)
+- Seller profile and inventory management
+- Search and browse functionality
+
+**Week 5-6: Transaction Features**
+- Payment integration (test mode)
+- Escrow logic and admin dashboard
+- Buyer purchase flow end-to-end
+
+**Week 7-8: Polish & Testing**
+- UI/UX refinement based on internal testing
+- Security audit and penetration testing
+- Sample data creation (50-100 inventorys)
+- Legal docs finalized (Terms, Privacy, Safety)
+
+**Week 9: Beta Prep**
+- Deploy to production environment
+- Payment gateway live mode activated
+- Analytics and monitoring configured
+- Beta user recruitment from personal network
+
+**Week 10: Beta Launch**
+- Soft launch to 20-30 beta users (friends, family, trusted community)
+- Daily monitoring and bug fixes
+- Gather qualitative feedback via surveys
+- Admin actively manages escrow releases
+
+**Week 11-12: Iterate & Scale**
+- Incorporate beta feedback (UI tweaks, flow improvements)
+- Monitor KPIs: inventorys, transactions, repeat rate
+- Expand to broader community if metrics positive
+
+### Launch Strategy
+
+**Phase 1: Private Beta (Week 10)**
+- **Audience:** Personal network (friends, family, college community, tech groups)
+- **Size:** 20-30 users (mix of buyers and sellers)
+- **Goal:** Validate end-to-end flow, gather feedback, achieve first 10 transactions
+- **Channels:** Direct outreach (WhatsApp, email), invite-only access
+- **Incentives:** Early adopters get featured inventorys, founder support for onboarding
+
+**Phase 2: Community Beta (Week 11-14)**
+- **Audience:** Expand to specific community (e.g., college campus, tech Slack/Discord groups, local Facebook groups)
+- **Size:** 100-200 users
+- **Goal:** Achieve 50+ inventorys, 30+ transactions, validate product-market fit
+- **Channels:** Social media posts (Instagram, Twitter, LinkedIn), community forums, word-of-mouth
+- **Positioning:** "Affordable gadgets from people you trust - local, verified, secure"
+
+**Phase 3: City Launch (Week 15-20)**
+- **Audience:** Broader city/region (e.g., Bangalore, Mumbai, Delhi)
+- **Size:** 500-1,000 users
+- **Goal:** Hit KPI targets (1,000 inventorys, 100 transactions, 1% repeat rate)
+- **Channels:** Paid social ads (Instagram, Facebook), influencer partnerships, SEO optimization, PR outreach
+- **Budget:** ₹10,000 - ₹30,000 for ads (testing phase)
+
+### Phased Rollout
+
+**Beta Features (Week 10-12):**
+- Core flows only: Auth, inventory, search, payment, escrow
+- Manual admin processes (escrow release, dispute resolution)
+- Limited categories (Phones, Laptops, Tablets, Accessories, Other)
+- Single geography focus (one city)
+
+**Post-Beta Enhancements (Week 13+, based on feedback):**
+- Seller ratings and reviews (if fraud concerns arise)
+- Automated escrow release after X days (reduce admin burden)
+- Shipping integration (if user demand is high)
+- Buyer-seller in-app messaging (if coordination issues surface)
+- Advanced search (filters by brand, specifications)
+- Recommendation engine (if browsing behavior warrants it)
+
+### Success Checkpoints
+
+**End of Week 10 (Beta Launch):**
+- ✅ 20+ active inventorys from beta sellers
+- ✅ 5+ completed transactions
+- ✅ Zero critical bugs or security incidents
+- ✅ Positive qualitative feedback (NPS >7)
+
+**End of Week 12 (Beta Completion):**
+- ✅ 100+ active inventorys
+- ✅ 20+ completed transactions
+- ✅ Repeat purchase by at least 2 buyers
+- ✅ <10% dispute rate
+- ✅ Decision: Proceed to broader launch or pivot based on feedback
+
+**End of Week 20 (City Launch):**
+- ✅ 1,000 active inventorys (KPI target)
+- ✅ 100 completed transactions (KPI target)
+- ✅ 1% buyer repeat rate (KPI target)
+- ✅ 95%+ payment success rate
+- ✅ Operational runbook established for admin processes
+
+### Rollback Plan
+
+If critical issues arise (payment failures, security breach, high fraud rate):
+1. Pause new signups immediately
+2. Email all active users about maintenance window
+3. Identify and fix root cause
+4. Re-test in staging environment
+5. Gradual re-launch with monitoring
+6. Communicate resolution and preventive measures to users
+
+---
+
+**END OF PRD**
+
+_Generated: February 2026_
+_Version: 1.0 - V1 Scope_
+_Next Review: Post-Beta Feedback (Week 12)_
+
+
+---
+
+# project-plan_combined_output.txt : project-plan
+
+_Source: `prd/project-plan/project-plan_combined_output.txt`_
+
+==================================================
+FILE: database-schema.md
+==================================================
+
+# Database Schema Design: Pre-Owned Gadgets Marketplace
+
+## Overview
+
+This document defines the complete database schema for the marketplace including:
+- Entity Relationship Diagram (ERD)
+- Django models with all fields and relationships
+- Indexes and constraints for performance
+- Sample data structure
+
+**Database:** PostgreSQL 14+  
+**ORM:** Django 4.2+  
+**Region:** India (ap-south-1)
+
+---
+
+## Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    User ||--o{ UserProfile : has
+    User ||--o{ Inventory : creates
+    User ||--o{ Transaction : "buyer/seller"
+    User ||--o{ Dispute : raises
+    
+    Category ||--o{ Category : "parent/child"
+    Category ||--o{ Inventory : categorizes
+    
+    Inventory ||--o{ InventoryImage : has
+    Inventory ||--|{ Tag : "tagged_with"
+    Inventory ||--o| Transaction : "sold_in"
+    
+    Transaction ||--o| Dispute : has
+    
+    User {
+        int id PK
+        string email UK
+        string password
+        string role
+        boolean is_email_verified
+        datetime date_joined
+        datetime last_login
+    }
+    
+    UserProfile {
+        int id PK
+        int user_id FK
+        string full_name
+        string brand_name
+        string nickname
+        string bank_account_number
+        string ifsc_code
+        string bank_name
+        string branch_address
+        boolean consent_given
+        datetime created_at
+    }
+    
+    Category {
+        int id PK
+        string path UK
+        int depth
+        int numchild
+        string name
+        string slug UK
+        string description
+        string icon_url
+        boolean is_active
+        datetime created_at
+    }
+    
+    Inventory {
+        int id PK
+        int seller_id FK
+        int category_id FK
+        string title
+        text description
+        decimal marked_price
+        decimal offer_price
+        decimal discount_percentage
+        string condition
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+    
+    InventoryImage {
+        int id PK
+        int inventory_id FK
+        string image_url
+        int order
+        datetime uploaded_at
+    }
+    
+    Tag {
+        int id PK
+        string name UK
+        string slug UK
+    }
+    
+    Transaction {
+        int id PK
+        int buyer_id FK
+        int seller_id FK
+        int inventory_id FK
+        decimal amount
+        string payment_id
+        string status
+        text admin_notes
+        datetime created_at
+        datetime updated_at
+        datetime released_at
+    }
+    
+    Dispute {
+        int id PK
+        int transaction_id FK
+        int raised_by_id FK
+        string reason
+        text description
+        string status
+        text resolution_notes
+        datetime created_at
+        datetime resolved_at
+    }
+```
+
+---
+
+## Django Models
+
+### App Structure
+
+```
+marketplace/
+├── accounts/           # User, UserProfile
+├── categories/         # Category (django-treebeard)
+├── inventorys/          # Inventory, InventoryImage, Tag (django-taggit)
+├── transactions/      # Transaction, Dispute
+└── core/              # Shared utilities
+```
+
+---
+
+## 1. Accounts App
+
+### models.py
+
+```python
+import uuid
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.core.validators import RegexValidator
+from cryptography.fernet import Fernet
+from django.conf import settings
+
+
+class User(AbstractUser):
+    """
+    Custom user model with role-based authentication
+    """
+    
+    class Role(models.TextChoices):
+        BUYER = 'BUYER', 'Buyer'
+        SELLER = 'SELLER', 'Seller'
+        ADMIN = 'ADMIN', 'Admin'
+    
+    class SellerPlan(models.TextChoices):
+        SELF_SELL = 'SELF_SELL', 'Self Sell'
+        SMART_SELL = 'SMART_SELL', 'Smart Sell'
+        DONATE = 'DONATE', 'Donate'
+    
+    class DonationPercentage(models.IntegerChoices):
+        FIFTY = 50, '50%'
+        HUNDRED = 100, '100%'
+    
+    # Core Identity
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+    email = models.EmailField(unique=True, db_index=True)
+    username = models.CharField(max_length=150, unique=True, db_index=True)
+    
+    # Personal Information
+    full_name = models.CharField(max_length=255)
+    
+    # Email Verification
+    is_email_verified = models.BooleanField(default=False)
+    email_verification_token = models.CharField(max_length=100, blank=True, db_index=True)
+    email_verification_expiry = models.DateTimeField(null=True, blank=True)
+    
+    # Mobile Verification
+    mobile = models.CharField(
+        max_length=15,
+        blank=True,
+        validators=[
+            RegexValidator(
+                regex=r'^\+?1?\d{9,15}$',
+                message='Phone number must be entered in the format: "+919876543210"'
+            )
+        ]
+    )
+    mobile_verified = models.BooleanField(default=False)
+    mobile_last_verified_on = models.DateTimeField(null=True, blank=True)
+    
+    # Payment Information
+    upi_id = models.CharField(max_length=100, blank=True)
+    upi_id_last_verified_on = models.DateTimeField(null=True, blank=True)
+    
+    # Seller Configuration
+    seller_plan = models.CharField(
+        max_length=20,
+        choices=SellerPlan.choices,
+        blank=True,
+        help_text="Seller's chosen plan"
+    )
+    donation_percentage = models.IntegerField(
+        choices=DonationPercentage.choices,
+        null=True,
+        blank=True,
+        help_text="Donation percentage if seller_plan is DONATE"
+    )
+    net_earnings = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0.00,
+        help_text="Total earnings in INR"
+    )
+    
+    # Role & Status
+    role = models.CharField(
+        max_length=10,
+        choices=Role.choices,
+        default=Role.BUYER,
+        db_index=True,
+        help_text="Auto-assigned: BUYER by default, SELLER if has inventory"
+    )
+    
+    # Personal Preference
+    favorite_book = models.CharField(max_length=255, blank=True)
+    
+    # Status Fields
+    active = models.BooleanField(default=True, db_index=True)
+    archived = models.BooleanField(default=False, db_index=True)
+    
+    # Timestamps
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'full_name']
+    
+    class Meta:
+        db_table = 'users'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+        indexes = [
+            models.Index(fields=['email', 'is_email_verified']),
+            models.Index(fields=['role', 'active']),
+            models.Index(fields=['uuid']),
+            models.Index(fields=['mobile', 'mobile_verified']),
+            models.Index(fields=['active', 'archived']),
+        ]
+    
+    def __str__(self):
+        return f"{self.email} ({self.get_role_display()})"
+    
+    def auto_assign_role(self):
+        """
+        Auto-assign role based on inventory:
+        - Has inventorys → SELLER
+        - No inventorys → BUYER
+        """
+        if self.role == self.Role.ADMIN:
+            return  # Don't change admin role
+        
+        has_inventory = self.inventorys.filter(status='ACTIVE').exists()
+        new_role = self.Role.SELLER if has_inventory else self.Role.BUYER
+        
+        if self.role != new_role:
+            self.role = new_role
+            self.save(update_fields=['role', 'updated_on'])
+    
+    def verify_email(self, token):
+        """Verify email with token"""
+        from django.utils import timezone
+        if (self.email_verification_token == token and 
+            self.email_verification_expiry and 
+            self.email_verification_expiry > timezone.now()):
+            self.is_email_verified = True
+            self.email_verification_token = ''
+            self.email_verification_expiry = None
+            self.save(update_fields=['is_email_verified', 'email_verification_token', 
+                                    'email_verification_expiry', 'updated_on'])
+            return True
+        return False
+    
+    def verify_mobile(self):
+        """Mark mobile as verified"""
+        from django.utils import timezone
+        self.mobile_verified = True
+        self.mobile_last_verified_on = timezone.now()
+        self.save(update_fields=['mobile_verified', 'mobile_last_verified_on', 'updated_on'])
+    
+    def verify_upi_id(self):
+        """Mark UPI ID as verified"""
+        from django.utils import timezone
+        self.upi_id_last_verified_on = timezone.now()
+        self.save(update_fields=['upi_id_last_verified_on', 'updated_on'])
+    
+    def add_earnings(self, amount):
+        """Add to net earnings"""
+        self.net_earnings += amount
+        self.save(update_fields=['net_earnings', 'updated_on'])
+
+
+class UserProfile(models.Model):
+    """
+    Extended profile for sellers with bank details
+    Auto-generates unique cool nicknames (Reddit-style)
+    """
+    
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='user_profile'
+    )
+    
+    # Personal Information
+    full_name = models.CharField(max_length=255)
+    brand_name = models.CharField(max_length=255, blank=True)
+    nickname = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        help_text="Auto-generated unique cool name (Reddit-style)"
+    )
+    
+    # Bank Details (Encrypted)
+    bank_account_number = models.BinaryField()  # Encrypted
+    ifsc_code = models.CharField(
+        max_length=11,
+        validators=[
+            RegexValidator(
+                regex=r'^[A-Z]{4}0[A-Z0-9]{6}$',
+                message='Invalid IFSC code format'
+            )
+        ]
+    )
+    bank_name = models.CharField(max_length=255)
+    branch_address = models.TextField(blank=True)
+    
+    # Consent
+    consent_given = models.BooleanField(default=False)
+    consent_timestamp = models.DateTimeField(null=True, blank=True)
+    
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'user_profiles'
+        verbose_name = 'Seller Profile'
+        verbose_name_plural = 'Seller Profiles'
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.nickname}"
+    
+    def save(self, *args, **kwargs):
+        """Auto-generate nickname if not set"""
+        if not self.nickname:
+            self.nickname = self.generate_unique_nickname()
+        super().save(*args, **kwargs)
+    
+    @staticmethod
+    def generate_unique_nickname():
+        """
+        Generate unique Reddit-style nicknames
+        Format: AdjectiveNoun#### (e.g., CoolPanda4782)
+        """
+        import random
+        
+        adjectives = [
+            'Cool', 'Swift', 'Bright', 'Smart', 'Epic', 'Mega', 'Ultra', 'Super',
+            'Wild', 'Bold', 'Quick', 'Lucky', 'Happy', 'Mighty', 'Noble', 'Proud',
+            'Cosmic', 'Electric', 'Golden', 'Silver', 'Quantum', 'Turbo', 'Stellar'
+        ]
+        
+        nouns = [
+            'Panda', 'Tiger', 'Eagle', 'Falcon', 'Phoenix', 'Dragon', 'Lion', 'Wolf',
+            'Hawk', 'Bear', 'Fox', 'Shark', 'Panther', 'Cobra', 'Raven', 'Lynx',
+            'Viper', 'Jaguar', 'Otter', 'Badger', 'Racoon', 'Falcon', 'Condor'
+        ]
+        
+        while True:
+            adjective = random.choice(adjectives)
+            noun = random.choice(nouns)
+            number = random.randint(1000, 9999)
+            nickname = f"{adjective}{noun}{number}"
+            
+            # Check uniqueness
+            if not UserProfile.objects.filter(nickname=nickname).exists():
+                return nickname
+    
+    def set_bank_account(self, account_number):
+        """Encrypt and store bank account number"""
+        cipher = Fernet(settings.ENCRYPTION_KEY)
+        encrypted = cipher.encrypt(account_number.encode())
+        self.bank_account_number = encrypted
+    
+    def get_bank_account(self):
+        """Decrypt and return bank account number"""
+        cipher = Fernet(settings.ENCRYPTION_KEY)
+        decrypted = cipher.decrypt(self.bank_account_number)
+        return decrypted.decode()
+    
+    @property
+    def is_complete(self):
+        """Check if profile is 100% complete"""
+        return all([
+            self.full_name,
+            self.bank_account_number,
+            self.ifsc_code,
+            self.bank_name,
+            self.consent_given,
+        ])
+
+
+class Media(models.Model):
+    """
+    Central media repository for all images (profile photos, inventory images, etc.)
+    One media can be associated with multiple inventorys or profiles (reusable)
+    """
+    
+    class FileType(models.TextChoices):
+        IMAGE_JPEG = 'image/jpeg', 'JPEG Image'
+        IMAGE_PNG = 'image/png', 'PNG Image'
+        IMAGE_WEBP = 'image/webp', 'WebP Image'
+        IMAGE_GIF = 'image/gif', 'GIF Image'
+    
+    # Core Identity
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, db_index=True)
+    
+    # File Information
+    file_name = models.CharField(max_length=255)
+    alt_tag = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Alt text for accessibility"
+    )
+    file_type = models.CharField(
+        max_length=20,
+        choices=FileType.choices,
+        help_text="Auto-captured from content type"
+    )
+    
+    # Storage
+    s3_url = models.URLField(
+        max_length=500,
+        unique=True,
+        help_text="Full S3 URL with CDN"
+    )
+    
+    # Metadata
+    created_on = models.DateTimeField(auto_now_add=True, db_index=True)
+    
+    # Status
+    status = models.BooleanField(
+        default=True,
+        db_index=True,
+        help_text="Active/Inactive"
+    )
+    archived = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text="Soft delete"
+    )
+    
+    class Meta:
+        db_table = 'media'
+        verbose_name = 'Media'
+        verbose_name_plural = 'Media'
+        ordering = ['-created_on']
+        indexes = [
+            models.Index(fields=['uuid']),
+            models.Index(fields=['status', 'archived']),
+            models.Index(fields=['file_type', 'status']),
+            models.Index(fields=['created_on']),
+        ]
+    
+    def __str__(self):
+        return f"{self.file_name} ({self.uuid})"
+    
+    def get_usage_count(self):
+        """Get count of how many times this media is used"""
+        profile_usage = self.profile_images.count()
+        inventory_usage = self.inventory_images.count()
+        return profile_usage + inventory_usage
+    
+    def is_reusable(self):
+        """Check if media can be reused (not archived, active)"""
+        return self.status and not self.archived
+    
+    @classmethod
+    def create_from_upload(cls, file, alt_tag=''):
+        """
+        Create Media instance from uploaded file
+        Handles S3 upload and metadata extraction
+        """
+        import mimetypes
+        from django.core.files.storage import default_storage
+        
+        # Detect file type
+        content_type, _ = mimetypes.guess_type(file.name)
+        if content_type not in dict(cls.FileType.choices):
+            raise ValueError(f"Unsupported file type: {content_type}")
+        
+        # Generate unique filename
+        import uuid as uuid_lib
+        file_uuid = uuid_lib.uuid4()
+        extension = file.name.split('.')[-1]
+        unique_filename = f"media/{file_uuid}.{extension}"
+        
+        # Upload to S3
+        s3_path = default_storage.save(unique_filename, file)
+        s3_url = default_storage.url(s3_path)
+        
+        # Create Media record
+        media = cls.objects.create(
+            file_name=file.name,
+            alt_tag=alt_tag,
+            file_type=content_type,
+            s3_url=s3_url,
+        )
+        
+        return media
+```
+
+---
+
+## 2. Categories App
+
+### models.py
+
+```python
+from django.db import models
+from treebeard.mp_tree import MP_Node
+
+
+class Category(MP_Node):
+    """
+    Hierarchical category model using django-treebeard
+    Supports unlimited nesting (Phones > iPhone > iPhone 13)
+    """
+    
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True, db_index=True)
+    description = models.TextField(blank=True)
+    icon_url = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    node_order_by = ['name']  # Treebeard: order children alphabetically
+    
+    class Meta:
+        db_table = 'categories'
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+        indexes = [
+            models.Index(fields=['slug', 'is_active']),
+            models.Index(fields=['path']),  # Treebeard materialized path
+        ]
+    
+    def __str__(self):
+        return self.get_full_path()
+    
+    def get_full_path(self):
+        """Get full category path (e.g., 'Phones > iPhone > iPhone 13')"""
+        ancestors = self.get_ancestors()
+        path_parts = [cat.name for cat in ancestors] + [self.name]
+        return ' > '.join(path_parts)
+    
+    def get_inventory_count(self):
+        """Get count of active inventorys in this category and subcategories"""
+        from inventorys.models import Inventory
+        descendant_ids = [self.id] + [cat.id for cat in self.get_descendants()]
+        return Inventory.objects.filter(
+            category_id__in=descendant_ids,
+            status=Inventory.Status.ACTIVE
+        ).count()
+    
+    def can_delete(self):
+        """Check if category can be deleted (no active inventorys)"""
+        return self.get_inventory_count() == 0
+```
+
+---
+
+## 3. Inventorys App
+
+### models.py
+
+```python
+from django.db import models
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
+from taggit.managers import TaggableManager
+from accounts.models import User
+from categories.models import Category
+
+
+class Inventory(models.Model):
+    """
+    Product inventory model with full-text search
+    """
+    
+    class Condition(models.TextChoices):
+        LIKE_NEW = 'LIKE_NEW', 'Like New'
+        GOOD = 'GOOD', 'Good'
+        FAIR = 'FAIR', 'Fair'
+    
+    class Status(models.TextChoices):
+        DRAFT = 'DRAFT', 'Draft'
+        ACTIVE = 'ACTIVE', 'Active'
+        SOLD = 'SOLD', 'Sold'
+    
+    # Relationships
+    seller = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='inventorys',
+        limit_choices_to={'role': User.Role.SELLER}
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        related_name='inventorys'
+    )
+    
+    # Basic Information
+    title = models.CharField(max_length=200, db_index=True)
+    description = models.TextField()
+    
+    # Pricing
+    marked_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Original/MRP price in INR"
+    )
+    offer_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Selling price in INR",
+        db_index=True
+    )
+    discount_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        editable=False,
+        help_text="Auto-calculated discount %"
+    )
+    
+    # Condition & Status
+    condition = models.CharField(
+        max_length=10,
+        choices=Condition.choices,
+        db_index=True
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.DRAFT,
+        db_index=True
+    )
+    
+    # Tags (django-taggit)
+    tags = TaggableManager(blank=True)
+    
+    # Full-text search vector
+    search_vector = SearchVectorField(null=True, editable=False)
+    
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'inventorys'
+        verbose_name = 'Inventory'
+        verbose_name_plural = 'Inventorys'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['seller', 'status']),
+            models.Index(fields=['category', 'status']),
+            models.Index(fields=['offer_price', 'status']),
+            GinIndex(fields=['search_vector']),  # Full-text search index
+        ]
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(offer_price__lte=models.F('marked_price')),
+                name='offer_price_lte_marked_price'
+            ),
+        ]
+    
+    def __str__(self):
+        return f"{self.title} - ₹{self.offer_price}"
+    
+    def save(self, *args, **kwargs):
+        """Auto-calculate discount percentage before saving"""
+        if self.marked_price and self.offer_price:
+            discount = ((self.marked_price - self.offer_price) / self.marked_price) * 100
+            self.discount_percentage = round(discount, 2)
+        super().save(*args, **kwargs)
+    
+    def mark_as_sold(self):
+        """Mark inventory as sold"""
+        self.status = self.Status.SOLD
+        self.save(update_fields=['status', 'updated_at'])
+    
+    def get_primary_image(self):
+        """Get first image or None"""
+        return self.images.first()
+    
+    def get_image_urls(self):
+        """Get all image URLs as list"""
+        return list(self.images.order_by('order').values_list('image_url', flat=True))
+
+
+class InventoryImage(models.Model):
+    """
+    Association between Inventory and Media (many-to-many through model)
+    One inventory can have multiple images (1-5)
+    One image (Media) can be used in multiple inventorys (reusable)
+    """
+    inventory = models.ForeignKey(
+        Inventory,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    media = models.ForeignKey(
+        'accounts.Media',  # Reference to Media model
+        on_delete=models.PROTECT,  # Don't delete media if used in inventory
+        related_name='inventory_images'
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'inventory_images'
+        ordering = ['order']
+        unique_together = [('inventory', 'order')]
+        indexes = [
+            models.Index(fields=['inventory', 'order']),
+            models.Index(fields=['media']),
+        ]
+    
+    def __str__(self):
+        return f"Image {self.order + 1} for {self.inventory.title}"
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+
+
+class ProfileImage(models.Model):
+    """
+    Association between User Profile and Media
+    One user can have one profile image
+    One image (Media) can be used by multiple users (reusable)
+    """
+    user = models.OneToOneField(
+        'accounts.User',
+        on_delete=models.CASCADE,
+        related_name='profile_image'
+    )
+    media = models.ForeignKey(
+        'accounts.Media',
+        on_delete=models.PROTECT,
+        related_name='profile_images'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'profile_images'
+    
+    def __str__(self):
+        return f"Profile image for {self.user.email}"
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+
+
+class InventoryView(models.Model):
+    """
+    Track inventory views for analytics (optional for V1)
+    """
+    inventory = models.ForeignKey(
+        Inventory,
+        on_delete=models.CASCADE,
+        related_name='views'
+    )
+    viewer_ip = models.GenericIPAddressField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'inventory_views'
+        indexes = [
+            models.Index(fields=['inventory', 'viewed_at']),
+        ]
+```
+
+---
+
+## 4. Transactions App
+
+### models.py
+
+```python
+from django.db import models
+from accounts.models import User
+from inventorys.models import Inventory
+
+
+class Transaction(models.Model):
+    """
+    Payment transaction with escrow
+    """
+    
+    class Status(models.TextChoices):
+        PENDING = 'PENDING', 'Payment Pending'
+        ESCROW = 'ESCROW', 'In Escrow'
+        RELEASED = 'RELEASED', 'Payment Released'
+        REFUNDED = 'REFUNDED', 'Refunded'
+        DISPUTED = 'DISPUTED', 'Disputed'
+    
+    # Relationships
+    buyer = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='purchases'
+    )
+    seller = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='sales'
+    )
+    inventory = models.OneToOneField(
+        Inventory,
+        on_delete=models.PROTECT,
+        related_name='transaction'
+    )
+    
+    # Payment Details
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Transaction amount in INR"
+    )
+    payment_id = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        help_text="Razorpay payment ID"
+    )
+    
+    # Status & Notes
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PENDING,
+        db_index=True
+    )
+    admin_notes = models.TextField(blank=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    released_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'transactions'
+        verbose_name = 'Transaction'
+        verbose_name_plural = 'Transactions'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['buyer', 'status']),
+            models.Index(fields=['seller', 'status']),
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['payment_id']),
+        ]
+    
+    def __str__(self):
+        return f"Transaction {self.payment_id} - ₹{self.amount}"
+    
+    def move_to_escrow(self):
+        """Move payment to escrow after successful payment"""
+        self.status = self.Status.ESCROW
+        self.inventory.mark_as_sold()
+        self.save(update_fields=['status', 'updated_at'])
+    
+    def release_payment(self, admin_user):
+        """Release payment from escrow to seller"""
+        from django.utils import timezone
+        self.status = self.Status.RELEASED
+        self.released_at = timezone.now()
+        self.admin_notes += f"\nPayment released by {admin_user.email} at {self.released_at}"
+        self.save(update_fields=['status', 'released_at', 'admin_notes', 'updated_at'])
+    
+    def refund_payment(self, admin_user, reason):
+        """Refund payment to buyer"""
+        self.status = self.Status.REFUNDED
+        self.admin_notes += f"\nRefunded by {admin_user.email}. Reason: {reason}"
+        self.save(update_fields=['status', 'admin_notes', 'updated_at'])
+    
+    def mark_disputed(self):
+        """Mark transaction as disputed"""
+        self.status = self.Status.DISPUTED
+        self.save(update_fields=['status', 'updated_at'])
+
+
+class Dispute(models.Model):
+    """
+    Dispute raised by buyer or seller
+    """
+    
+    class Reason(models.TextChoices):
+        NOT_AS_DESCRIBED = 'NOT_AS_DESCRIBED', 'Item not as described'
+        PAYMENT_ISSUE = 'PAYMENT_ISSUE', 'Payment issue'
+        MEETUP_FAILED = 'MEETUP_FAILED', 'Meetup failed'
+        OTHER = 'OTHER', 'Other'
+    
+    class Status(models.TextChoices):
+        NEW = 'NEW', 'New'
+        IN_REVIEW = 'IN_REVIEW', 'In Review'
+        RESOLVED = 'RESOLVED', 'Resolved'
+    
+    # Relationships
+    transaction = models.OneToOneField(
+        Transaction,
+        on_delete=models.CASCADE,
+        related_name='dispute'
+    )
+    raised_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        help_text="User who raised the dispute"
+    )
+    
+    # Dispute Details
+    reason = models.CharField(max_length=20, choices=Reason.choices)
+    description = models.TextField()
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.NEW,
+        db_index=True
+    )
+    
+    # Resolution
+    resolution_notes = models.TextField(blank=True)
+    resolved_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='resolved_disputes',
+        limit_choices_to={'role': User.Role.ADMIN}
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'disputes'
+        verbose_name = 'Dispute'
+        verbose_name_plural = 'Disputes'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['transaction']),
+        ]
+    
+    def __str__(self):
+        return f"Dispute on {self.transaction.payment_id} by {self.raised_by.email}"
+    
+    def resolve(self, admin_user, resolution_notes, action):
+        """
+        Resolve dispute
+        action: 'release' or 'refund'
+        """
+        from django.utils import timezone
+        
+        self.status = self.Status.RESOLVED
+        self.resolution_notes = resolution_notes
+        self.resolved_by = admin_user
+        self.resolved_at = timezone.now()
+        self.save()
+        
+        # Execute action on transaction
+        if action == 'release':
+            self.transaction.release_payment(admin_user)
+        elif action == 'refund':
+            self.transaction.refund_payment(admin_user, resolution_notes)
+```
+
+---
+
+## Database Indexes Summary
+
+### Performance-Critical Indexes
+
+```sql
+-- Users
+CREATE INDEX idx_users_email_verified ON users(email, is_email_verified);
+CREATE INDEX idx_users_role_active ON users(role, is_active);
+
+-- Categories (Treebeard handles path index automatically)
+CREATE INDEX idx_categories_slug_active ON categories(slug, is_active);
+
+-- Inventorys (Most Important)
+CREATE INDEX idx_inventorys_status_created ON inventorys(status, created_at);
+CREATE INDEX idx_inventorys_seller_status ON inventorys(seller_id, status);
+CREATE INDEX idx_inventorys_category_status ON inventorys(category_id, status);
+CREATE INDEX idx_inventorys_price_status ON inventorys(offer_price, status);
+CREATE INDEX idx_inventorys_search_vector ON inventorys USING GIN(search_vector);
+
+-- Transactions
+CREATE INDEX idx_transactions_buyer_status ON transactions(buyer_id, status);
+CREATE INDEX idx_transactions_seller_status ON transactions(seller_id, status);
+CREATE INDEX idx_transactions_status_created ON transactions(status, created_at);
+CREATE INDEX idx_transactions_payment_id ON transactions(payment_id);
+
+-- Disputes
+CREATE INDEX idx_disputes_status_created ON disputes(status, created_at);
+```
+
+---
+
+## Constraints & Validation
+
+### Database-Level Constraints
+
+```sql
+-- Inventorys: Offer price must be <= Marked price
+ALTER TABLE inventorys ADD CONSTRAINT offer_price_lte_marked_price 
+CHECK (offer_price <= marked_price);
+
+-- InventoryImages: Unique order per inventory
+ALTER TABLE inventory_images ADD CONSTRAINT unique_inventory_order 
+UNIQUE (inventory_id, order);
+
+-- Transactions: Amount must be positive
+ALTER TABLE transactions ADD CONSTRAINT positive_amount 
+CHECK (amount > 0);
+```
+
+---
+
+## Sample Data Structure
+
+### Example Records
+
+```python
+# User
+{
+    "id": 1,
+    "email": "john@example.com",
+    "role": "SELLER",
+    "is_email_verified": True,
+    "date_joined": "2026-01-15T10:30:00Z"
+}
+
+# UserProfile
+{
+    "id": 1,
+    "user_id": 1,
+    "full_name": "John Doe",
+    "brand_name": "John's Gadgets",
+    "bank_account_number": b"encrypted_data",
+    "ifsc_code": "HDFC0001234",
+    "bank_name": "HDFC Bank",
+    "consent_given": True
+}
+
+# Category (Hierarchical)
+{
+    "id": 1,
+    "path": "0001",
+    "depth": 1,
+    "name": "Phones",
+    "slug": "phones",
+    "is_active": True
+}
+{
+    "id": 2,
+    "path": "00010001",
+    "depth": 2,
+    "name": "iPhone",
+    "slug": "iphone",
+    "is_active": True
+}
+
+# Inventory
+{
+    "id": 1,
+    "seller_id": 1,
+    "category_id": 2,
+    "title": "iPhone 13 Pro 256GB - Sierra Blue",
+    "description": "Excellent condition, barely used...",
+    "marked_price": "129900.00",
+    "offer_price": "85000.00",
+    "discount_percentage": "34.55",
+    "condition": "LIKE_NEW",
+    "status": "ACTIVE",
+    "created_at": "2026-02-01T14:20:00Z"
+}
+
+# InventoryImage
+{
+    "id": 1,
+    "inventory_id": 1,
+    "image_url": "https://s3.ap-south-1.amazonaws.com/bucket/inventory-1-img-1.jpg",
+    "order": 0
+}
+
+# Transaction
+{
+    "id": 1,
+    "buyer_id": 2,
+    "seller_id": 1,
+    "inventory_id": 1,
+    "amount": "85000.00",
+    "payment_id": "pay_L8zNxUqEzqVc8a",
+    "status": "ESCROW",
+    "created_at": "2026-02-05T16:45:00Z"
+}
+```
+
+---
+
+## Migration Strategy
+
+### Initial Migrations Order
+
+1. **Create accounts app**
+   ```bash
+   python manage.py makemigrations accounts
+   python manage.py migrate accounts
+   ```
+
+2. **Create categories app (django-treebeard)**
+   ```bash
+   python manage.py makemigrations categories
+   python manage.py migrate categories
+   ```
+
+3. **Create inventorys app (django-taggit)**
+   ```bash
+   python manage.py makemigrations inventorys
+   python manage.py migrate inventorys
+   ```
+
+4. **Create transactions app**
+   ```bash
+   python manage.py makemigrations transactions
+   python manage.py migrate transactions
+   ```
+
+5. **Add full-text search vector**
+   ```bash
+   python manage.py migrate
+   ```
+
+---
+
+## Database Seeding
+
+### Create Seed Data Script
+
+```python
+# management/commands/seed_data.py
+
+from django.core.management.base import BaseCommand
+from accounts.models import User, UserProfile
+from categories.models import Category
+from inventorys.models import Inventory, InventoryImage
+from django.utils.text import slugify
+
+
+class Command(BaseCommand):
+    help = 'Seed database with sample data'
+    
+    def handle(self, *args, **kwargs):
+        # Create users
+        admin = User.objects.create_superuser(
+            email='admin@marketplace.com',
+            password='admin123',
+            role=User.Role.ADMIN
+        )
+        
+        # Create categories (hierarchical)
+        phones = Category.add_root(name='Phones', slug='phones')
+        phones.add_child(name='iPhone', slug='iphone')
+        phones.add_child(name='Android', slug='android')
+        
+        laptops = Category.add_root(name='Laptops', slug='laptops')
+        laptops.add_child(name='MacBooks', slug='macbooks')
+        laptops.add_child(name='Windows', slug='windows')
+        
+        self.stdout.write(self.style.SUCCESS('✓ Database seeded'))
+```
+
+---
+
+## Performance Optimization
+
+### Query Optimization Tips
+
+1. **Use select_related for ForeignKey**
+   ```python
+   Inventory.objects.select_related('seller', 'category').filter(status='ACTIVE')
+   ```
+
+2. **Use prefetch_related for reverse ForeignKey**
+   ```python
+   Inventory.objects.prefetch_related('images', 'tags').all()
+   ```
+
+3. **Use only() to limit fields**
+   ```python
+   Inventory.objects.only('id', 'title', 'offer_price').filter(status='ACTIVE')
+   ```
+
+4. **Use values() for bulk operations**
+   ```python
+   Inventory.objects.values('id', 'title').filter(status='ACTIVE')
+   ```
+
+---
+
+## Backup Strategy
+
+### Automated Backups
+
+```bash
+# Daily backup to S3
+0 2 * * * pg_dump marketplace_db | gzip | aws s3 cp - s3://backups/$(date +\%Y-\%m-\%d).sql.gz
+```
+
+### Retention Policy
+- Daily: Keep 7 days
+- Weekly: Keep 4 weeks
+- Monthly: Keep 12 months
+
+---
+
+**END OF DATABASE SCHEMA**
+
+_Last Updated: February 2026_
+_Version: 1.0 - Complete Schema Design_
+
+
+==================================================
+FILE: django-anymail-aws-ses-guide.md
+==================================================
+
+# Django-Anymail AWS SES Configuration Guide
+
+## Overview
+
+This guide covers setting up **django-anymail** with **AWS SES (Simple Email Service)** for the pre-owned gadgets marketplace. Django-anymail provides a clean, unified interface for sending transactional emails through AWS SES.
+
+---
+
+## Why Django-Anymail + AWS SES?
+
+✅ **Cost-Effective:** 62,000 free emails/month when sending from EC2  
+✅ **Reliable:** 99.9% uptime SLA from AWS  
+✅ **Easy Integration:** Native Django email backend  
+✅ **Tracking:** Built-in support for opens, clicks, bounces  
+✅ **Scalable:** Handles millions of emails per day  
+✅ **India-Optimized:** Use Mumbai (ap-south-1) region for low latency  
+
+---
+
+## Step 1: AWS SES Setup
+
+### 1.1 Create AWS Account
+If you don't have one: https://aws.amazon.com/
+
+### 1.2 Verify Email Address or Domain
+
+**Option A: Verify Single Email (Quick Start)**
+1. Go to AWS Console → SES → Verified Identities
+2. Click "Create Identity"
+3. Choose "Email address"
+4. Enter: `noreply@yourdomain.com`
+5. Click verification link in email from AWS
+
+**Option B: Verify Domain (Recommended for Production)**
+1. Go to AWS Console → SES → Verified Identities
+2. Click "Create Identity"
+3. Choose "Domain"
+4. Enter your domain: `yourdomain.com`
+5. Add DNS records (TXT, CNAME, MX) to your domain registrar
+6. Wait for verification (usually 15 mins - 24 hours)
+
+### 1.3 Request Production Access
+
+**Important:** AWS SES starts in **Sandbox Mode** (can only send to verified emails).
+
+To send to any email address:
+1. Go to AWS Console → SES → Account Dashboard
+2. Click "Request production access"
+3. Fill form:
+   - **Mail Type:** Transactional
+   - **Use Case:** E-commerce marketplace transactional emails (signup, password reset, order confirmations)
+   - **Expected Volume:** 1,000 emails/month initially
+   - **Compliance:** Confirm you won't send spam
+4. Submit request
+5. Wait for approval (usually 24-48 hours)
+
+### 1.4 Create IAM User for SES
+
+For security, don't use root AWS credentials:
+
+1. Go to AWS Console → IAM → Users
+2. Click "Create User"
+3. Username: `ses-marketplace-sender`
+4. Click "Next"
+5. Attach policy: `AmazonSESFullAccess` (or create custom policy with only SendEmail permission)
+6. Click "Create User"
+7. Go to user → Security Credentials → Create Access Key
+8. Choose "Application running outside AWS"
+9. **Save credentials securely:**
+   - Access Key ID: `AKIA...`
+   - Secret Access Key: `wJalr...`
+
+---
+
+## Step 2: Install Django-Anymail
+
+### 2.1 Install Package
+
+```bash
+pip install django-anymail[amazon-ses] --break-system-packages
+```
+
+The `[amazon-ses]` extra includes the boto3 library needed for AWS SES.
+
+### 2.2 Verify Installation
+
+```bash
+python -c "import anymail; print(anymail.__version__)"
+```
+
+Should output version number (e.g., `10.2`)
+
+---
+
+## Step 3: Django Configuration
+
+### 3.1 Update settings.py
+
+Add to `INSTALLED_APPS`:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Third-party apps
+    'rest_framework',
+    'anymail',  # Add this
+    
+    # Your apps
+    'accounts',
+    'listings',
+    'transactions',
+]
+```
+
+Add email configuration (at end of settings.py):
+
+```python
+# Email Configuration (Django-Anymail + AWS SES)
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        "aws_access_key_id": os.environ.get('AWS_SES_ACCESS_KEY_ID'),
+        "aws_secret_access_key": os.environ.get('AWS_SES_SECRET_ACCESS_KEY'),
+        "region_name": "ap-south-1",  # Mumbai region for India
+    },
+}
+
+EMAIL_BACKEND = 'anymail.backends.amazon_ses.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'  # Must be verified in SES
+SERVER_EMAIL = 'admin@yourdomain.com'  # For error emails
+```
+
+### 3.2 Environment Variables
+
+Create `.env` file (never commit this!):
+
+```bash
+# AWS SES Credentials
+AWS_SES_ACCESS_KEY_ID=AKIA...your_key...
+AWS_SES_SECRET_ACCESS_KEY=wJalr...your_secret...
+
+# Email Settings
+DEFAULT_FROM_EMAIL=noreply@yourdomain.com
+SERVER_EMAIL=admin@yourdomain.com
+```
+
+Load in settings.py using `python-decouple` or `django-environ`:
+
+```python
+from decouple import config
+
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        "aws_access_key_id": config('AWS_SES_ACCESS_KEY_ID'),
+        "aws_secret_access_key": config('AWS_SES_SECRET_ACCESS_KEY'),
+        "region_name": "ap-south-1",
+    },
+}
+```
+
+---
+
+## Step 4: Create Email Templates
+
+### 4.1 Directory Structure
+
+```
+your_project/
+├── templates/
+│   └── emails/
+│       ├── welcome.html
+│       ├── welcome.txt
+│       ├── verification.html
+│       ├── verification.txt
+│       ├── password_reset.html
+│       ├── password_reset.txt
+│       ├── payment_success.html
+│       ├── payment_success.txt
+│       ├── payment_released.html
+│       └── payment_released.txt
+```
+
+### 4.2 Example Template: Email Verification
+
+**templates/emails/verification.html:**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .button { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 12px 24px; 
+            text-decoration: none; 
+            border-radius: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Verify Your Email</h2>
+        <p>Hi {{ user.first_name|default:"there" }},</p>
+        <p>Thanks for signing up! Please verify your email address by clicking the button below:</p>
+        <p>
+            <a href="{{ verification_url }}" class="button">Verify Email</a>
+        </p>
+        <p>Or copy and paste this link into your browser:</p>
+        <p>{{ verification_url }}</p>
+        <p>This link expires in 24 hours.</p>
+        <p>If you didn't create an account, you can safely ignore this email.</p>
+        <p>Best regards,<br>The Marketplace Team</p>
+    </div>
+</body>
+</html>
+```
+
+**templates/emails/verification.txt:** (Plain text fallback)
+```
+Hi {{ user.first_name|default:"there" }},
+
+Thanks for signing up! Please verify your email address by clicking the link below:
+
+{{ verification_url }}
+
+This link expires in 24 hours.
+
+If you didn't create an account, you can safely ignore this email.
+
+Best regards,
+The Marketplace Team
+```
+
+---
+
+## Step 5: Send Emails in Django
+
+### 5.1 Basic Email Sending
+
+```python
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+def send_verification_email(user, verification_url):
+    subject = 'Verify Your Email'
+    
+    # Render HTML email
+    html_message = render_to_string('emails/verification.html', {
+        'user': user,
+        'verification_url': verification_url,
+    })
+    
+    # Plain text fallback
+    plain_message = render_to_string('emails/verification.txt', {
+        'user': user,
+        'verification_url': verification_url,
+    })
+    
+    send_mail(
+        subject=subject,
+        message=plain_message,
+        from_email=None,  # Uses DEFAULT_FROM_EMAIL
+        recipient_list=[user.email],
+        html_message=html_message,
+        fail_silently=False,
+    )
+```
+
+### 5.2 Using Anymail Features
+
+For advanced features (tracking, metadata, tags):
+
+```python
+from anymail.message import AnymailMessage
+
+def send_transaction_email(buyer, seller, transaction):
+    msg = AnymailMessage(
+        subject='Payment Received - In Escrow',
+        body='Your payment has been received...',
+        from_email='noreply@yourdomain.com',
+        to=[buyer.email],
+        tags=['transaction', 'escrow'],  # For filtering in SES dashboard
+        metadata={'transaction_id': transaction.id},  # Track with events
+    )
+    
+    # Add HTML version
+    msg.attach_alternative(
+        '<html><body><h1>Payment Received</h1>...</body></html>',
+        'text/html'
+    )
+    
+    msg.send()
+```
+
+### 5.3 Async Email Sending (Recommended)
+
+Don't block HTTP requests waiting for email to send:
+
+**Option A: Django Background Tasks (Simple)**
+```bash
+pip install django-background-tasks --break-system-packages
+```
+
+```python
+from background_task import background
+
+@background(schedule=0)
+def send_email_async(user_id, verification_url):
+    user = User.objects.get(id=user_id)
+    send_verification_email(user, verification_url)
+
+# In your view:
+send_email_async(user.id, verification_url)
+```
+
+**Option B: Celery (Production)**
+```python
+from celery import shared_task
+
+@shared_task
+def send_verification_email_task(user_id, verification_url):
+    user = User.objects.get(id=user_id)
+    send_verification_email(user, verification_url)
+
+# In your view:
+send_verification_email_task.delay(user.id, verification_url)
+```
+
+---
+
+## Step 6: Testing
+
+### 6.1 Test in Sandbox Mode
+
+While SES is in sandbox mode, you can only send to verified emails:
+
+1. Verify your personal email in SES
+2. Send test email to yourself
+3. Check spam folder if not received
+
+### 6.2 Use Anymail Test Backend
+
+For local development without actually sending emails:
+
+```python
+# settings_local.py or settings.py (development)
+if DEBUG:
+    EMAIL_BACKEND = 'anymail.backends.test.EmailBackend'
+    ANYMAIL = {}
+```
+
+Check sent emails in test mode:
+```python
+from django.core.mail import send_mail
+from anymail.backends.test import TestEmailBackend
+
+send_mail('Test', 'Body', 'from@example.com', ['to@example.com'])
+
+# Access sent messages
+print(TestEmailBackend.messages)
+```
+
+### 6.3 Django Shell Testing
+
+```bash
+python manage.py shell
+```
+
+```python
+from django.core.mail import send_mail
+
+send_mail(
+    'Test Email',
+    'This is a test message.',
+    'noreply@yourdomain.com',
+    ['your-email@example.com'],
+    fail_silently=False,
+)
+
+# Check for errors
+# If successful, check your email inbox
+```
+
+---
+
+## Step 7: Monitoring & Troubleshooting
+
+### 7.1 AWS SES Dashboard
+
+Monitor email sending:
+1. Go to AWS Console → SES → Account Dashboard
+2. View:
+   - Sends (last 24 hours)
+   - Bounces
+   - Complaints
+   - Reputation metrics
+
+### 7.2 Common Issues
+
+**Issue: "Email address is not verified"**
+- Solution: Verify sender email in SES console
+- Or: Request production access to send to unverified emails
+
+**Issue: "AccessDenied" error**
+- Solution: Check IAM user has `ses:SendEmail` permission
+- Verify AWS credentials in `.env` file
+
+**Issue: Emails go to spam**
+- Solution: Add SPF, DKIM, DMARC records to your domain DNS
+- AWS provides these in SES → Verified Identities → Domain → DKIM
+
+**Issue: Slow email delivery**
+- Solution: Use async sending (Celery or background tasks)
+- Check SES region (use ap-south-1 for India)
+
+### 7.3 SES Event Tracking
+
+Track bounces, complaints, opens, clicks:
+
+```python
+# settings.py
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        # ... existing config ...
+    },
+    "SEND_DEFAULTS": {
+        "track_clicks": True,
+        "track_opens": True,
+    },
+}
+```
+
+Set up SNS notifications in AWS SES for bounce/complaint handling.
+
+---
+
+## Step 8: Production Checklist
+
+Before launch:
+
+- [ ] Domain verified in AWS SES
+- [ ] Production access approved by AWS
+- [ ] SPF, DKIM, DMARC DNS records added
+- [ ] IAM user created with minimal permissions (only SES)
+- [ ] Environment variables secured (not in code)
+- [ ] Email templates tested (HTML + plain text)
+- [ ] Unsubscribe links added (if sending marketing emails)
+- [ ] Bounce/complaint handling configured
+- [ ] Email sending is async (Celery or background tasks)
+- [ ] Monitoring set up (AWS CloudWatch alerts)
+
+---
+
+## Cost Estimation
+
+**AWS SES Pricing (ap-south-1 region):**
+
+| Scenario | Monthly Emails | Cost |
+|----------|----------------|------|
+| Sending from EC2 | 0 - 62,000 | **FREE** |
+| Sending from EC2 | 100,000 | ~₹300 ($0.10 per 1,000 beyond 62k) |
+| Not from EC2 | 10,000 | ~₹80 ($0.10 per 1,000) |
+| Not from EC2 | 100,000 | ~₹800 |
+
+**Recommendation:** Host Django on AWS EC2 to maximize free tier.
+
+**V1 Estimate:**
+- Signups: 100/month × 1 email = 100
+- Transactions: 100/month × 3 emails (buyer confirmation, seller notification, payment released) = 300
+- Password resets: 20/month × 1 email = 20
+- **Total: ~420 emails/month = FREE tier**
+
+---
+
+## Email Types for Marketplace
+
+### Transactional Emails (Required)
+
+1. **Welcome Email** - On signup
+2. **Email Verification** - With link to verify
+3. **Password Reset** - With reset link
+4. **Payment Confirmation** - Buyer: payment received, in escrow
+5. **Seller Notification** - Seller: item sold, buyer contact info
+6. **Payment Released** - Seller: payment transferred to bank
+7. **Dispute Notification** - Admin: new dispute raised
+8. **Dispute Resolution** - Buyer/Seller: dispute resolved
+
+### Optional (Future)
+
+9. **Listing Approved** - Seller: listing is live
+10. **Price Drop Alert** - Buyer: item they viewed dropped in price
+11. **Weekly Digest** - New listings in favorite categories
+
+---
+
+## Sample Email Sending Functions
+
+```python
+# utils/emails.py
+
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
+def send_templated_email(subject, template_name, context, recipient_list):
+    """
+    Send email using HTML and plain text templates
+    """
+    html_message = render_to_string(f'emails/{template_name}.html', context)
+    plain_message = render_to_string(f'emails/{template_name}.txt', context)
+    
+    send_mail(
+        subject=subject,
+        message=plain_message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=recipient_list,
+        html_message=html_message,
+        fail_silently=False,
+    )
+
+def send_verification_email(user, verification_url):
+    send_templated_email(
+        subject='Verify Your Email',
+        template_name='verification',
+        context={'user': user, 'verification_url': verification_url},
+        recipient_list=[user.email],
+    )
+
+def send_payment_confirmation(transaction):
+    send_templated_email(
+        subject='Payment Received - In Escrow',
+        template_name='payment_success',
+        context={'transaction': transaction, 'buyer': transaction.buyer},
+        recipient_list=[transaction.buyer.email],
+    )
+
+def send_payment_released(transaction):
+    send_templated_email(
+        subject='Payment Released to Your Account',
+        template_name='payment_released',
+        context={'transaction': transaction, 'seller': transaction.seller},
+        recipient_list=[transaction.seller.email],
+    )
+```
+
+---
+
+## Resources
+
+- **Django-Anymail Docs:** https://anymail.dev/
+- **AWS SES Docs:** https://docs.aws.amazon.com/ses/
+- **SES Pricing:** https://aws.amazon.com/ses/pricing/
+- **Django Email Docs:** https://docs.djangoproject.com/en/stable/topics/email/
+
+---
+
+## Support
+
+If you encounter issues:
+1. Check AWS SES logs in CloudWatch
+2. Enable Django email logging: `EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'` for local testing
+3. Review django-anymail GitHub issues: https://github.com/anymail/django-anymail/issues
+
+---
+
+**Last Updated:** February 2026  
+**Version:** 1.0 - AWS SES Configuration Guide
+
+
+==================================================
+FILE: media-management-guide.md
+==================================================
+
+# Media Management Guide
+
+## Overview
+
+The Media model serves as a **central repository** for all images in the marketplace. This approach enables:
+- **Image Reuse** - Upload once, use in multiple inventories or profiles
+- **Cost Savings** - Reduce S3 storage by 30-40% through deduplication
+- **Centralized Management** - Archive/delete from one location
+- **Analytics** - Track which images are most popular
+- **Performance** - CDN caching for frequently used images
+
+---
+
+## Media Model Structure
+
+### Complete Model Definition
+
+```python
+import uuid
+from django.db import models
+
+class Media(models.Model):
+    """
+    Central media repository for all images (profile photos, inventory images, etc.)
+    One media can be associated with multiple inventories or profiles (reusable)
+    """
+    
+    class FileType(models.TextChoices):
+        IMAGE_JPEG = 'image/jpeg', 'JPEG Image'
+        IMAGE_PNG = 'image/png', 'PNG Image'
+        IMAGE_WEBP = 'image/webp', 'WebP Image'
+        IMAGE_GIF = 'image/gif', 'GIF Image'
+    
+    # Core Identity
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True,
+        help_text="Unique identifier for this media file"
+    )
+    
+    # File Information
+    file_name = models.CharField(
+        max_length=255,
+        help_text="Original filename uploaded by user"
+    )
+    alt_tag = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Alt text for accessibility (SEO and screen readers)"
+    )
+    file_type = models.CharField(
+        max_length=20,
+        choices=FileType.choices,
+        help_text="Auto-captured from content type during upload"
+    )
+    
+    # Storage
+    s3_url = models.URLField(
+        max_length=500,
+        unique=True,
+        help_text="Full S3 URL with CDN (e.g., https://cdn.example.com/media/uuid.jpg)"
+    )
+    
+    # Metadata
+    created_on = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True,
+        help_text="When this media was uploaded"
+    )
+    
+    # Status
+    status = models.BooleanField(
+        default=True,
+        db_index=True,
+        help_text="Active (True) or Inactive (False)"
+    )
+    archived = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text="Soft delete flag - archived media can be restored"
+    )
+    
+    class Meta:
+        db_table = 'media'
+        verbose_name = 'Media'
+        verbose_name_plural = 'Media'
+        ordering = ['-created_on']
+        indexes = [
+            models.Index(fields=['uuid']),
+            models.Index(fields=['status', 'archived']),
+            models.Index(fields=['file_type', 'status']),
+            models.Index(fields=['created_on']),
+        ]
+    
+    def __str__(self):
+        return f"{self.file_name} ({self.uuid})"
+    
+    def get_usage_count(self):
+        """Get count of how many times this media is used"""
+        profile_usage = self.profile_images.count()
+        inventory_usage = self.inventory_images.count()
+        return profile_usage + inventory_usage
+    
+    def is_reusable(self):
+        """Check if media can be reused (not archived, active)"""
+        return self.status and not self.archived
+    
+    @classmethod
+    def create_from_upload(cls, file, alt_tag=''):
+        """
+        Create Media instance from uploaded file
+        Handles S3 upload and metadata extraction
+        
+        Args:
+            file: Django UploadedFile object
+            alt_tag: Optional alt text for accessibility
+            
+        Returns:
+            Media: Created media instance
+            
+        Raises:
+            ValueError: If file type is not supported
+        """
+        import mimetypes
+        from django.core.files.storage import default_storage
+        
+        # Detect file type from content
+        content_type, _ = mimetypes.guess_type(file.name)
+        if content_type not in dict(cls.FileType.choices):
+            raise ValueError(f"Unsupported file type: {content_type}")
+        
+        # Generate unique filename
+        import uuid as uuid_lib
+        file_uuid = uuid_lib.uuid4()
+        extension = file.name.split('.')[-1]
+        unique_filename = f"media/{file_uuid}.{extension}"
+        
+        # Upload to S3
+        s3_path = default_storage.save(unique_filename, file)
+        s3_url = default_storage.url(s3_path)
+        
+        # Create Media record
+        media = cls.objects.create(
+            file_name=file.name,
+            alt_tag=alt_tag,
+            file_type=content_type,
+            s3_url=s3_url,
+        )
+        
+        return media
+```
+
+---
+
+## Association Models
+
+### InventoryImage (Many-to-Many)
+
+Links Inventory items to Media (one inventory can have multiple images, one image can be used in multiple inventories)
+
+```python
+class InventoryImage(models.Model):
+    """
+    Association between Inventory and Media (many-to-many through model)
+    One inventory can have multiple images (1-5)
+    One image (Media) can be used in multiple inventories (reusable)
+    """
+    inventory = models.ForeignKey(
+        Inventory,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+    media = models.ForeignKey(
+        Media,
+        on_delete=models.PROTECT,  # Don't delete media if used in inventory
+        related_name='inventory_images'
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'inventory_images'
+        ordering = ['order']
+        unique_together = [('inventory', 'order')]
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+```
+
+### ProfileImage (One-to-One)
+
+Links User profiles to Media (one user has one profile picture, one image can be used by multiple users)
+
+```python
+class ProfileImage(models.Model):
+    """
+    Association between User Profile and Media
+    One user can have one profile image
+    One image (Media) can be used by multiple users (reusable)
+    """
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile_image'
+    )
+    media = models.ForeignKey(
+        Media,
+        on_delete=models.PROTECT,
+        related_name='profile_images'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'profile_images'
+    
+    @property
+    def image_url(self):
+        """Get S3 URL from associated Media"""
+        return self.media.s3_url if self.media else None
+```
+
+---
+
+## API Endpoints
+
+### 1. Upload Media
+
+**Endpoint:** `POST /api/media/upload`
+
+**Description:** Upload a new image to S3 and create Media record
+
+**Request:**
+```http
+POST /api/media/upload
+Content-Type: multipart/form-data
+Authorization: Bearer <jwt_token>
+
+file: <binary_image_data>
+alt_tag: "iPhone 13 Pro front view" (optional)
+```
+
+**Response (Success - 201 Created):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "file_name": "iphone13.jpg",
+  "alt_tag": "iPhone 13 Pro front view",
+  "file_type": "image/jpeg",
+  "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+  "created_on": "2026-02-08T10:30:00Z",
+  "status": true,
+  "archived": false
+}
+```
+
+**Response (Error - 400 Bad Request):**
+```json
+{
+  "error": "Unsupported file type: image/svg+xml"
+}
+```
+
+**Validation:**
+- File type must be: JPEG, PNG, WebP, or GIF
+- Max file size: 100MB (configurable)
+- User must be authenticated
+
+---
+
+### 2. Get Media by UUID
+
+**Endpoint:** `GET /api/media/:uuid`
+
+**Description:** Retrieve media details by UUID
+
+**Request:**
+```http
+GET /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+Authorization: Bearer <jwt_token>
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "file_name": "iphone13.jpg",
+  "alt_tag": "iPhone 13 Pro front view",
+  "file_type": "image/jpeg",
+  "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+  "created_on": "2026-02-08T10:30:00Z",
+  "status": true,
+  "archived": false,
+  "usage_count": 3
+}
+```
+
+---
+
+### 3. List Media
+
+**Endpoint:** `GET /api/media`
+
+**Description:** List all media uploaded by current user
+
+**Request:**
+```http
+GET /api/media?status=true&limit=20&offset=0
+Authorization: Bearer <jwt_token>
+```
+
+**Query Parameters:**
+- `status` (optional): Filter by active status (true/false)
+- `archived` (optional): Filter by archived status (true/false)
+- `file_type` (optional): Filter by file type (image/jpeg, image/png, etc.)
+- `limit` (optional): Number of results per page (default: 20)
+- `offset` (optional): Pagination offset (default: 0)
+
+**Response (Success - 200 OK):**
+```json
+{
+  "count": 45,
+  "next": "/api/media?limit=20&offset=20",
+  "previous": null,
+  "results": [
+    {
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "file_name": "iphone13.jpg",
+      "alt_tag": "iPhone 13 Pro front view",
+      "file_type": "image/jpeg",
+      "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+      "created_on": "2026-02-08T10:30:00Z",
+      "status": true,
+      "archived": false,
+      "usage_count": 3
+    },
+    // ... more media objects
+  ]
+}
+```
+
+---
+
+### 4. Update Media
+
+**Endpoint:** `PATCH /api/media/:uuid`
+
+**Description:** Update media metadata (alt_tag, status, archived)
+
+**Request:**
+```http
+PATCH /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+Content-Type: application/json
+Authorization: Bearer <jwt_token>
+
+{
+  "alt_tag": "Updated alt text",
+  "status": true
+}
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "file_name": "iphone13.jpg",
+  "alt_tag": "Updated alt text",
+  "file_type": "image/jpeg",
+  "s3_url": "https://cdn.example.com/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+  "created_on": "2026-02-08T10:30:00Z",
+  "status": true,
+  "archived": false
+}
+```
+
+**Note:** Cannot update `file_name`, `file_type`, or `s3_url` (immutable)
+
+---
+
+### 5. Archive Media
+
+**Endpoint:** `DELETE /api/media/:uuid`
+
+**Description:** Soft delete (archive) media
+
+**Request:**
+```http
+DELETE /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+Authorization: Bearer <jwt_token>
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "message": "Media archived successfully",
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "archived": true
+}
+```
+
+**Response (Error - 409 Conflict):**
+```json
+{
+  "error": "Cannot archive media. Still in use by 3 inventories.",
+  "usage_count": 3
+}
+```
+
+**Behavior:**
+- Sets `archived = True`
+- Does NOT delete from S3 (for data recovery)
+- Only allowed if `usage_count = 0` (not used in any inventory/profile)
+
+---
+
+### 6. Get Media Usage
+
+**Endpoint:** `GET /api/media/:uuid/usage`
+
+**Description:** Get all inventories and profiles using this media
+
+**Request:**
+```http
+GET /api/media/a1b2c3d4-e5f6-7890-abcd-ef1234567890/usage
+Authorization: Bearer <jwt_token>
+```
+
+**Response (Success - 200 OK):**
+```json
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "total_usage": 3,
+  "inventories": [
+    {
+      "id": 101,
+      "title": "iPhone 13 Pro 256GB",
+      "url": "/inventories/101"
+    },
+    {
+      "id": 205,
+      "title": "iPhone 13 Pro 128GB",
+      "url": "/inventories/205"
+    }
+  ],
+  "profiles": [
+    {
+      "user_id": 42,
+      "email": "john@example.com",
+      "url": "/users/42/profile"
+    }
+  ]
+}
+```
+
+---
+
+## Frontend Implementation
+
+### Upload Component (React)
+
+```jsx
+import { useState } from 'react';
+
+function MediaUpload({ onUploadSuccess }) {
+  const [file, setFile] = useState(null);
+  const [altTag, setAltTag] = useState('');
+  const [uploading, setUploading] = useState(false);
+  
+  const handleUpload = async () => {
+    if (!file) return;
+    
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('alt_tag', altTag);
+    
+    try {
+      const response = await fetch('/api/media/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: formData
+      });
+      
+      const media = await response.json();
+      onUploadSuccess(media);
+      
+      // Reset form
+      setFile(null);
+      setAltTag('');
+    } catch (error) {
+      console.error('Upload failed:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+  
+  return (
+    <div className="bg-white p-6 rounded-lg shadow">
+      <h3 className="text-lg font-bold mb-4">Upload Image</h3>
+      
+      {/* File Input */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">
+          Select Image
+        </label>
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={(e) => setFile(e.target.files[0])}
+          className="w-full px-4 py-2 border rounded"
+        />
+      </div>
+      
+      {/* Alt Tag Input */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">
+          Alt Text (Optional)
+        </label>
+        <input
+          type="text"
+          value={altTag}
+          onChange={(e) => setAltTag(e.target.value)}
+          placeholder="Describe the image for accessibility"
+          className="w-full px-4 py-2 border rounded"
+        />
+      </div>
+      
+      {/* Preview */}
+      {file && (
+        <div className="mb-4">
+          <img
+            src={URL.createObjectURL(file)}
+            alt="Preview"
+            className="max-w-xs rounded"
+          />
+        </div>
+      )}
+      
+      {/* Upload Button */}
+      <button
+        onClick={handleUpload}
+        disabled={!file || uploading}
+        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+      >
+        {uploading ? 'Uploading...' : 'Upload'}
+      </button>
+    </div>
+  );
+}
+```
+
+### Media Gallery Component
+
+```jsx
+function MediaGallery({ onSelectMedia }) {
+  const [media, setMedia] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+  
+  const fetchMedia = async () => {
+    try {
+      const response = await fetch('/api/media?status=true', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      setMedia(data.results);
+    } catch (error) {
+      console.error('Fetch failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  if (loading) return <div>Loading media...</div>;
+  
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {media.map((item) => (
+        <div
+          key={item.uuid}
+          onClick={() => onSelectMedia(item)}
+          className="cursor-pointer border rounded hover:border-blue-500"
+        >
+          <img
+            src={item.s3_url}
+            alt={item.alt_tag || item.file_name}
+            className="w-full h-40 object-cover rounded-t"
+          />
+          <div className="p-2">
+            <p className="text-sm truncate">{item.file_name}</p>
+            <p className="text-xs text-gray-500">
+              Used: {item.usage_count} times
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+---
+
+## Backend Implementation
+
+### Django View (Media Upload)
+
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from accounts.models import Media
+
+class MediaUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        """
+        Upload media file to S3 and create Media record
+        """
+        file = request.FILES.get('file')
+        alt_tag = request.data.get('alt_tag', '')
+        
+        if not file:
+            return Response(
+                {'error': 'No file provided'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate file size (100MB max)
+        if file.size > 100 * 1024 * 1024:
+            return Response(
+                {'error': 'File size exceeds 100MB limit'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Create Media instance (handles S3 upload)
+            media = Media.create_from_upload(file, alt_tag)
+            
+            # Serialize and return
+            serializer = MediaSerializer(media)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        except ValueError as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+```
+
+### Django Serializer
+
+```python
+from rest_framework import serializers
+from accounts.models import Media
+
+class MediaSerializer(serializers.ModelSerializer):
+    usage_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Media
+        fields = [
+            'uuid', 'file_name', 'alt_tag', 'file_type',
+            's3_url', 'created_on', 'status', 'archived',
+            'usage_count'
+        ]
+        read_only_fields = ['uuid', 'file_type', 's3_url', 'created_on']
+    
+    def get_usage_count(self, obj):
+        return obj.get_usage_count()
+```
+
+---
+
+## Usage Examples
+
+### Creating Inventory with Media
+
+```python
+# Backend: Create inventory with existing media
+from inventory.models import Inventory, InventoryImage
+from accounts.models import Media
+
+# Get or upload media
+media_uuid = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+media = Media.objects.get(uuid=media_uuid)
+
+# Create inventory
+inventory = Inventory.objects.create(
+    seller=request.user,
+    title='iPhone 13 Pro',
+    # ... other fields
+)
+
+# Associate media with inventory
+InventoryImage.objects.create(
+    inventory=inventory,
+    media=media,
+    order=0  # First image
+)
+```
+
+### Reusing Media Across Inventories
+
+```python
+# Same media can be used in multiple inventories
+media = Media.objects.get(uuid='a1b2c3d4-e5f6-7890-abcd-ef1234567890')
+
+# Use in inventory 1
+InventoryImage.objects.create(
+    inventory=inventory1,
+    media=media,
+    order=0
+)
+
+# Reuse in inventory 2
+InventoryImage.objects.create(
+    inventory=inventory2,
+    media=media,
+    order=0
+)
+
+# Check usage
+print(media.get_usage_count())  # Output: 2
+```
+
+### Setting Profile Image
+
+```python
+# Backend: Set user profile image
+from accounts.models import ProfileImage, Media
+
+media = Media.objects.get(uuid='a1b2c3d4-e5f6-7890-abcd-ef1234567890')
+
+# Create or update profile image
+profile_image, created = ProfileImage.objects.update_or_create(
+    user=request.user,
+    defaults={'media': media}
+)
+```
+
+---
+
+## Best Practices
+
+### 1. Image Optimization
+
+```python
+# Before uploading to S3, compress images
+from PIL import Image
+import io
+
+def optimize_image(file, max_size=(1920, 1920), quality=85):
+    """
+    Optimize image before uploading
+    """
+    img = Image.open(file)
+    
+    # Convert RGBA to RGB if needed
+    if img.mode == 'RGBA':
+        img = img.convert('RGB')
+    
+    # Resize if larger than max_size
+    img.thumbnail(max_size, Image.LANCZOS)
+    
+    # Save to buffer
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG', quality=quality, optimize=True)
+    buffer.seek(0)
+    
+    return buffer
+```
+
+### 2. Generate Thumbnails
+
+```python
+# Create multiple sizes for responsive images
+def create_thumbnail(media, size=(300, 300)):
+    """
+    Create thumbnail version of media
+    """
+    # Download from S3
+    response = requests.get(media.s3_url)
+    img = Image.open(io.BytesIO(response.content))
+    
+    # Create thumbnail
+    img.thumbnail(size, Image.LANCZOS)
+    
+    # Upload as new media
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG', quality=80)
+    buffer.seek(0)
+    
+    # ... upload to S3 and create Media record
+```
+
+### 3. Lazy Loading
+
+```jsx
+// Frontend: Lazy load images
+<img
+  src={media.s3_url}
+  alt={media.alt_tag}
+  loading="lazy"
+  className="w-full h-auto"
+/>
+```
+
+### 4. CDN Caching
+
+```python
+# settings.py
+AWS_S3_CUSTOM_DOMAIN = 'cdn.example.com'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',  # 24 hours
+}
+```
+
+---
+
+## Security Considerations
+
+### 1. File Type Validation
+
+```python
+# Validate file signature (magic bytes) not just extension
+import magic
+
+def validate_image_file(file):
+    """
+    Validate file is actually an image
+    """
+    mime = magic.from_buffer(file.read(1024), mime=True)
+    file.seek(0)
+    
+    allowed_types = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    
+    if mime not in allowed_types:
+        raise ValueError(f"Invalid file type: {mime}")
+```
+
+### 2. Virus Scanning
+
+```python
+# Use ClamAV or cloud service to scan uploads
+import pyclamd
+
+def scan_for_viruses(file):
+    """
+    Scan uploaded file for viruses
+    """
+    cd = pyclamd.ClamdUnixSocket()
+    
+    file_content = file.read()
+    file.seek(0)
+    
+    result = cd.scan_stream(file_content)
+    
+    if result:
+        raise ValueError("File contains malware")
+```
+
+### 3. Access Control
+
+```python
+# Only allow users to access their own media
+class MediaViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        # Users can only see media they uploaded
+        # or media used in their inventories
+        return Media.objects.filter(
+            Q(inventory_images__inventory__seller=self.request.user) |
+            Q(profile_images__user=self.request.user)
+        ).distinct()
+```
+
+---
+
+## Performance Optimization
+
+### 1. Database Indexes
+
+Already configured in the model:
+```python
+indexes = [
+    models.Index(fields=['uuid']),           # Fast UUID lookup
+    models.Index(fields=['status', 'archived']),  # Filter queries
+    models.Index(fields=['file_type', 'status']), # Type filtering
+    models.Index(fields=['created_on']),     # Ordering
+]
+```
+
+### 2. Query Optimization
+
+```python
+# Prefetch related inventory images
+media_list = Media.objects.prefetch_related(
+    'inventory_images',
+    'profile_images'
+).filter(status=True)
+
+# Annotate with usage count
+from django.db.models import Count
+
+media_list = Media.objects.annotate(
+    usage_count=Count('inventory_images') + Count('profile_images')
+)
+```
+
+### 3. Caching
+
+```python
+from django.core.cache import cache
+
+def get_media(uuid):
+    """
+    Get media with caching
+    """
+    cache_key = f'media:{uuid}'
+    media = cache.get(cache_key)
+    
+    if not media:
+        media = Media.objects.get(uuid=uuid)
+        cache.set(cache_key, media, timeout=3600)  # 1 hour
+    
+    return media
+```
+
+---
+
+## Analytics & Reporting
+
+### Most Used Media
+
+```python
+# Get top 10 most reused images
+from django.db.models import Count
+
+popular_media = Media.objects.annotate(
+    usage=Count('inventory_images') + Count('profile_images')
+).filter(
+    status=True,
+    archived=False
+).order_by('-usage')[:10]
+```
+
+### Storage Usage
+
+```python
+# Calculate total storage used
+total_storage = Media.objects.filter(
+    status=True,
+    archived=False
+).count() * 5  # Assume avg 5MB per image
+
+print(f"Total storage: {total_storage} MB")
+```
+
+### Unused Media Cleanup
+
+```python
+# Find unused media older than 30 days
+from datetime import timedelta
+from django.utils import timezone
+
+unused_media = Media.objects.annotate(
+    usage=Count('inventory_images') + Count('profile_images')
+).filter(
+    usage=0,
+    created_on__lt=timezone.now() - timedelta(days=30)
+)
+
+# Archive unused media
+unused_media.update(archived=True)
+```
+
+---
+
+## Testing
+
+### Unit Tests
+
+```python
+from django.test import TestCase
+from accounts.models import Media
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+class MediaModelTestCase(TestCase):
+    def test_create_from_upload(self):
+        """Test creating media from uploaded file"""
+        # Create fake image file
+        image = SimpleUploadedFile(
+            "test.jpg",
+            b"file_content",
+            content_type="image/jpeg"
+        )
+        
+        # Create media
+        media = Media.create_from_upload(image, alt_tag="Test image")
+        
+        # Assertions
+        self.assertIsNotNone(media.uuid)
+        self.assertEqual(media.file_name, "test.jpg")
+        self.assertEqual(media.file_type, "image/jpeg")
+        self.assertEqual(media.alt_tag, "Test image")
+        self.assertTrue(media.status)
+        self.assertFalse(media.archived)
+    
+    def test_unsupported_file_type(self):
+        """Test uploading unsupported file type"""
+        svg_file = SimpleUploadedFile(
+            "test.svg",
+            b"<svg></svg>",
+            content_type="image/svg+xml"
+        )
+        
+        with self.assertRaises(ValueError):
+            Media.create_from_upload(svg_file)
+    
+    def test_get_usage_count(self):
+        """Test usage count calculation"""
+        media = Media.objects.create(
+            file_name="test.jpg",
+            file_type="image/jpeg",
+            s3_url="https://example.com/test.jpg"
+        )
+        
+        # Initially 0
+        self.assertEqual(media.get_usage_count(), 0)
+        
+        # Create inventory image
+        InventoryImage.objects.create(
+            inventory=some_inventory,
+            media=media,
+            order=0
+        )
+        
+        # Now 1
+        self.assertEqual(media.get_usage_count(), 1)
+```
+
+---
+
+## Summary
+
+### Media Model Features ✅
+
+1. **UUID** - Unique identifier ✅
+2. **file_name** - Original filename ✅
+3. **alt_tag** - Accessibility text ✅
+4. **file_type** - Auto-captured from content type ✅
+5. **s3_url** - Full S3 URL with CDN ✅
+6. **created_on** - Upload timestamp ✅
+7. **status** - Boolean active/inactive ✅
+8. **archived** - Boolean soft delete ✅
+
+### Benefits
+
+✅ **30-40% storage savings** through image reuse  
+✅ **Centralized management** of all media  
+✅ **Better performance** with CDN caching  
+✅ **Analytics** on image usage  
+✅ **Soft delete** for data recovery  
+✅ **Scalable** architecture  
+
+---
+
+**Ready for implementation in Sprint 2!**
+
+**Version:** 1.0 - Media Management Guide  
+**Last Updated:** February 2026
+
+
+==================================================
+FILE: naming-conventions.md
+==================================================
+
+# Naming Convention Updates
+
+## Overview
+
+All documentation has been updated with new naming conventions for clarity and consistency.
+
+---
+
+## Changes Made
+
+### 1. Listing → Inventory
+
+**Rationale:** "Inventory" better represents the stock/items that sellers have available for sale.
+
+| Old Name | New Name |
+|----------|----------|
+| Listing | Inventory |
+| listing | inventory |
+| listings | inventories |
+| ListingImage | InventoryImage |
+| listing_images | inventory_images |
+
+**Files Updated:**
+- ✅ database-schema.md
+- ✅ schema-updates-v2.md
+- ✅ sprint-plan.md
+- ✅ prd.md
+- ✅ sprint-updates-summary.md
+- ✅ erd-diagram.mermaid
+
+### 2. SellerProfile → UserProfile
+
+**Rationale:** "UserProfile" is more generic and can accommodate buyer information too if needed in the future.
+
+| Old Name | New Name |
+|----------|----------|
+| SellerProfile | UserProfile |
+| seller_profile | user_profile |
+| seller_profiles | user_profiles |
+
+**Files Updated:**
+- ✅ database-schema.md
+- ✅ schema-updates-v2.md
+- ✅ sprint-plan.md
+- ✅ prd.md
+- ✅ erd-diagram.mermaid
+
+---
+
+## Updated Model Names
+
+### Django Apps Structure
+
+```
+marketplace/
+├── accounts/           # User, UserProfile, Media, ProfileImage
+├── categories/         # Category (django-treebeard)
+├── inventory/          # Inventory, InventoryImage, Tag (django-taggit)
+└── transactions/       # Transaction, Dispute
+```
+
+### Database Tables
+
+| Model | Table Name |
+|-------|------------|
+| User | users |
+| UserProfile | user_profiles |
+| Media | media |
+| ProfileImage | profile_images |
+| Category | categories |
+| Inventory | inventories |
+| InventoryImage | inventory_images |
+| Transaction | transactions |
+| Dispute | disputes |
+
+---
+
+## Updated API Endpoints
+
+### Before vs After
+
+**Inventory Endpoints:**
+```
+OLD: GET  /api/listings
+NEW: GET  /api/inventories
+
+OLD: POST /api/listings
+NEW: POST /api/inventories
+
+OLD: GET  /api/listings/:id
+NEW: GET  /api/inventories/:id
+
+OLD: PUT  /api/listings/:id
+NEW: PUT  /api/inventories/:id
+
+OLD: GET  /api/listings/my-listings
+NEW: GET  /api/inventories/my-inventories
+```
+
+**Profile Endpoints:**
+```
+OLD: GET  /api/profile (returns SellerProfile)
+NEW: GET  /api/profile (returns UserProfile)
+
+OLD: PUT  /api/profile (updates SellerProfile)
+NEW: PUT  /api/profile (updates UserProfile)
+```
+
+---
+
+## Updated Frontend Routes
+
+**React Router Paths:**
+```javascript
+// Before
+/listings
+/listings/:id
+/my-listings
+/create-listing
+
+// After
+/inventories
+/inventories/:id
+/my-inventories
+/create-inventory
+```
+
+**Component Names:**
+```javascript
+// Before
+<ListingCard />
+<ListingDetail />
+<CreateListing />
+<MyListings />
+
+// After
+<InventoryCard />
+<InventoryDetail />
+<CreateInventory />
+<MyInventories />
+```
+
+---
+
+## Updated Database Relationships
+
+### Foreign Keys
+
+```python
+# User → Inventory
+class Inventory(models.Model):
+    seller = models.ForeignKey(User, related_name='inventories')
+
+# Inventory → InventoryImage
+class InventoryImage(models.Model):
+    inventory = models.ForeignKey(Inventory, related_name='images')
+
+# Transaction → Inventory
+class Transaction(models.Model):
+    inventory = models.OneToOneField(Inventory, related_name='transaction')
+```
+
+### Related Names
+
+| Model | Related Name | Access Example |
+|-------|--------------|----------------|
+| User.inventories | inventories | `user.inventories.all()` |
+| Inventory.images | images | `inventory.images.all()` |
+| Inventory.transaction | transaction | `inventory.transaction` |
+| User.user_profile | user_profile | `user.user_profile` |
+
+---
+
+## Updated ERD
+
+```mermaid
+erDiagram
+    User ||--o{ UserProfile : has
+    User ||--o{ Inventory : creates
+    User ||--o{ Transaction : "buyer/seller"
+    
+    Category ||--o{ Inventory : categorizes
+    
+    Inventory ||--o{ InventoryImage : has
+    Inventory ||--|{ Tag : "tagged_with"
+    Inventory ||--o| Transaction : "sold_in"
+    
+    Media ||--o{ InventoryImage : "used_in"
+    Media ||--o{ ProfileImage : "used_as"
+    
+    Transaction ||--o| Dispute : has
+```
+
+---
+
+## Search & Replace Guide
+
+If you need to update any additional files or code:
+
+### Using sed (Linux/Mac)
+```bash
+# Replace Listing → Inventory
+sed -i 's/Listing/Inventory/g' yourfile.py
+sed -i 's/listing/inventory/g' yourfile.py
+sed -i 's/listings/inventories/g' yourfile.py
+
+# Replace SellerProfile → UserProfile
+sed -i 's/SellerProfile/UserProfile/g' yourfile.py
+sed -i 's/seller_profile/user_profile/g' yourfile.py
+```
+
+### Using VS Code
+1. Press `Ctrl+H` (Find and Replace)
+2. Enable regex with `.*` button
+3. Find: `Listing`
+4. Replace: `Inventory`
+5. Replace All in Files
+
+### Python/Django Code
+```python
+# Update model imports
+from inventory.models import Inventory, InventoryImage  # was listings.models
+from accounts.models import UserProfile  # was SellerProfile
+
+# Update queries
+inventories = Inventory.objects.filter(status='ACTIVE')  # was Listing
+user_profile = user.user_profile  # was user.seller_profile
+```
+
+---
+
+## Updated User Stories
+
+### Before
+> "As a seller, I want to create a listing so I can sell my gadget"
+
+### After
+> "As a seller, I want to create an inventory item so I can sell my gadget"
+
+---
+
+### Before
+> "As a buyer, I want to search listings so I can find gadgets"
+
+### After
+> "As a buyer, I want to search inventory so I can find gadgets"
+
+---
+
+## Validation Checklist
+
+After renaming, verify:
+
+- [ ] All model names updated (Inventory, UserProfile, InventoryImage)
+- [ ] All table names updated (inventories, user_profiles, inventory_images)
+- [ ] All API endpoints updated (/api/inventories, /api/profile)
+- [ ] All frontend routes updated (/inventories, /my-inventories)
+- [ ] All component names updated (InventoryCard, etc.)
+- [ ] All related_name fields updated (user.inventories, user.user_profile)
+- [ ] All imports updated in Python files
+- [ ] All imports updated in JavaScript/React files
+- [ ] Database migrations reflect new names
+- [ ] Tests updated with new names
+- [ ] Documentation updated (README, API docs, etc.)
+
+---
+
+## Benefits of New Names
+
+### "Inventory" over "Listing"
+✅ **Clearer Intent** - Represents stock/items available  
+✅ **Industry Standard** - Common in e-commerce platforms  
+✅ **Future-Proof** - Better for inventory management features  
+✅ **Professional** - More business-oriented terminology  
+
+### "UserProfile" over "SellerProfile"
+✅ **Generic** - Can store both buyer and seller info  
+✅ **Extensible** - Easy to add buyer-specific fields later  
+✅ **Consistent** - Matches Django convention (User + UserProfile)  
+✅ **Flexible** - Accommodates role changes (buyer ↔ seller)  
+
+---
+
+## Migration Notes
+
+### Database Rename Migration
+
+When you run migrations, Django will rename tables:
+
+```python
+# Generated migration file
+class Migration(migrations.Migration):
+    operations = [
+        migrations.RenameModel(
+            old_name='Listing',
+            new_name='Inventory',
+        ),
+        migrations.RenameModel(
+            old_name='ListingImage',
+            new_name='InventoryImage',
+        ),
+        migrations.RenameModel(
+            old_name='SellerProfile',
+            new_name='UserProfile',
+        ),
+    ]
+```
+
+This will execute SQL like:
+```sql
+ALTER TABLE listings RENAME TO inventories;
+ALTER TABLE listing_images RENAME TO inventory_images;
+ALTER TABLE seller_profiles RENAME TO user_profiles;
+```
+
+---
+
+## Quick Reference Card
+
+| Concept | Old Term | New Term |
+|---------|----------|----------|
+| Item for sale | Listing | **Inventory** |
+| Multiple items | Listings | **Inventories** |
+| Seller details | SellerProfile | **UserProfile** |
+| Item photo | ListingImage | **InventoryImage** |
+| App folder | listings/ | **inventory/** |
+| API path | /api/listings | **/api/inventories** |
+| React route | /listings | **/inventories** |
+| Database table | listings | **inventories** |
+| Related name | user.listings | **user.inventories** |
+
+---
+
+**All documentation files have been updated with these new naming conventions.**
+
+**Version:** 2.1 - Naming Convention Updates  
+**Last Updated:** February 2026
+
+
+==================================================
+FILE: prd.md
+==================================================
+
+# Product Requirements Document: Pre-Owned Gadgets Marketplace
+
+## CONTENTS
+1. [Abstract](#abstract)
+2. [Business Objectives](#business-objectives)
+3. [KPI](#kpi)
+4. [Success Criteria](#success-criteria)
+5. [User Journeys](#user-journeys)
+6. [Scenarios](#scenarios)
+7. [User Flow](#user-flow)
+8. [Functional Requirements](#functional-requirements)
+9. [Model Requirements](#model-requirements)
+10. [Data Requirements](#data-requirements)
+11. [Prompt Requirements](#prompt-requirements)
+12. [Testing & Measurement](#testing--measurement)
+13. [Risks & Mitigations](#risks--mitigations)
+14. [Costs](#costs)
+15. [Assumptions & Dependencies](#assumptions--dependencies)
+16. [Compliance/Privacy/Legal](#complianceprivacylegal)
+17. [GTM/Rollout Plan](#gtmrollout-plan)
+
+---
+
+## 📝 Abstract
+
+A mobile-responsive web marketplace connecting budget-conscious buyers with sellers of pre-owned gadgets and electronics in India. The platform enables individual sellers to declutter and earn income by inventory working gadgets at below-retail prices, while buyers discover affordable electronics through powerful search capabilities. V1 focuses on local, in-person transactions with escrow payment protection, email verification for sellers, and admin-managed dispute resolution. Built with Django REST Framework backend, PostgreSQL database, and React frontend.
+
+**Purpose:** Make quality electronics accessible at affordable prices while creating a trusted marketplace for pre-owned gadgets.
+
+**Rationale:** New gadgets are expensive. This platform solves affordability by connecting buyers directly with sellers of working, pre-owned items at significantly lower prices than market retail.
+
+---
+
+## 🎯 Business Objectives
+
+- **Enable affordable access to technology** by creating a trusted marketplace for pre-owned gadgets priced below retail
+- **Build supply-side liquidity** by making it easy for individuals to monetize unused electronics through simple inventory and secure payments
+- **Establish marketplace trust** through escrow payments, email verification, and admin oversight to reduce fraud and build buyer confidence
+- **Capture local transaction demand** by facilitating safe, in-person exchanges without complex shipping logistics in V1
+- **Create sustainable growth engine** through repeat buyers finding quality deals and motivated sellers earning consistent income
+
+---
+
+## 📊 KPI
+
+| GOAL | METRIC | TARGET (8-12 weeks) | QUESTION |
+|------|--------|---------------------|----------|
+| Supply Growth | Active Inventorys | 1,000 | Are we attracting enough sellers to build inventory? |
+| Transaction Volume | Completed Transactions | 100 | Is the marketplace converting browsers into buyers? |
+| Buyer Retention | D7 Repeat Rate | 1% | Are buyers coming back for second purchases? |
+
+---
+
+## 🏆 Success Criteria
+
+**Quantitative:**
+- Achieve 1,000 active inventorys within 8-12 weeks of launch
+- Complete 100 successful transactions with escrow payment releases
+- Reach 1% buyer repeat purchase rate (buyers making 2+ purchases)
+- Maintain <5% dispute rate on completed transactions
+
+**Qualitative:**
+- Positive beta user feedback on trust and ease of use
+- Sellers report simple inventory process and timely payment receipt
+- Buyers find relevant gadgets through search within 3 queries
+- Zero critical security or payment incidents during beta period
+
+---
+
+## 🚶‍♀️ User Journeys
+
+### Primary Journey: Budget-Conscious Buyer (Ravi)
+
+Ravi is a college student looking for a reliable laptop under ₹20,000. He visits the marketplace, searches for "laptop under 20000", filters by "Good" condition, and browses inventorys sorted by lowest price. He finds a suitable Dell laptop listed at ₹18,500 (marked down from ₹25,000). After viewing photos and description, he completes the purchase. Payment goes to escrow. He contacts the seller via provided contact info, arranges a meetup at a safe public location, inspects the laptop, and completes the exchange. The admin releases payment to the seller after verification. Ravi returns two weeks later to search for a wireless mouse.
+
+### Secondary Journey: Decluttering Seller (Priya)
+
+Priya wants to sell her old iPhone 12 before upgrading. She signs up with email verification, logs in, and completes her seller profile including bank details (account number, IFSC code). She creates a inventory: uploads 4 photos, titles it "iPhone 12 128GB - Excellent Condition", writes a detailed description, sets marked price at ₹35,000 and offer price at ₹28,000, selects "Like New" condition and "Phones" category. Within 3 days, a buyer purchases it. After meeting the buyer and completing the exchange, she notifies the admin. Payment is released to her bank account within 24 hours.
+
+---
+
+## 📖 Scenarios
+
+**Buyer Scenarios:**
+- Search for specific gadget model and find it within top 5 results
+- Filter inventorys by price range to stay within budget
+- View multiple photos and detailed condition description before deciding
+- Complete purchase with confidence knowing payment is held in escrow
+- Coordinate meetup with seller using provided contact information
+- Browse active inventorys without seeing sold-out items
+
+**Seller Scenarios:**
+- Complete signup and email verification to establish trust
+- Add comprehensive profile with bank details for payment receipt
+- List gadget with multiple photos showing actual condition
+- Show competitive pricing with marked price vs. offer price
+- Edit or update inventory details if item condition or price changes
+- Receive payment directly to bank account after successful transaction
+
+**Admin Scenarios:**
+- Review and release escrow payments after transaction verification
+- Handle buyer-seller disputes through manual intervention
+- Add new product categories as marketplace expands
+- Monitor inventory quality and user activity for fraud detection
+- Manage user accounts and moderate content
+
+---
+
+## 🕹️ User Flow
+
+### Buyer Happy Path
+1. Land on homepage → Browse featured/recent inventorys
+2. Use search bar (keyword: "iPhone 13") → View results sorted by price
+3. Apply filters (price range, condition) → Refine results
+4. Click inventory → View photos, description, marked price, offer price, condition, seller info
+5. Click "Buy Now" → Sign up/Login (Email+Password or Google OAuth)
+6. Complete payment → Funds held in escrow
+7. Receive seller contact info → Arrange meetup offline
+8. Complete exchange → Admin releases payment to seller
+
+### Seller Happy Path
+1. Land on homepage → Click "Sell Your Gadget"
+2. Sign up (Email+Password or Google OAuth) → Verify email
+3. Login → Complete profile (name, brand, bank details)
+4. Click "Add Inventory" → Upload photos (1-5), enter title, description, marked price, offer price, select condition, select category
+5. Submit inventory → Item goes live immediately
+6. Buyer purchases → Receive notification with buyer contact
+7. Arrange meetup → Complete exchange
+8. Notify admin → Payment released to bank account within 24 hours
+
+### Alternative Flows
+- **Forgot Password:** Email reset link → User resets password → Login successful
+- **Failed Payment:** Payment gateway error → User retries or uses alternative method
+- **Edit Inventory:** Seller updates price/description → Changes reflected immediately
+- **Dispute:** Buyer/seller reports issue → Admin investigates → Resolution (refund or payment release)
+
+---
+
+## 🧰 Functional Requirements
+
+### Authentication & User Management
+
+| SECTION | SUB-SECTION | USER STORY & EXPECTED BEHAVIORS | SCREENS |
+|---------|-------------|----------------------------------|---------|
+| Signup | Email | **Story:** As a new user, I want to create an account with email and password so I can access the marketplace.<br>**Behaviors:** Email validation, password strength requirements (min 8 chars, 1 uppercase, 1 number), email verification link sent, account inactive until verified | Signup form, Email verification success |
+| Signup | Google OAuth | **Story:** As a new user, I want to sign up with my Google account for quick access.<br>**Behaviors:** OAuth redirect to Google, permission consent, auto-create account, email pre-verified, redirect to profile completion | Google OAuth consent, Profile setup |
+| Login | Email | **Story:** As a returning user, I want to log in with my email and password.<br>**Behaviors:** Email and password validation, show error for unverified email, redirect to dashboard on success | Login form, Dashboard |
+| Login | Google OAuth | **Story:** As a returning user, I want to log in with my Google account quickly.<br>**Behaviors:** OAuth redirect, auto-login if previously connected, redirect to dashboard | Google OAuth, Dashboard |
+| Forgot Password | - | **Story:** As a user who forgot my password, I want to reset it via email.<br>**Behaviors:** Enter email, send reset link (valid 24hrs), click link to reset page, enter new password, confirm and redirect to login | Forgot password form, Reset link email, Password reset form |
+
+### Seller Profile Management
+
+**User Story:** As a seller, I want to maintain a complete profile with payment details so buyers trust me and I can receive payments.
+
+**Expected Behaviors:**
+- Profile fields: Full Name (required), Brand Name (optional), Nickname (optional), Bank Account Number (required, encrypted), IFSC Code (required, validated format), Bank Name (required), Branch Address (optional)
+- Bank details encrypted at rest
+- Edit profile anytime
+- Profile completion indicator (encourage 100% completion)
+- Consent checkbox for storing bank details (required before saving)
+
+**Screens:** Profile setup form, Profile view/edit page
+
+### Product Inventory Management
+
+**User Story:** As a seller, I want to create detailed inventorys with photos and pricing so buyers have all information needed to make a purchase decision.
+
+**Expected Behaviors:**
+- Upload 1-5 photos (JPG, PNG, WEBP only, max 100MB each)
+- Photo preview before upload
+- Fields: Title (required, max 100 chars), Description (required, max 1000 chars), Marked Price (required, INR), Offer Price (required, INR, must be ≤ Marked Price), Condition dropdown (Like New, Good, Fair - required), Category dropdown (dynamic, required)
+- Auto-calculate discount percentage: ((Marked Price - Offer Price) / Marked Price) × 100
+- Save as draft or publish immediately
+- Edit inventory: All fields editable except photos (delete and re-upload)
+- Mark as sold (removes from search results)
+- Image storage: AWS S3 with CDN
+
+**Screens:** Create inventory form, Edit inventory form, Inventory preview, My inventorys dashboard
+
+### Search & Browse
+
+**User Story:** As a buyer, I want to search for gadgets by keyword and filter results so I can find exactly what I need within my budget.
+
+**Expected Behaviors:**
+- Search bar: Full-text search on title + description (PostgreSQL full-text search)
+- Auto-hide sold items from all results
+- Sort options: Price Low-to-High (default), Price High-to-Low, Newest First
+- Filter options: Price range slider (₹0 - ₹100,000), Condition checkboxes (Like New, Good, Fair), Category checkboxes (dynamic based on available categories)
+- Search results: Grid view with thumbnail, title, offer price, marked price (strikethrough), discount %, condition badge
+- Pagination: 20 items per page
+- Empty state: "No results found" with suggestion to modify search
+
+**Screens:** Homepage with search, Search results page, Filter sidebar
+
+### Product Detail Page
+
+**User Story:** As a buyer, I want to view complete product details including all photos and seller info so I can decide if I want to purchase.
+
+**Expected Behaviors:**
+- Image gallery: Thumbnail strip + large preview, click to zoom
+- Product info: Title, Description, Offer Price (prominent), Marked Price (strikethrough), Discount % badge, Condition badge, Category tag
+- Seller info: Brand name or nickname, "Verified Email" badge
+- "Buy Now" button (prominent CTA)
+- Breadcrumb navigation: Home > Category > Product Title
+- Related inventorys: Show 4 similar items (same category, similar price range)
+
+**Screens:** Product detail page
+
+### Payment & Escrow
+
+**User Story:** As a buyer, I want to pay securely knowing my money is protected until I receive the item.
+
+**Expected Behaviors:**
+- Click "Buy Now" → Redirect to payment gateway (Razorpay or equivalent)
+- Payment options: UPI, Cards, Net Banking, Wallets
+- Payment success → Funds moved to escrow account (not seller account)
+- Generate transaction ID
+- Send confirmation emails to buyer and seller with contact info exchange
+- Buyer receives: Seller name, phone number (if provided)
+- Seller receives: Buyer name, phone number (if provided)
+- Transaction status: "Payment in Escrow - Awaiting Admin Release"
+
+**User Story:** As a seller, I want to receive payment in my bank account after successful transaction.
+
+**Expected Behaviors:**
+- Admin dashboard shows "Pending Release" transactions
+- Admin reviews transaction, confirms with buyer/seller if needed
+- Admin clicks "Release Payment" → Escrow transfers to seller's bank account
+- Payment typically released within 24 hours of transaction completion
+- Seller receives payment confirmation email with transaction details
+
+**Screens:** Payment gateway integration, Payment success page, Transaction history (buyer & seller), Admin escrow management dashboard
+
+### Category Management (Admin)
+
+**User Story:** As a super admin, I want to add and manage product categories so the marketplace can expand to new gadget types.
+
+**Expected Behaviors:**
+- Admin panel: View all categories in table
+- Add category: Category name (required, unique), Description (optional), Icon/image (optional)
+- Edit category: Update name or description
+- Delete category: Only if no active inventorys use it (show warning + count)
+- Categories appear in seller inventory form and buyer filter dropdown
+- Default categories: Phones, Laptops, Tablets, Accessories, Other
+
+**Screens:** Admin category management page
+
+### Dispute Resolution (Admin)
+
+**User Story:** As an admin, I want to handle disputes between buyers and sellers so transactions can be resolved fairly.
+
+**Expected Behaviors:**
+- Buyer or seller can flag transaction as "Disputed"
+- Dispute form: Reason dropdown (Item not as described, Payment issue, Meetup failed, Other), Description (required)
+- Admin receives dispute notification
+- Admin dashboard shows all disputes with status: New, In Review, Resolved
+- Admin actions: Contact buyer/seller via email, Request additional info, Refund to buyer (from escrow), Release to seller, Partial refund
+- Resolution notes logged in transaction history
+- Email notifications sent to both parties on resolution
+
+**Screens:** Dispute flag form (buyer/seller), Admin dispute management dashboard
+
+---
+
+## 📐 Model Requirements
+
+**Not applicable.** This product does not utilize AI/ML models in V1. Search is powered by PostgreSQL full-text search capabilities. Future versions may incorporate ML for recommendations, fraud detection, or dynamic pricing suggestions.
+
+---
+
+## 🧮 Data Requirements
+
+### User Data
+- **Storage:** PostgreSQL database, India-based hosting (AWS Mumbai or equivalent region)
+- **Retention:** Indefinite unless user requests account deletion (GDPR-style right to be forgotten)
+- **PII Protection:** Bank details encrypted at rest (AES-256), password hashing (bcrypt), HTTPS enforced for all connections
+- **Access Controls:** Role-based access (Buyer, Seller, Admin), users can only view/edit their own data, admins have read-only access to support disputes
+
+### Product Inventory Data
+- **Storage:** PostgreSQL for metadata, AWS S3 for images
+- **Freshness:** Real-time updates, sold items immediately hidden from search
+- **Retention:** Active inventorys indefinite, sold inventorys archived after 90 days (retain for analytics)
+- **Image CDN:** CloudFront or equivalent for fast image delivery
+
+### Transaction Data
+- **Storage:** PostgreSQL with transaction log table for audit trail
+- **Retention:** 7 years (Indian tax and legal compliance)
+- **Audit Trail:** All status changes logged (payment received, escrow held, payment released, disputed, resolved)
+- **Access:** Buyer and seller can view their own transactions, admin full access for dispute resolution
+
+### Sample Data for Launch
+- **Purpose:** Populate marketplace for beta testing and demo
+- **Quantity:** 50-100 sample gadget inventorys across all categories
+- **Coverage:** Price range ₹500 - ₹80,000, all condition types, realistic photos and descriptions
+- **Sample Users:** 10-15 buyer accounts, 5-10 seller accounts with verified emails
+
+---
+
+## 💬 Prompt Requirements
+
+**Not applicable.** This product does not utilize LLM/AI prompting in V1. All content is user-generated. Future versions may incorporate AI for inventory description enhancement, fraud detection, or customer support chatbots.
+
+---
+
+## 🧪 Testing & Measurement
+
+### Pre-Launch Testing
+
+**Functional Testing:**
+- **Auth flows:** Email signup with verification, Google OAuth, login, logout, password reset
+- **Seller flows:** Profile completion, inventory creation (all field validations), photo upload (size/format limits), edit inventory, mark as sold
+- **Buyer flows:** Search (keyword accuracy), filter (price range, condition, category), sort, product detail view, payment integration
+- **Payment:** End-to-end payment with test gateway, escrow holding, admin release, bank transfer simulation
+- **Admin:** Category CRUD, escrow management, dispute handling
+- **Edge cases:** Duplicate inventorys, invalid bank details, payment failures, concurrent edits, SQL injection attempts
+
+**Performance Testing:**
+- Search response time: <500ms for 1,000 inventorys
+- Page load: <2s on 4G connection
+- Image load: Progressive loading with thumbnails
+- Concurrent users: Support 100 simultaneous users without degradation
+
+**Security Testing:**
+- Penetration testing for auth bypass attempts
+- SQL injection and XSS vulnerability scans
+- Bank detail encryption verification
+- HTTPS enforcement and certificate validation
+- Rate limiting on API endpoints (prevent scraping)
+
+**Browser Compatibility:**
+- Chrome (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Edge (latest 2 versions)
+- Mobile responsive: iOS Safari, Android Chrome
+
+### Post-Launch Monitoring
+
+**A/B Testing (Future):**
+- V1 ships with single experience, no A/B tests
+- Post-launch: Test search result ordering, pricing display format, CTA button copy
+
+**Live Performance Tracking:**
+- **Uptime:** 99.5% target, monitor via UptimeRobot or equivalent
+- **Error rate:** <1% of requests, alert if >2%
+- **Payment success rate:** >95%, alert if drops below 90%
+- **Search quality:** Track zero-result searches, investigate patterns
+- **Page speed:** Monitor with Google Analytics, target <3s average load time
+
+**Alerting:**
+- Payment gateway downtime: Immediate alert
+- Database connection failures: Immediate alert
+- Spike in dispute reports: Daily summary
+- Fraud pattern detection: Weekly review (manual in V1)
+
+**Analytics Tracking:**
+- Google Analytics 4 implementation
+- Track: Signups, inventorys created, searches performed, search-to-view rate, view-to-purchase rate, repeat purchase rate
+- Funnel: Homepage → Search → Product View → Purchase → Transaction Complete
+- Identify drop-off points for optimization
+
+---
+
+## ⚠️ Risks & Mitigations
+
+| RISK | LIKELIHOOD | IMPACT | MITIGATION |
+|------|------------|---------|------------|
+| **Fraud/Scams:** Fake inventorys or payment disputes destroy buyer trust | High | Critical | • Email verification for all sellers<br>• Escrow payment (not direct transfer)<br>• Admin review before payment release<br>• Dispute resolution process<br>• Future: Seller ratings, inventory review queue |
+| **Cold Start Problem:** No sellers = empty marketplace | High | Critical | • Pre-populate with 50-100 curated sample inventorys<br>• Beta launch with personal network (guaranteed initial sellers)<br>• Seller incentives: Featured inventorys for early adopters<br>• Community targeting: College campuses, tech groups |
+| **Poor Search Quality:** Buyers can't find relevant items | Medium | High | • PostgreSQL full-text search with ranking<br>• Test with 100+ inventorys before launch<br>• Track zero-result searches and iterate<br>• Plan migration to Elasticsearch if scale demands |
+| **Payment/Escrow Issues:** Failed payments or delayed releases frustrate users | Medium | High | • Use established payment gateway (Razorpay)<br>• Clear SLA: Payment released within 24 hours<br>• Automated email notifications at each status change<br>• Admin escalation process for delays |
+| **Low Buyer Trust:** Perception of risk in pre-owned marketplace | Medium | High | • "Verified Email" badges for sellers<br>• Escrow messaging in all payment flows<br>• Clear dispute resolution policy (visible on all pages)<br>• Encourage local meetups in public places (safety tips) |
+| **Technical Scalability:** Database/storage limits at high volume | Low | Medium | • AWS infrastructure with auto-scaling capability<br>• S3 for unlimited image storage<br>• Monitor database performance, plan sharding if needed<br>• CDN for image delivery reduces server load |
+| **Regulatory Compliance:** Non-compliance with RBI payment regulations | Low | Critical | • Legal review of escrow model before launch<br>• Partner with licensed payment gateway<br>• Document fund flow and audit trail<br>• Periodic compliance audits |
+
+---
+
+## 💰 Costs
+
+### Development Costs (One-Time)
+
+**Personnel (Estimated Timeline: 8-10 weeks):**
+- Backend Developer (Django REST): 6 weeks @ market rate
+- Frontend Developer (React): 6 weeks @ market rate
+- UI/UX Designer: 2 weeks @ market rate
+- QA/Testing: 2 weeks @ market rate
+- DevOps Setup: 1 week @ market rate
+
+**Assumption:** Using existing team or freelancers. Costs vary by region (₹50,000 - ₹3,00,000 total estimate for India-based team).
+
+**Third-Party Services Setup:**
+- Payment Gateway Integration: Razorpay setup (free, 2% transaction fee applies post-launch)
+- Email Service: AWS SES + django-anymail setup (free tier)
+- Domain Registration: ₹500 - ₹1,000/year
+- SSL Certificate: Free (Let's Encrypt)
+
+**Total Development Cost Estimate:** ₹50,000 - ₹3,00,000 (highly variable based on team structure)
+
+### Operational Costs (Monthly)
+
+**Infrastructure (Low-Cost Options):**
+- **Hosting:** AWS Lightsail or DigitalOcean Droplet: ₹500 - ₹2,000/month (scales with traffic)
+- **Database:** PostgreSQL on same server (V1), upgrade to RDS if needed: ₹0 - ₹3,000/month
+- **Storage:** AWS S3 for images: ₹500 - ₹2,000/month (100GB estimate, grows with inventorys)
+- **CDN:** CloudFront: ₹300 - ₹1,000/month (for image delivery)
+- **Email Service:**
+- AWS SES via django-anymail: First 62,000 emails/month FREE (when sending from EC2)
+- If not from EC2: $0.10 per 1,000 emails
+- Estimated: ₹0 - ₹300/month (well within free tier for beta/V1)
+
+**Payment Processing:**
+- Razorpay: 2% per transaction (₹100 transaction = ₹2 fee, deducted from seller payment or added to buyer total)
+- Estimated: ₹200/month (100 transactions × ₹100 avg × 2%)
+
+**Monitoring & Analytics:**
+- Google Analytics: Free
+- Uptime Monitoring: Free tier (UptimeRobot)
+- Error Tracking (Sentry): Free tier
+
+**Total Monthly Operational Cost:** ₹1,500 - ₹8,700/month
+
+**Cost Optimization Strategies:**
+- Start with smallest server, scale up based on traffic
+- Use AWS free tier for first 12 months if eligible
+- Image compression before S3 upload (reduces storage costs)
+- Consider Railway.app or Render.com for even lower hosting costs (₹300-500/month)
+
+---
+
+## 🔗 Assumptions & Dependencies
+
+### Assumptions
+
+1. **Market Assumption:** Sufficient demand exists for pre-owned gadgets in target geography (India)
+2. **Transaction Model:** V1 buyers and sellers are comfortable with local, in-person exchanges (no shipping)
+3. **Trust Model:** Email verification + escrow is sufficient trust signal for beta launch
+4. **Payment Timeline:** Sellers accept 24-hour payment release window as reasonable
+5. **Admin Bandwidth:** Manual escrow release and dispute resolution is feasible at <100 transactions/month
+6. **Search Scale:** PostgreSQL full-text search is adequate for up to 10,000 inventorys
+7. **Storage Growth:** 100 inventorys/week average, each with 3 photos × 5MB = 1.5GB/week growth rate
+8. **Browser Usage:** Target users have modern browsers (Chrome, Firefox, Safari, Edge)
+9. **Mobile Usage:** 60%+ users access via mobile, desktop experience is secondary
+10. **Beta Network:** Founder has access to 50+ potential beta users (buyers and sellers)
+11. **Sample Data:** Team can create realistic sample inventorys for marketplace seeding
+12. **Legal Compliance:** Current escrow model complies with Indian payment regulations (requires legal validation)
+13. **Geographic Focus:** Initial launch targets one city/region for concentrated growth
+14. **Category Growth:** 5 default categories sufficient for first 6 months
+
+### Dependencies
+
+**External Services:**
+- Payment gateway (Razorpay or equivalent) account active and integrated
+- AWS account with S3 bucket configured for India region
+- AWS SES configured with verified sender and production access
+- django-anymail installed for email delivery via SES
+- Domain registration and DNS configuration
+- Google OAuth credentials for social login
+
+**Internal Resources:**
+- Development team availability for 8-10 week build timeline
+- Legal review of Terms of Service, Privacy Policy, and escrow model
+- Admin availability for daily escrow release and dispute management (1-2 hours/day)
+- Marketing/community access for beta user recruitment
+
+**Content & Legal:**
+- Privacy Policy drafted and reviewed
+- Terms of Service drafted and reviewed
+- Refund/Dispute Policy documented
+- Consent forms for bank detail storage
+- Safety guidelines for local meetups
+
+**Technical:**
+- India-based hosting infrastructure provisioned
+- Database backup and disaster recovery plan
+- SSL certificate installed and auto-renewal configured
+- Monitoring and alerting configured before launch
+
+---
+
+## 🔒 Compliance/Privacy/Legal
+
+### Regulatory Compliance
+
+**Indian Payment Regulations:**
+- Escrow model must comply with RBI guidelines for marketplace facilitators
+- Payment gateway partner (Razorpay) handles PCI-DSS compliance
+- Transaction records retained for 7 years per Indian tax laws
+- GST applicability: Consult CA for marketplace commission structure (if applicable in future)
+
+**Action Required:** Legal review of escrow fund flow model before launch to ensure RBI compliance.
+
+### Data Protection & Privacy
+
+**Data Governance:**
+- **Storage Location:** All user data stored on India-based servers (AWS Mumbai or equivalent)
+- **Encryption:** Bank details encrypted at rest (AES-256), all connections via HTTPS (TLS 1.2+)
+- **Access Controls:** Role-based permissions, admin access logged and audited
+- **User Rights:** Users can request data export or account deletion (GDPR-style compliance)
+
+**Privacy Policy Requirements:**
+- **Consent:** Explicit consent checkbox before collecting bank details
+- **Disclosure:** Clearly state what data is collected (email, name, bank details, photos, transaction history)
+- **Usage:** Explain how data is used (facilitate transactions, payment processing, dispute resolution)
+- **Sharing:** Contact info shared between buyer/seller post-purchase, no third-party marketing sharing
+- **Retention:** User data retained indefinitely unless deletion requested, transaction data 7 years
+- **Cookies:** Disclose analytics cookies (Google Analytics), provide opt-out
+
+**Action Required:** Draft and publish Privacy Policy before launch, link prominently in footer and signup flow.
+
+### Terms of Service
+
+**Key Clauses:**
+- **User Conduct:** Prohibit fake inventorys, fraud, harassment, illegal goods
+- **Transaction Terms:** Escrow holding period, admin release timeline (24 hours), dispute process
+- **Liability:** Platform is facilitator only, not responsible for item condition or user disputes (best-effort resolution)
+- **Fees:** Payment gateway fees disclosed (2% transaction fee), no platform commission in V1
+- **Termination:** Platform can suspend/ban users violating terms
+- **Governing Law:** Indian jurisdiction for dispute resolution
+
+**Action Required:** Draft and publish Terms of Service before launch, require acceptance during signup.
+
+### Intellectual Property
+
+**User Content:**
+- Users retain copyright on photos and descriptions
+- Users grant platform license to display content for marketplace purposes
+- Platform can remove infringing content (counterfeit goods, trademark violations)
+
+### Risk Mitigation
+
+**Fraud Prevention:**
+- Email verification reduces fake accounts
+- Admin review before payment release catches suspicious transactions
+- Dispute process handles bad actors
+
+**Safety Guidelines:**
+- Publish safety tips for local meetups (public places, daytime, bring friend)
+- Recommend buyers inspect item before exchange
+- Encourage reporting suspicious inventorys or users
+
+**Action Required:** Create and publish Safety Guidelines page before launch.
+
+---
+
+## 📣 GTM/Rollout Plan
+
+### Milestones
+
+**Week 1-2: Foundation**
+- Finalize tech stack setup (Django, PostgreSQL, React scaffolding)
+- Design system and UI mockups approved
+- Payment gateway sandbox integration complete
+
+**Week 3-4: Core Development**
+- Auth flows (email, Google OAuth, password reset)
+- Seller profile and inventory management
+- Search and browse functionality
+
+**Week 5-6: Transaction Features**
+- Payment integration (test mode)
+- Escrow logic and admin dashboard
+- Buyer purchase flow end-to-end
+
+**Week 7-8: Polish & Testing**
+- UI/UX refinement based on internal testing
+- Security audit and penetration testing
+- Sample data creation (50-100 inventorys)
+- Legal docs finalized (Terms, Privacy, Safety)
+
+**Week 9: Beta Prep**
+- Deploy to production environment
+- Payment gateway live mode activated
+- Analytics and monitoring configured
+- Beta user recruitment from personal network
+
+**Week 10: Beta Launch**
+- Soft launch to 20-30 beta users (friends, family, trusted community)
+- Daily monitoring and bug fixes
+- Gather qualitative feedback via surveys
+- Admin actively manages escrow releases
+
+**Week 11-12: Iterate & Scale**
+- Incorporate beta feedback (UI tweaks, flow improvements)
+- Monitor KPIs: inventorys, transactions, repeat rate
+- Expand to broader community if metrics positive
+
+### Launch Strategy
+
+**Phase 1: Private Beta (Week 10)**
+- **Audience:** Personal network (friends, family, college community, tech groups)
+- **Size:** 20-30 users (mix of buyers and sellers)
+- **Goal:** Validate end-to-end flow, gather feedback, achieve first 10 transactions
+- **Channels:** Direct outreach (WhatsApp, email), invite-only access
+- **Incentives:** Early adopters get featured inventorys, founder support for onboarding
+
+**Phase 2: Community Beta (Week 11-14)**
+- **Audience:** Expand to specific community (e.g., college campus, tech Slack/Discord groups, local Facebook groups)
+- **Size:** 100-200 users
+- **Goal:** Achieve 50+ inventorys, 30+ transactions, validate product-market fit
+- **Channels:** Social media posts (Instagram, Twitter, LinkedIn), community forums, word-of-mouth
+- **Positioning:** "Affordable gadgets from people you trust - local, verified, secure"
+
+**Phase 3: City Launch (Week 15-20)**
+- **Audience:** Broader city/region (e.g., Bangalore, Mumbai, Delhi)
+- **Size:** 500-1,000 users
+- **Goal:** Hit KPI targets (1,000 inventorys, 100 transactions, 1% repeat rate)
+- **Channels:** Paid social ads (Instagram, Facebook), influencer partnerships, SEO optimization, PR outreach
+- **Budget:** ₹10,000 - ₹30,000 for ads (testing phase)
+
+### Phased Rollout
+
+**Beta Features (Week 10-12):**
+- Core flows only: Auth, inventory, search, payment, escrow
+- Manual admin processes (escrow release, dispute resolution)
+- Limited categories (Phones, Laptops, Tablets, Accessories, Other)
+- Single geography focus (one city)
+
+**Post-Beta Enhancements (Week 13+, based on feedback):**
+- Seller ratings and reviews (if fraud concerns arise)
+- Automated escrow release after X days (reduce admin burden)
+- Shipping integration (if user demand is high)
+- Buyer-seller in-app messaging (if coordination issues surface)
+- Advanced search (filters by brand, specifications)
+- Recommendation engine (if browsing behavior warrants it)
+
+### Success Checkpoints
+
+**End of Week 10 (Beta Launch):**
+- ✅ 20+ active inventorys from beta sellers
+- ✅ 5+ completed transactions
+- ✅ Zero critical bugs or security incidents
+- ✅ Positive qualitative feedback (NPS >7)
+
+**End of Week 12 (Beta Completion):**
+- ✅ 100+ active inventorys
+- ✅ 20+ completed transactions
+- ✅ Repeat purchase by at least 2 buyers
+- ✅ <10% dispute rate
+- ✅ Decision: Proceed to broader launch or pivot based on feedback
+
+**End of Week 20 (City Launch):**
+- ✅ 1,000 active inventorys (KPI target)
+- ✅ 100 completed transactions (KPI target)
+- ✅ 1% buyer repeat rate (KPI target)
+- ✅ 95%+ payment success rate
+- ✅ Operational runbook established for admin processes
+
+### Rollback Plan
+
+If critical issues arise (payment failures, security breach, high fraud rate):
+1. Pause new signups immediately
+2. Email all active users about maintenance window
+3. Identify and fix root cause
+4. Re-test in staging environment
+5. Gradual re-launch with monitoring
+6. Communicate resolution and preventive measures to users
+
+---
+
+**END OF PRD**
+
+_Generated: February 2026_
+_Version: 1.0 - V1 Scope_
+_Next Review: Post-Beta Feedback (Week 12)_
+
+
+==================================================
+FILE: README.md
+==================================================
+
+# Pre-Owned Gadgets Marketplace - Complete Documentation Package
+
+## 📦 Project Overview
+
+A mobile-responsive web marketplace for buying and selling pre-owned gadgets in India. Built with Django REST Framework (backend), PostgreSQL (database), and React + Tailwind CSS (frontend).
+
+**Version:** 2.1  
+**Last Updated:** February 2026  
+**Status:** Ready for Development
+
+---
+
+## 📚 Documentation Files
+
+### Core Planning Documents
+
+1. **prd.md** - Product Requirements Document
+   - Complete business objectives and KPIs
+   - User journeys and scenarios
+   - Functional requirements
+   - GTM and rollout plan
+   - **Start here** for understanding the product
+
+2. **sprint-plan.md** - 10-Week Development Sprint Plan
+   - 5 two-week sprints with detailed task breakdowns
+   - Story point estimates (248 total points)
+   - Sprint 1: Authentication & User Management (55 points)
+   - Sprint 2: Inventory, Categories & Tags (58 points)
+   - Sprint 3: Search, Browse & Product Details (35 points)
+   - Sprint 4: Payment Integration & Escrow (50 points)
+   - Sprint 5: Polish, Testing & Launch Prep (50 points)
+
+### Technical Architecture
+
+3. **database-schema.md** - Complete Database Design
+   - All 10+ Django models with fields and relationships
+   - ERD diagram (Mermaid format)
+   - Indexes and constraints for performance
+   - Migration strategy and sample data
+   - Query optimization tips
+
+4. **erd-diagram.mermaid** - Entity Relationship Diagram
+   - Visual database schema
+   - Can be rendered in GitHub, Notion, or Mermaid Live Editor
+   - Shows all tables and relationships
+
+### Implementation Guides
+
+5. **media-management-guide.md** - Media Model Complete Guide
+   - Central repository for all images (profile photos, inventory images)
+   - API endpoints (upload, list, update, archive)
+   - Frontend React components
+   - Image reuse and optimization
+   - Security and performance best practices
+
+6. **django-anymail-aws-ses-guide.md** - Email Service Setup
+   - Complete AWS SES configuration
+   - Django-anymail integration
+   - Email templates (verification, password reset, transactions)
+   - Testing and troubleshooting
+   - Cost estimation (62,000 free emails/month)
+
+### Change Documentation
+
+7. **schema-updates-v2.md** - Major Schema Changes Summary
+   - Enhanced User model (22 fields)
+   - Media model introduction
+   - Auto-generated nicknames
+   - Auto role assignment logic
+   - Change password feature
+   - Tailwind CSS integration
+   - Sprint impact analysis (+16 story points)
+
+8. **sprint-updates-summary.md** - Sprint 1 & 2 Updates
+   - Role-based authentication changes
+   - Hierarchical categories (django-treebeard)
+   - Flexible tagging (django-taggit)
+   - Technical dependencies
+
+9. **naming-conventions.md** - Terminology Updates
+   - Listing → Inventory
+   - SellerProfile → UserProfile
+   - Updated API endpoints, models, and routes
+   - Search & replace guide
+
+---
+
+## 🏗️ Tech Stack
+
+### Backend
+- **Framework:** Django 4.2+ with Django REST Framework
+- **Database:** PostgreSQL 14+
+- **Authentication:** JWT (JSON Web Tokens)
+- **Email:** Django-anymail + AWS SES
+- **Storage:** AWS S3 + CloudFront CDN
+- **Categories:** django-treebeard (hierarchical)
+- **Tags:** django-taggit
+- **Payments:** Razorpay
+
+### Frontend
+- **Framework:** React 18+
+- **Styling:** Tailwind CSS
+- **Routing:** React Router
+- **State:** React Context API
+- **HTTP Client:** Fetch API
+
+### Infrastructure
+- **Hosting:** AWS (Mumbai region - ap-south-1)
+- **Server:** EC2 or Railway/Render
+- **Database:** AWS RDS PostgreSQL or managed PostgreSQL
+- **Email:** AWS SES (62,000 free emails/month)
+- **Media Storage:** AWS S3 + CloudFront
+
+---
+
+## 📊 Database Schema Summary
+
+### Core Models (10 total)
+
+**Accounts App:**
+- `User` - 22 fields (UUID, email, username, mobile, UPI, seller_plan, etc.)
+- `UserProfile` - Extended profile with auto-generated nicknames
+- `Media` - Central repository for all images (reusable)
+- `ProfileImage` - Links users to profile photos
+
+**Categories App:**
+- `Category` - Hierarchical categories (django-treebeard)
+
+**Inventory App:**
+- `Inventory` - Product listings with full-text search
+- `InventoryImage` - Links inventory to media (many-to-many)
+- `Tag` - Flexible tagging (django-taggit)
+
+**Transactions App:**
+- `Transaction` - Payment transactions with escrow
+- `Dispute` - Buyer/seller dispute resolution
+
+---
+
+## 🎯 Key Features
+
+### User Management
+✅ Role-based authentication (BUYER, SELLER, ADMIN)  
+✅ Auto role assignment based on inventory  
+✅ Email + Google OAuth login  
+✅ Email and mobile verification  
+✅ Auto-generated Reddit-style nicknames  
+✅ Change password functionality  
+
+### Inventory Management
+✅ Create, edit, delete inventory items  
+✅ 1-5 images per item (reusable from Media library)  
+✅ Hierarchical categories with unlimited nesting  
+✅ Flexible tagging system  
+✅ Price comparison (marked price vs offer price)  
+✅ Condition tracking (Like New, Good, Fair)  
+
+### Search & Discovery
+✅ Full-text search on title, description, tags  
+✅ Filter by category, price range, condition, tags  
+✅ Sort by price (low-high, high-low) or newest  
+✅ Hide sold items automatically  
+✅ Related items suggestions  
+
+### Payments & Escrow
+✅ Razorpay integration for payments  
+✅ Escrow system (funds held until confirmed)  
+✅ Admin-managed payment releases  
+✅ Dispute resolution workflow  
+✅ Direct bank transfers to sellers  
+
+### Seller Features
+✅ Seller plans (SELF_SELL, SMART_SELL, DONATE)  
+✅ Donation options (50% or 100%)  
+✅ Net earnings tracking  
+✅ Bank details (encrypted storage)  
+✅ UPI ID verification  
+
+---
+
+## 🚀 Getting Started
+
+### 1. Review Core Documents (1-2 hours)
+- Read `prd.md` for business context
+- Review `database-schema.md` for technical architecture
+- Check `sprint-plan.md` for development timeline
+
+### 2. Set Up Development Environment
+- Install Python 3.10+, Node.js 18+, PostgreSQL 14+
+- Create virtual environment: `python -m venv venv`
+- Install dependencies (see sprint-plan.md Sprint 0)
+
+### 3. Configure Third-Party Services
+- AWS account (S3, SES, EC2)
+- Razorpay test account
+- Google OAuth credentials
+- Follow `django-anymail-aws-ses-guide.md` for email setup
+
+### 4. Start Sprint 1 Development
+- Implement User model with 22 fields
+- Set up JWT authentication
+- Create Media model
+- Build signup/login flows
+- **Estimated:** 2 weeks (55 story points)
+
+---
+
+## 📈 Project Timeline
+
+**Total Duration:** 10 weeks (5 sprints × 2 weeks)  
+**Total Story Points:** 248 points
+
+| Sprint | Focus | Duration | Points |
+|--------|-------|----------|--------|
+| Sprint 0 | Pre-development setup | 3-5 days | N/A |
+| Sprint 1 | Auth & User Management | 2 weeks | 55 |
+| Sprint 2 | Inventory, Categories & Tags | 2 weeks | 58 |
+| Sprint 3 | Search & Browse | 2 weeks | 35 |
+| Sprint 4 | Payment & Escrow | 2 weeks | 50 |
+| Sprint 5 | Polish & Launch | 2 weeks | 50 |
+
+**Beta Launch:** Week 10  
+**Full Launch:** Week 12-20 (after beta feedback)
+
+---
+
+## 💰 Cost Estimation
+
+### Development Costs (One-Time)
+- Team: ₹50,000 - ₹3,00,000 (8-10 weeks, India-based)
+- Third-party setup: ₹500 - ₹2,000 (domain, tools)
+
+### Monthly Operational Costs
+- **Hosting:** ₹500 - ₹2,000 (AWS Lightsail/DigitalOcean)
+- **Database:** ₹0 - ₹3,000 (PostgreSQL on same server or RDS)
+- **Storage (S3):** ₹500 - ₹2,000 (100GB with image reuse)
+- **CDN:** ₹300 - ₹1,000 (CloudFront)
+- **Email (SES):** ₹0 - ₹300 (62,000 free/month from EC2)
+- **Payment Processing:** 2% per transaction (₹200/month for 100 transactions)
+
+**Total Monthly:** ₹1,500 - ₹8,700  
+**First Year Total:** ₹18,000 - ₹1,04,400 operations + ₹50,000 - ₹3,00,000 development
+
+---
+
+## 🎯 Success Metrics (8-12 weeks post-launch)
+
+**KPIs:**
+- 1,000 active inventory listings
+- 100 completed transactions
+- 1% buyer repeat purchase rate
+
+**Qualitative:**
+- Positive beta user feedback (NPS >7)
+- <5% dispute rate
+- Zero critical security incidents
+
+---
+
+## 📝 Key Design Decisions
+
+### Why Media Model?
+- **30-40% storage savings** through image reuse
+- One upload, use in multiple inventories
+- Centralized management and analytics
+
+### Why Auto Role Assignment?
+- Simpler UX (no manual role selection)
+- Always accurate (reflects actual behavior)
+- Automatic BUYER ↔ SELLER transitions
+
+### Why Hierarchical Categories?
+- Better organization (Phones → iPhone → iPhone 13)
+- Precise filtering
+- SEO-friendly structure
+
+### Why Escrow Payments?
+- Build trust in C2C marketplace
+- Reduce fraud and disputes
+- Protect both buyers and sellers
+
+### Why Tailwind CSS?
+- Rapid development with utility classes
+- Small bundle size (PurgeCSS)
+- Responsive by default
+- Industry standard
+
+---
+
+## 🔧 Development Tools
+
+**Recommended:**
+- **IDE:** VS Code with Python, React extensions
+- **API Testing:** Postman or Insomnia
+- **Database Client:** pgAdmin or DBeaver
+- **Version Control:** Git + GitHub
+- **Project Management:** Jira or GitHub Projects
+- **Design:** Figma for mockups
+- **Communication:** Slack or Discord
+
+---
+
+## 📖 How to Use This Documentation
+
+### For Product Managers
+1. Start with `prd.md`
+2. Review `sprint-plan.md` for timeline
+3. Use for stakeholder communication
+
+### For Backend Developers
+1. Read `database-schema.md` thoroughly
+2. Follow `sprint-plan.md` Sprint 1 backend tasks
+3. Reference `django-anymail-aws-ses-guide.md` for email
+4. Check `media-management-guide.md` for image handling
+
+### For Frontend Developers
+1. Review `prd.md` for user flows
+2. Follow `sprint-plan.md` Sprint 1 frontend tasks
+3. Use Tailwind CSS (see sprint-plan.md)
+4. Reference `media-management-guide.md` for image upload components
+
+### For DevOps Engineers
+1. Review infrastructure requirements in `prd.md`
+2. Follow Sprint 0 tasks in `sprint-plan.md`
+3. Set up AWS services per `django-anymail-aws-ses-guide.md`
+4. Configure S3, CloudFront, SES, EC2
+
+### For QA Engineers
+1. Review test cases in `sprint-plan.md` (each sprint)
+2. Check `database-schema.md` for data validation rules
+3. Test API endpoints from `media-management-guide.md`
+
+---
+
+## 🔐 Security & Compliance
+
+**Implemented:**
+- ✅ Encrypted bank details (Fernet encryption)
+- ✅ HTTPS enforced (all connections)
+- ✅ Password hashing (bcrypt)
+- ✅ JWT authentication
+- ✅ Role-based access control
+- ✅ SQL injection prevention (Django ORM)
+- ✅ XSS protection (React escaping)
+- ✅ CSRF protection (Django middleware)
+
+**To Implement:**
+- [ ] Rate limiting (prevent abuse)
+- [ ] File upload virus scanning
+- [ ] 2FA for admin accounts (optional)
+- [ ] Security audit before launch
+
+**Compliance:**
+- India-based hosting (data residency)
+- RBI payment guidelines (escrow model)
+- Privacy Policy and Terms of Service
+- GDPR-style data rights (export, delete)
+
+---
+
+## 🐛 Known Limitations (V1)
+
+**Excluded from V1:**
+- ❌ In-app messaging (buyer-seller coordination offline)
+- ❌ Shipping integration (local meetups only)
+- ❌ Seller ratings/reviews
+- ❌ Bidding/auction system
+- ❌ Recommendation engine
+- ❌ Mobile apps (web-only, responsive)
+
+**Planned for V2:**
+- 📅 Shipping integration
+- 📅 In-app chat
+- 📅 Seller ratings
+- 📅 AI-powered recommendations
+- 📅 Mobile apps (React Native)
+
+---
+
+## 📞 Support & Feedback
+
+**During Development:**
+- Daily standups (15 min)
+- Sprint reviews (1 hour)
+- Retrospectives (1 hour)
+
+**Post-Launch:**
+- Beta feedback via Google Forms
+- User support via email
+- Bug tracking via GitHub Issues
+
+---
+
+## 🎓 Learning Resources
+
+**Django:**
+- Django Docs: https://docs.djangoproject.com/
+- DRF Docs: https://www.django-rest-framework.org/
+
+**React:**
+- React Docs: https://react.dev/
+- Tailwind CSS: https://tailwindcss.com/
+
+**PostgreSQL:**
+- PostgreSQL Docs: https://www.postgresql.org/docs/
+
+**AWS:**
+- S3 Guide: https://docs.aws.amazon.com/s3/
+- SES Guide: https://docs.aws.amazon.com/ses/
+
+**Django Packages:**
+- django-treebeard: https://django-treebeard.readthedocs.io/
+- django-taggit: https://django-taggit.readthedocs.io/
+- django-anymail: https://anymail.dev/
+
+---
+
+## ✅ Pre-Launch Checklist
+
+### Technical
+- [ ] All migrations run successfully
+- [ ] Sample data seeded (50-100 inventory items)
+- [ ] All tests passing (unit + integration)
+- [ ] Security audit completed
+- [ ] Performance testing (100 concurrent users)
+- [ ] Browser compatibility verified
+- [ ] Mobile responsive tested
+
+### Business
+- [ ] Terms of Service finalized
+- [ ] Privacy Policy finalized
+- [ ] Safety Guidelines published
+- [ ] Payment gateway live mode activated
+- [ ] AWS SES production access approved
+- [ ] Domain configured with SSL
+- [ ] Beta users recruited (20-30)
+
+### Operations
+- [ ] Monitoring configured (Sentry, Analytics)
+- [ ] Backup strategy implemented
+- [ ] Rollback plan documented
+- [ ] Admin accounts created
+- [ ] Customer support email set up
+- [ ] Incident response plan ready
+
+---
+
+## 📦 File Manifest
+
+```
+documentation/
+├── README.md (this file)
+├── prd.md
+├── sprint-plan.md
+├── database-schema.md
+├── erd-diagram.mermaid
+├── media-management-guide.md
+├── django-anymail-aws-ses-guide.md
+├── schema-updates-v2.md
+├── sprint-updates-summary.md
+└── naming-conventions.md
+```
+
+**Total:** 10 files  
+**Total Size:** ~180KB
+
+---
+
+## 🚀 Quick Start Commands
+
+```bash
+# Clone repository (when created)
+git clone <repo-url>
+cd marketplace
+
+# Backend setup
+python -m venv venv
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+pip install -r requirements.txt
+
+# Create .env file
+cp .env.example .env
+# Edit .env with your credentials
+
+# Database setup
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+
+# Frontend setup
+cd frontend
+npm install
+npm run dev
+
+# Run development server
+cd ..
+python manage.py runserver
+```
+
+---
+
+## 📅 Version History
+
+**v2.1 (Feb 2026)** - Current
+- Renamed Listing → Inventory
+- Renamed SellerProfile → UserProfile
+- Complete documentation package
+
+**v2.0 (Feb 2026)**
+- Enhanced User model (22 fields)
+- Media model introduction
+- Auto role assignment
+- Tailwind CSS integration
+
+**v1.0 (Feb 2026)**
+- Initial PRD and sprint plan
+- Basic database schema
+- Role-based authentication
+
+---
+
+## 🎉 Ready to Build!
+
+All documentation is complete and ready for development. Follow the sprint plan, start with Sprint 0 setup, and you'll have a fully functional marketplace in 10 weeks.
+
+**Good luck with your launch! 🚀**
+
+---
+
+**Package Version:** 2.1  
+**Last Updated:** February 09, 2026  
+**Prepared by:** Claude (AI Product Manager)  
+**For:** Pre-Owned Gadgets Marketplace Project
+
+
+==================================================
+FILE: schema-updates-v2.md
+==================================================
+
+# Database Schema & Sprint Plan Updates - V2
+
+## Overview of Changes
+
+This document outlines major updates to the database schema and sprint plan based on new requirements:
+
+1. **Enhanced User Model** - 22 fields including UUID, mobile, UPI, seller plans, donations
+2. **Media Model** - Central repository for all images (reusable across profiles and inventorys)
+3. **Auto-Generated Nicknames** - Reddit-style unique nicknames for seller profiles
+4. **Auto Role Assignment** - Roles assigned based on inventory (not manual upgrade)
+5. **Change Password** - Authenticated users can change their password
+6. **Tailwind CSS** - Frontend styling framework
+
+---
+
+## 1. Enhanced User Model
+
+### New Fields Added (Total: 22 fields)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **uuid** | UUID | Unique identifier for each user |
+| **email** | Email | Primary identifier (unchanged) |
+| **username** | String | Unique username (required) |
+| **password** | String | Hashed password (unchanged) |
+| **full_name** | String | User's full name |
+| **is_email_verified** | Boolean | Email verification status |
+| **email_verification_token** | String | Token for email verification |
+| **email_verification_expiry** | DateTime | Token expiry timestamp |
+| **mobile** | String | Phone number (+919876543210) |
+| **mobile_verified** | Boolean | Mobile verification status |
+| **mobile_last_verified_on** | DateTime | Last mobile verification timestamp |
+| **upi_id** | String | UPI ID for payments |
+| **upi_id_last_verified_on** | DateTime | Last UPI verification timestamp |
+| **seller_plan** | Choice | SELF_SELL, SMART_SELL, DONATE |
+| **donation_percentage** | Integer | 50% or 100% (if seller_plan=DONATE) |
+| **net_earnings** | Decimal | Total earnings in INR |
+| **role** | Choice | BUYER, SELLER, ADMIN (auto-assigned) |
+| **favorite_book** | String | Personal preference field |
+| **active** | Boolean | Active status |
+| **archived** | Boolean | Soft delete flag |
+| **created_on** | DateTime | Account creation timestamp |
+| **updated_on** | DateTime | Last update timestamp |
+
+### Removed Fields
+
+- ~~GUEST role~~ - Users are BUYER by default
+- ~~Separate EmailVerificationToken model~~ - Now fields in User model
+- ~~Separate PasswordResetToken model~~ - Token stored in User model
+
+### New Methods
+
+```python
+def auto_assign_role(self):
+    """Auto-assign SELLER if has inventory, otherwise BUYER"""
+    
+def verify_email(self, token):
+    """Verify email with token"""
+    
+def verify_mobile(self):
+    """Mark mobile as verified"""
+    
+def verify_upi_id(self):
+    """Mark UPI ID as verified"""
+    
+def add_earnings(self, amount):
+    """Add to net earnings"""
+```
+
+---
+
+## 2. Media Model - Central Repository
+
+### Concept
+
+One **Media** record can be used by:
+- Multiple inventorys (e.g., same product photo on different inventorys)
+- Multiple user profiles (e.g., default avatar reused)
+- This reduces storage costs and simplifies image management
+
+### Model Structure
+
+```python
+class Media(models.Model):
+    uuid = UUIDField  # Unique identifier
+    file_name = CharField  # Original filename
+    alt_tag = CharField  # Accessibility text
+    file_type = CharField  # image/jpeg, image/png, image/webp
+    s3_url = URLField  # Full S3 URL with CDN
+    created_on = DateTimeField
+    status = BooleanField  # Active/Inactive
+    archived = BooleanField  # Soft delete
+```
+
+### Association Models
+
+**InventoryImage** (Many-to-Many through model)
+- One Inventory → Many InventoryImage → Many Media
+- One Media → Many InventoryImage → Many Inventorys
+- Allows image reuse across inventorys
+
+**ProfileImage** (One-to-One through model)
+- One User → One ProfileImage → One Media
+- One Media → Many ProfileImage → Many Users
+- Allows profile picture reuse
+
+### Benefits
+
+✅ **Cost Savings** - Upload once, use multiple times  
+✅ **Consistency** - Same product shown across inventorys  
+✅ **Centralized Management** - Archive/delete from one place  
+✅ **Analytics** - Track which images are most popular  
+✅ **Performance** - Reduced storage and bandwidth  
+
+---
+
+## 3. Auto-Generated Nicknames
+
+### Format
+
+Reddit-style: `AdjectiveNoun####`
+
+Examples:
+- `CoolPanda4782`
+- `SwiftEagle2193`
+- `MightyDragon5647`
+
+### Implementation
+
+```python
+# In UserProfile.save()
+if not self.nickname:
+    self.nickname = self.generate_unique_nickname()
+
+@staticmethod
+def generate_unique_nickname():
+    adjectives = ['Cool', 'Swift', 'Bright', 'Smart', 'Epic', ...]
+    nouns = ['Panda', 'Tiger', 'Eagle', 'Falcon', 'Phoenix', ...]
+    
+    while True:
+        nickname = f"{random.choice(adjectives)}{random.choice(nouns)}{random.randint(1000, 9999)}"
+        if not UserProfile.objects.filter(nickname=nickname).exists():
+            return nickname
+```
+
+### Benefits
+
+✅ **Privacy** - No need to expose real names  
+✅ **Fun** - Engaging, memorable identifiers  
+✅ **Uniqueness** - Guaranteed unique via database check  
+✅ **Consistency** - Standardized format  
+
+---
+
+## 4. Auto Role Assignment Logic
+
+### Previous Flow (Removed)
+
+❌ User signs up as GUEST  
+❌ User manually upgrades to BUYER or SELLER  
+
+### New Flow
+
+✅ User signs up → Default role = **BUYER**  
+✅ User creates first inventory → Auto-upgrade to **SELLER**  
+✅ User deletes all inventorys → Auto-downgrade to **BUYER**  
+
+### Implementation
+
+```python
+# Called after login
+user.auto_assign_role()
+
+# Called after inventory creation
+inventory.save()
+inventory.seller.auto_assign_role()
+
+# Called after inventory deletion
+inventory.delete()
+seller.auto_assign_role()
+```
+
+### Benefits
+
+✅ **Simpler UX** - No manual role selection  
+✅ **Automatic** - Role reflects actual behavior  
+✅ **Accurate** - Always up-to-date based on inventory  
+
+---
+
+## 5. Change Password Feature
+
+### New API Endpoint
+
+```
+PATCH /api/auth/change-password
+```
+
+**Request Body:**
+```json
+{
+  "current_password": "oldpass123",
+  "new_password": "newpass456"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Password changed successfully"
+}
+```
+
+### Validation
+
+- User must be authenticated (JWT required)
+- Current password must be correct
+- New password must meet strength requirements
+- Cannot reuse current password
+
+### Frontend Flow
+
+1. User clicks "Change Password" in settings
+2. Form with current_password and new_password fields
+3. Submit PATCH request
+4. Show success message
+5. Optional: Force re-login with new password
+
+---
+
+## 6. Tailwind CSS Integration
+
+### Why Tailwind?
+
+✅ **Utility-First** - Rapid development with pre-defined classes  
+✅ **Responsive** - Built-in breakpoints (sm, md, lg, xl)  
+✅ **Customizable** - Easy theme configuration  
+✅ **Small Bundle** - PurgeCSS removes unused styles  
+✅ **Modern** - Industry standard for React projects  
+
+### Setup (Sprint 1)
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+**tailwind.config.js:**
+```javascript
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#007bff',
+        secondary: '#6c757d',
+      }
+    },
+  },
+  plugins: [],
+}
+```
+
+**src/index.css:**
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+### Usage Examples
+
+```jsx
+// Button
+<button className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600">
+  Buy Now
+</button>
+
+// Card
+<div className="bg-white shadow-md rounded-lg p-6">
+  <h2 className="text-xl font-bold mb-2">iPhone 13 Pro</h2>
+  <p className="text-gray-600">₹85,000</p>
+</div>
+
+// Grid
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  {inventorys.map(inventory => <InventoryCard key={inventory.id} {...inventory} />)}
+</div>
+```
+
+---
+
+## Sprint Plan Updates
+
+### Sprint 0 (Pre-Development)
+
+**Add to Design Tasks:**
+- [ ] Configure Tailwind CSS in React project
+- [ ] Define custom theme (colors, fonts, spacing)
+- [ ] Create Tailwind component library (buttons, cards, forms)
+
+### Sprint 1 (Auth & User Management)
+
+**Backend Changes:**
+
+1. **User Model Updates:**
+   - [ ] Add all 22 fields to User model (see table above)
+   - [ ] Remove GUEST role, default to BUYER
+   - [ ] Implement auto_assign_role() method
+   - [ ] Add verify_mobile(), verify_upi_id(), add_earnings() methods
+   - [ ] Store email_verification_token directly in User (no separate table)
+
+2. **New API Endpoints:**
+   - [ ] PATCH `/api/auth/change-password` - Change password for authenticated users
+   - [ ] POST `/api/auth/verify-mobile` - Verify mobile number (optional for V1)
+   - [ ] POST `/api/auth/verify-upi` - Verify UPI ID (optional for V1)
+   - [ ] Remove `/api/auth/upgrade-role` endpoint (auto-assignment instead)
+
+3. **Media Model:**
+   - [ ] Create Media model with UUID, file_name, alt_tag, file_type, s3_url
+   - [ ] Implement Media.create_from_upload() class method
+   - [ ] Create ProfileImage association model (User ↔ Media)
+
+**Frontend Changes:**
+
+1. **Signup/Login Updates:**
+   - [ ] Add username field to signup form
+   - [ ] Add full_name field to signup form
+   - [ ] Remove role selection (auto-assigned)
+   - [ ] Show default role as BUYER after signup
+
+2. **Profile Management:**
+   - [ ] Add change password form
+   - [ ] Add mobile number field (optional)
+   - [ ] Add UPI ID field (optional)
+   - [ ] Add favorite_book field (optional)
+   - [ ] Add seller_plan selection (for sellers)
+   - [ ] Add donation_percentage selection (if DONATE plan)
+   - [ ] Show net_earnings for sellers
+
+3. **Navigation:**
+   - [ ] Remove GUEST-specific UI (no role upgrade prompt)
+   - [ ] Auto-show "Sell Item" button when user becomes SELLER
+
+4. **Tailwind CSS:**
+   - [ ] Install and configure Tailwind
+   - [ ] Convert all Bootstrap/CSS to Tailwind utility classes
+   - [ ] Create reusable Tailwind components
+
+**Estimated Story Points:** Sprint 1 increases from 45 to **55 points** (+10)
+
+### Sprint 2 (Inventorys & Categories)
+
+**Backend Changes:**
+
+1. **Inventory Model Updates:**
+   - [ ] No direct changes (already using relationship to User)
+   - [ ] After inventory creation, call seller.auto_assign_role()
+   - [ ] After inventory deletion, call seller.auto_assign_role()
+
+2. **InventoryImage Updates:**
+   - [ ] Change from direct S3 URL to Media FK relationship
+   - [ ] Support image reuse (multiple inventorys can use same Media)
+   - [ ] Update image upload logic to create Media first, then InventoryImage
+
+**Frontend Changes:**
+
+1. **Image Upload:**
+   - [ ] Upload creates Media record
+   - [ ] Media UUID returned and associated with inventory
+   - [ ] Show existing Media library for image reuse (optional for V1)
+
+**Estimated Story Points:** Sprint 2 increases from 52 to **58 points** (+6)
+
+---
+
+## Updated ERD (Key Changes)
+
+```mermaid
+erDiagram
+    User ||--o{ Inventory : creates
+    User ||--o| ProfileImage : has
+    User ||--o{ Transaction : "buyer/seller"
+    
+    Media ||--o{ InventoryImage : "used_in"
+    Media ||--o{ ProfileImage : "used_as"
+    
+    Inventory ||--o{ InventoryImage : contains
+    InventoryImage }o--|| Media : references
+    
+    ProfileImage }o--|| Media : references
+    
+    User {
+        uuid uuid PK
+        string email UK
+        string username UK
+        string full_name
+        string mobile
+        boolean mobile_verified
+        string upi_id
+        string seller_plan
+        int donation_percentage
+        decimal net_earnings
+        string role
+        string favorite_book
+        boolean active
+        boolean archived
+    }
+    
+    Media {
+        uuid uuid PK
+        string file_name
+        string alt_tag
+        string file_type
+        string s3_url UK
+        boolean status
+        boolean archived
+    }
+    
+    InventoryImage {
+        int inventory_id FK
+        uuid media_id FK
+        int order
+    }
+    
+    ProfileImage {
+        int user_id FK
+        uuid media_id FK
+    }
+```
+
+---
+
+## Migration Strategy
+
+### Order of Migrations
+
+1. **Create Media model** (accounts app)
+   ```bash
+   python manage.py makemigrations accounts
+   ```
+
+2. **Update User model** with all new fields
+   ```bash
+   python manage.py makemigrations accounts
+   ```
+
+3. **Create ProfileImage model** (accounts app)
+   ```bash
+   python manage.py makemigrations accounts
+   ```
+
+4. **Update InventoryImage model** to use Media FK
+   ```bash
+   python manage.py makemigrations inventorys
+   ```
+
+5. **Data Migration** (migrate existing S3 URLs to Media records)
+   ```python
+   # Create Media records for existing inventory images
+   for inventory_image in InventoryImage.objects.all():
+       media = Media.objects.create(
+           file_name=f"legacy_image_{inventory_image.id}",
+           file_type="image/jpeg",
+           s3_url=inventory_image.image_url  # old field
+       )
+       inventory_image.media = media
+       inventory_image.save()
+   ```
+
+6. **Run all migrations**
+   ```bash
+   python manage.py migrate
+   ```
+
+---
+
+## Testing Updates
+
+### New Test Cases
+
+**User Model Tests:**
+- [ ] Test auto_assign_role() - becomes SELLER when has inventorys
+- [ ] Test auto_assign_role() - becomes BUYER when no inventorys
+- [ ] Test verify_email() - valid token
+- [ ] Test verify_email() - expired token
+- [ ] Test verify_mobile()
+- [ ] Test verify_upi_id()
+- [ ] Test add_earnings()
+- [ ] Test all 22 fields save correctly
+
+**Media Model Tests:**
+- [ ] Test create_from_upload() - creates Media record
+- [ ] Test Media can be reused (multiple InventoryImages point to same Media)
+- [ ] Test Media.get_usage_count()
+- [ ] Test Media.is_reusable()
+
+**UserProfile Tests:**
+- [ ] Test auto-generated nickname uniqueness
+- [ ] Test nickname format (AdjectiveNoun####)
+- [ ] Test nickname collision handling
+
+**API Tests:**
+- [ ] Test PATCH /api/auth/change-password - success
+- [ ] Test PATCH /api/auth/change-password - wrong current password
+- [ ] Test PATCH /api/auth/change-password - unauthenticated
+
+---
+
+## Cost Impact
+
+### Storage Costs
+
+**Before (Direct S3 URLs):**
+- 100 inventorys × 5 images = 500 images
+- Each 5MB = 2.5GB storage
+- Cost: ~₹150/month
+
+**After (Media Repository with Reuse):**
+- Assume 30% image reuse across inventorys
+- 500 images → 350 unique Media records
+- Each 5MB = 1.75GB storage
+- Cost: ~₹105/month
+
+**Savings:** ~₹45/month (30% reduction)
+
+---
+
+## Documentation Updates Needed
+
+1. **API Documentation:**
+   - Update User schema (22 fields)
+   - Add PATCH /api/auth/change-password endpoint
+   - Remove /api/auth/upgrade-role endpoint
+   - Update Media-related endpoints
+
+2. **Frontend Documentation:**
+   - Tailwind CSS setup guide
+   - Component library documentation
+   - Image upload flow with Media model
+
+3. **Database Documentation:**
+   - Updated ERD with Media model
+   - Migration guide for existing data
+   - Media reuse best practices
+
+---
+
+## Summary of Changes
+
+| Area | Change | Impact |
+|------|--------|--------|
+| **User Model** | 22 fields (was 5) | +3 story points |
+| **Role Logic** | Auto-assignment (was manual) | -2 story points (simpler) |
+| **Media Model** | New central repository | +5 story points |
+| **Nicknames** | Auto-generated (Reddit-style) | +2 story points |
+| **Change Password** | New endpoint | +2 story points |
+| **Tailwind CSS** | Replace custom CSS | +3 story points (setup) |
+| **Total Sprint 1** | 45 → **55 points** | +10 points |
+| **Total Sprint 2** | 52 → **58 points** | +6 points |
+| **Overall Project** | 232 → **248 points** | +16 points |
+
+---
+
+**Next Steps:**
+
+1. Review and approve these changes
+2. Update database-schema.md with final models
+3. Update sprint-plan.md with new tasks
+4. Create Tailwind CSS setup guide
+5. Create Media upload guide
+
+---
+
+**Version:** 2.0 - Enhanced User Model + Media Repository  
+**Last Updated:** February 2026
+
+
+==================================================
+FILE: sprint-plan.md
+==================================================
+
+# Development Sprint Plan: Pre-Owned Gadgets Marketplace
+
+## Overview
+
+**Timeline:** 10 weeks (5 sprints × 2 weeks each)  
+**Team Structure:** Backend Dev, Frontend Dev, UI/UX Designer, QA/Tester, DevOps  
+**Sprint Cadence:** 2-week sprints with planning, daily standups, and retrospectives  
+**Definition of Done:** Code reviewed, tested (unit + integration), deployed to staging, documented
+
+### Sprint Summary
+
+**5 Two-Week Sprints:**
+
+1. **Sprint 1 (Weeks 1-2):** Authentication & User Management - 45 story points
+2. **Sprint 2 (Weeks 3-4):** Product Inventorys, Categories & Tags - 52 story points  
+3. **Sprint 3 (Weeks 5-6):** Search, Browse & Product Details - 35 story points
+4. **Sprint 4 (Weeks 7-8):** Payment Integration & Escrow - 50 story points
+5. **Sprint 5 (Weeks 9-10):** Polish, Testing & Launch Prep - 50 story points
+
+**Total:** ~232 story points across all sprints
+
+---
+
+## Sprint 0: Pre-Development Setup (Week 0)
+
+**Duration:** 3-5 days before Sprint 1  
+**Goal:** Foundation ready for development to begin
+
+### DevOps Tasks
+- [ ] Provision AWS account and configure Mumbai region
+- [ ] Create S3 bucket for image storage with CDN (CloudFront)
+- [ ] Set up PostgreSQL database (local dev + staging environment)
+- [ ] Configure GitHub repository with branch protection rules
+- [ ] Set up CI/CD pipeline (GitHub Actions or GitLab CI)
+- [ ] Deploy skeleton Django + React apps to staging
+- [ ] Configure environment variables and secrets management
+- [ ] Set up monitoring (error tracking with Sentry free tier)
+
+### Business/Legal Tasks
+- [ ] Register domain name and configure DNS
+- [ ] Set up Razorpay test account and obtain API keys
+- [ ] Configure AWS SES (Simple Email Service):
+  - Verify sender email address or domain
+  - Request production access (move out of sandbox)
+  - Obtain AWS SES credentials (Access Key ID, Secret Access Key)
+  - Configure SES region (use Mumbai ap-south-1 for India)
+- [ ] Draft Terms of Service (use template + customize)
+- [ ] Draft Privacy Policy (use template + customize)
+- [ ] Create Safety Guidelines page content
+- [ ] Set up Google OAuth credentials for social login
+
+### Design Tasks
+- [ ] Create design system (colors, typography, spacing, components)
+- [ ] Design high-fidelity mockups for priority screens:
+  - Homepage
+  - Signup/Login
+  - Seller Profile
+  - Create Inventory
+  - Search Results
+  - Product Detail
+  - Payment Flow
+- [ ] Create responsive breakpoints (mobile, tablet, desktop)
+- [ ] Export design assets (icons, logos, images)
+
+**Sprint 0 Deliverables:**
+- Staging environment live and accessible
+- Design system documented
+- All third-party accounts configured
+- Repository with initial commit
+
+---
+
+## Sprint 1: Authentication & User Management (Weeks 1-2)
+
+**Goal:** Users can sign up, log in, manage their accounts, and access role-based features
+
+### Backend Tasks
+
+**User Authentication (Priority: Critical)**
+- [ ] Set up Django REST Framework with JWT authentication
+- [ ] Implement user model (extend Django AbstractUser)
+  - Fields: email, password, role (choices: GUEST, BUYER, SELLER, ADMIN), is_email_verified
+  - Default role: GUEST (can upgrade to BUYER or SELLER)
+- [ ] POST `/api/auth/signup` - Email/password registration
+  - Validate email format and password strength
+  - Send verification email with token
+  - Default role: GUEST
+- [ ] POST `/api/auth/verify-email` - Email verification endpoint
+- [ ] POST `/api/auth/login` - Login with email/password
+  - Return JWT access + refresh tokens + user role
+- [ ] POST `/api/auth/refresh` - Refresh JWT token
+- [ ] POST `/api/auth/logout` - Invalidate token
+- [ ] POST `/api/auth/forgot-password` - Send reset email
+- [ ] POST `/api/auth/reset-password` - Reset password with token
+- [ ] POST `/api/auth/google` - Google OAuth integration
+  - Validate Google token
+  - Create or authenticate user
+  - Default role: GUEST
+- [ ] PATCH `/api/auth/upgrade-role` - Upgrade role to BUYER or SELLER
+  - GUEST → BUYER: No additional requirements
+  - GUEST → SELLER: Requires email verification + profile completion
+- [ ] Implement role-based permissions decorators
+  - @require_role('BUYER') for buyer-only endpoints
+  - @require_role('SELLER') for seller-only endpoints
+  - @require_role('ADMIN') for admin-only endpoints
+- [ ] Write unit tests (80%+ coverage for auth flows including role checks)
+
+**User Profile (Priority: High)**
+- [ ] Create UserProfile model
+  - Fields: user (FK), full_name, brand_name, nickname, bank_account_number (encrypted), ifsc_code, bank_name, branch_address, consent_given
+- [ ] GET `/api/profile` - Get current user profile
+- [ ] PUT `/api/profile` - Update profile
+  - Validate IFSC code format (11 characters, alphanumeric)
+  - Encrypt bank details before saving
+- [ ] POST `/api/profile/consent` - Record bank detail consent
+- [ ] Write unit tests for profile CRUD
+
+**Email Service (Priority: High)**
+- [ ] Install and configure **django-anymail** for AWS SES integration
+  ```bash
+  pip install django-anymail[amazon-ses] --break-system-packages
+  ```
+- [ ] Configure django-anymail in Django settings:
+  ```python
+  INSTALLED_APPS = [
+      # ...
+      'anymail',
+  ]
+  
+  ANYMAIL = {
+      "AMAZON_SES_CLIENT_PARAMS": {
+          "aws_access_key_id": env('AWS_SES_ACCESS_KEY_ID'),
+          "aws_secret_access_key": env('AWS_SES_SECRET_ACCESS_KEY'),
+          "region_name": "ap-south-1",  # Mumbai region
+      },
+  }
+  EMAIL_BACKEND = 'anymail.backends.amazon_ses.EmailBackend'
+  DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+  SERVER_EMAIL = 'admin@yourdomain.com'
+  ```
+- [ ] Create email templates (HTML + plain text fallback):
+  - Welcome email
+  - Email verification
+  - Password reset
+  - Transaction notifications (payment received, escrow held, payment released)
+- [ ] Implement email sending functions using django-anymail:
+  ```python
+  from django.core.mail import send_mail
+  from anymail.message import AnymailMessage
+  ```
+- [ ] Add email tracking (optional): Opens, clicks via SES notifications
+- [ ] Implement async email sending (Celery + Redis optional, or Django background tasks)
+- [ ] Write unit tests for email sending (use Anymail test backend)
+
+**Estimated Story Points:** 24
+
+### Frontend Tasks
+
+**Authentication UI (Priority: Critical)**
+- [ ] Set up React Router for navigation
+- [ ] Create Auth context for global user state management (includes user role)
+- [ ] Build Signup page
+  - Email/password form with validation
+  - Google OAuth button
+  - Link to Login and Terms/Privacy
+  - Default role: GUEST
+- [ ] Build Email Verification success/pending pages
+- [ ] Build Login page
+  - Email/password form
+  - Google OAuth button
+  - "Forgot Password" link
+  - Store user role in auth context after login
+- [ ] Build Forgot Password flow
+  - Email input page
+  - Success message page
+  - Reset password form page
+- [ ] Build Role Selection/Upgrade page
+  - For GUEST users: Choose "I want to buy" (BUYER) or "I want to sell" (SELLER)
+  - Show after first login or as prompt in header
+  - Call upgrade-role API endpoint
+- [ ] Implement JWT token storage (localStorage + secure httpOnly cookies)
+- [ ] Create PrivateRoute component for protected pages
+- [ ] Implement role-based route guards
+  - Redirect GUEST to role selection if accessing protected pages
+  - Prevent non-SELLER from accessing inventory creation
+  - Prevent non-ADMIN from accessing admin dashboard
+- [ ] Handle token refresh logic
+
+**Profile Management UI (Priority: High)**
+- [ ] Build Seller Profile page
+  - Form with all fields (name, brand, bank details)
+  - Consent checkbox for bank detail storage
+  - Save and edit modes
+  - Profile completion indicator
+- [ ] Create reusable form components (Input, Select, Button, Checkbox)
+- [ ] Implement form validation (client-side)
+- [ ] Show success/error messages on save
+
+**Shared Components (Priority: Medium)**
+- [ ] Header/Navigation component
+  - Logo, search bar placeholder
+  - User menu with role-based options:
+    - **GUEST:** Login, Signup
+    - **BUYER:** My Purchases, Profile, Logout
+    - **SELLER:** My Purchases, My Inventorys, Sell Item, Profile, Logout
+    - **ADMIN:** Dashboard, Categories, Transactions, Disputes, Logout
+  - "Upgrade to Seller" prompt for BUYER users (optional CTA)
+- [ ] Footer component
+  - Links to Terms, Privacy, Safety Guidelines
+- [ ] Loading spinner component
+- [ ] Toast/notification component for alerts
+- [ ] Role guard wrapper component (conditionally renders based on user role)
+
+**Estimated Story Points:** 21
+
+### QA Tasks
+- [ ] Test all signup flows (email, Google OAuth)
+- [ ] Test email verification (valid/expired tokens)
+- [ ] Test login flows (success, wrong password, unverified email)
+- [ ] Test forgot password flow end-to-end
+- [ ] Test profile creation and editing
+- [ ] Test role upgrade flow (GUEST → BUYER, GUEST → SELLER)
+- [ ] Test role-based access control:
+  - GUEST cannot access protected pages
+  - BUYER cannot access seller-only pages
+  - SELLER cannot access admin pages
+  - ADMIN can access all pages
+- [ ] Test role-based menu display (correct items shown per role)
+- [ ] Test form validations (client + server side)
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- [ ] Mobile responsive testing (iOS Safari, Android Chrome)
+- [ ] Security testing: SQL injection, XSS attempts on forms, role escalation attempts
+
+**Sprint 1 Deliverables:**
+- ✅ Users can sign up with email or Google
+- ✅ Email verification working
+- ✅ Login/logout functional
+- ✅ Password reset working
+- ✅ Role-based authentication (GUEST, BUYER, SELLER, ADMIN)
+- ✅ Role upgrade functionality (GUEST → BUYER/SELLER)
+- ✅ Role-based menu and navigation display
+- ✅ Role-based access control on routes and API endpoints
+- ✅ Seller profile CRUD complete
+- ✅ All tests passing
+
+---
+
+## Sprint 2: Product Inventorys & Categories (Weeks 3-4)
+
+**Goal:** Sellers can create, edit, and manage product inventorys
+
+### Backend Tasks
+
+**Category Management (Priority: High)**
+- [ ] Install and configure **django-treebeard** for hierarchical category management
+  - Supports nested categories and subcategories (unlimited depth)
+  - Efficient tree queries (materialized path approach)
+- [ ] Create Category model using Treebeard's MP_Node
+  - Fields: name, slug, description, icon_url, is_active, parent (FK to self for hierarchy)
+  - Methods: get_children(), get_ancestors(), get_descendants()
+- [ ] Seed default categories with subcategories:
+  - Phones (iPhone, Android, Feature Phones)
+  - Laptops (Windows, MacBooks, Chromebooks, Gaming Laptops)
+  - Tablets (iPads, Android Tablets, Windows Tablets)
+  - Accessories (Chargers, Cases, Headphones, Cables)
+  - Other
+- [ ] GET `/api/categories` - List all active categories with tree structure
+  - Return nested JSON with parent-child relationships
+  - Option to flatten for simple dropdown
+- [ ] GET `/api/categories/:id` - Get single category with children
+- [ ] POST `/api/categories` - Create category (requires ADMIN role)
+  - Input: name, description, parent_id (optional for subcategory)
+  - Auto-generate slug from name
+- [ ] PUT `/api/categories/:id` - Update category (requires ADMIN role)
+- [ ] DELETE `/api/categories/:id` - Delete category (requires ADMIN role)
+  - Check for active inventorys in this category and all subcategories
+  - Prevent deletion if inventorys exist (show count)
+- [ ] PATCH `/api/categories/:id/move` - Move category to different parent (requires ADMIN role)
+- [ ] Write unit tests for category CRUD and tree operations
+
+**Tag Management (Priority: High)**
+- [ ] Install and configure **django-taggit** for flexible tagging
+  - Simple, reusable tagging for any model
+  - Automatic tag creation (no pre-defined tag list needed)
+- [ ] Add tagging to Inventory model
+  - Use TaggableManager from django-taggit
+  - Tags stored separately, linked via many-to-many
+- [ ] GET `/api/tags` - List all tags with usage count
+  - Return: tag name, slug, inventory count
+  - Sort by popularity (most used tags first)
+- [ ] GET `/api/tags/:slug/inventorys` - Get all inventorys with specific tag
+- [ ] Inventory endpoints automatically handle tags:
+  - POST `/api/inventorys` includes `tags: ["wireless", "bluetooth", "new"]`
+  - PUT `/api/inventorys/:id` can update tags
+  - GET `/api/inventorys/:id` returns tags array
+- [ ] Search integration: Tags included in full-text search
+- [ ] Write unit tests for tag operations
+
+**Product Inventory (Priority: Critical)**
+- [ ] Create Inventory model
+  - Fields: seller (FK to User), title, description, marked_price, offer_price, discount_percentage (auto-calculated), condition (choices: Like New, Good, Fair), category (FK), tags (TaggableManager), status (draft/active/sold), created_at, updated_at
+  - Constraint: Only users with role=SELLER can create inventorys
+- [ ] Create InventoryImage model
+  - Fields: inventory (FK), image_url, order, uploaded_at
+  - Constraint: Max 5 images per inventory
+- [ ] POST `/api/inventorys` - Create new inventory (requires SELLER role)
+  - Validate: title length, prices (offer ≤ marked), condition, category exists
+  - Auto-calculate discount percentage
+  - Save as draft or active based on request
+  - Input includes tags array: `["wireless", "bluetooth", "warranty"]`
+  - Tags auto-created if they don't exist
+- [ ] POST `/api/inventorys/:id/images` - Upload images to S3
+  - Validate: File type (JPG, PNG, WEBP), size (max 100MB)
+  - Generate thumbnail (resize to 300x300)
+  - Store S3 URL in database
+  - Support batch upload (1-5 images)
+- [ ] GET `/api/inventorys/:id` - Get single inventory with images and tags
+- [ ] GET `/api/inventorys/my-inventorys` - Get current seller's inventorys
+- [ ] PUT `/api/inventorys/:id` - Update inventory (requires SELLER role)
+  - Only seller can edit their own inventory
+  - Can update tags array
+- [ ] PATCH `/api/inventorys/:id/status` - Mark as sold/active
+- [ ] DELETE `/api/inventorys/:id/images/:image_id` - Delete image
+- [ ] Write unit tests for inventory CRUD and image upload
+
+**File Upload Service (Priority: High)**
+- [ ] Configure AWS S3 bucket permissions (public read, authenticated write)
+- [ ] Implement image compression before upload (Pillow library)
+- [ ] Generate unique file names (UUID + timestamp)
+- [ ] Create CloudFront distribution for image CDN
+- [ ] Write helper functions for S3 upload/delete
+
+**Estimated Story Points:** 28
+
+### Frontend Tasks
+
+**Inventory Management UI (Priority: Critical)**
+- [ ] Build Create Inventory page
+  - Multi-step form or single page with sections
+  - Step 1: Basic info (title, description, category with subcategory dropdown, condition)
+  - Step 2: Pricing (marked price, offer price, auto-show discount)
+  - Step 3: Photos (drag-and-drop upload, preview, reorder, delete)
+  - Step 4: Tags (tag input with autocomplete from popular tags, create new tags)
+  - Save as draft or publish
+  - Only accessible to users with SELLER role
+- [ ] Build Edit Inventory page (reuse Create Inventory components)
+- [ ] Build My Inventorys dashboard
+  - Table/grid view of seller's inventorys
+  - Filter by status (draft/active/sold)
+  - Quick actions: Edit, Mark as Sold, Delete
+  - Inventory stats: Views (future), Inquiries (future)
+  - Only accessible to users with SELLER role
+- [ ] Image upload component
+  - Drag-and-drop zone
+  - File type and size validation
+  - Progress bar during upload
+  - Image preview grid with reorder/delete
+  - Max 5 images enforcement
+- [ ] Tag input component
+  - Autocomplete suggestions from popular tags
+  - Allow creating new tags
+  - Visual tag pills (removable)
+  - Max 10 tags per inventory
+
+**Reusable Components (Priority: Medium)**
+- [ ] Price input component with INR formatting
+- [ ] Image uploader component
+- [ ] Nested category selector component (tree view or cascading dropdowns)
+- [ ] Tag input component with autocomplete
+- [ ] Rich text editor for description (optional: simple textarea is fine for V1)
+
+**Estimated Story Points:** 24
+
+### Design Tasks
+- [ ] Design Admin Category Management screen (hierarchical tree view)
+- [ ] Design tag input interaction (autocomplete, pills)
+- [ ] Design image upload interaction (drag-drop states)
+- [ ] Create inventory card component design (for search results)
+
+### QA Tasks
+- [ ] Test inventory creation flow end-to-end
+- [ ] Test nested category selection (parent → child)
+- [ ] Test tag input (autocomplete, create new, max 10 tags)
+- [ ] Test image upload (valid files, invalid types, oversized files)
+- [ ] Test auto-calculation of discount percentage
+- [ ] Test edit inventory (change prices, categories, tags, add/remove images)
+- [ ] Test mark as sold functionality
+- [ ] Test My Inventorys dashboard filtering
+- [ ] Test permissions (non-SELLER cannot create inventorys)
+- [ ] Test permissions (seller can't edit other seller's inventorys)
+- [ ] Test category deletion prevention (when inventorys exist)
+- [ ] Performance test: Upload 5 images × 100MB simultaneously
+- [ ] Mobile responsive testing for create/edit forms
+
+**Sprint 2 Deliverables:**
+- ✅ Sellers can create inventorys with 1-5 photos
+- ✅ Inventorys support nested categories and subcategories (django-treebeard)
+- ✅ Inventorys support flexible tagging (django-taggit)
+- ✅ Tag autocomplete and creation working
+- ✅ Inventorys stored in database with S3 image URLs
+- ✅ Edit and mark as sold working
+- ✅ Categories (with hierarchy) manageable by ADMIN role via API
+- ✅ All tests passing
+
+---
+
+## Sprint 3: Search, Browse & Product Details (Weeks 5-6)
+
+**Goal:** Buyers can search, filter, and view product inventorys
+
+### Backend Tasks
+
+**Search & Browse (Priority: Critical)**
+- [ ] Implement PostgreSQL full-text search
+  - Create search vector on inventory title + description + tags
+  - Index for performance
+- [ ] GET `/api/inventorys` - List/search inventorys with filters
+  - Query params: `q` (search keyword), `category`, `condition`, `min_price`, `max_price`, `tags` (comma-separated), `sort` (price_asc, price_desc, newest)
+  - Auto-exclude sold inventorys (status != sold)
+  - Pagination: 20 items per page
+  - Return: inventorys with first image, basic info, tags
+- [ ] Optimize query performance (select_related, prefetch_related)
+- [ ] GET `/api/inventorys/:id/related` - Get 4 related inventorys
+  - Same category, similar price range (+/- 20%), or shared tags
+  - Exclude current inventory and sold items
+- [ ] Write unit tests for search and filter logic including tag filtering
+
+**Analytics (Priority: Low - Future Enhancement)**
+- [ ] (Optional) Track inventory views - create InventoryView model
+  - Fields: inventory (FK), viewer_ip, viewed_at
+
+**Estimated Story Points:** 13
+
+### Frontend Tasks
+
+**Homepage (Priority: Critical)**
+- [ ] Build Homepage
+  - Hero section with value proposition
+  - Search bar (prominent CTA)
+  - Featured/Recent inventorys grid (latest 12 inventorys)
+  - Category quick links
+  - Trust signals (email verified, escrow, safety)
+- [ ] Implement search bar with autocomplete (optional for V1, can be simple input)
+- [ ] Featured inventorys carousel or grid
+
+**Search & Results (Priority: Critical)**
+- [ ] Build Search Results page
+  - Search bar at top (sticky)
+  - Filter sidebar:
+    - Price range slider (₹0 - ₹100,000)
+    - Category checkboxes (dynamic from API, hierarchical)
+    - Condition checkboxes
+    - Popular tags (clickable tag cloud or checkboxes)
+  - Sort dropdown (Price Low-High, Price High-Low, Newest)
+  - Inventory grid (responsive: 4 cols desktop, 2 cols tablet, 1 col mobile)
+  - Pagination controls
+  - Empty state when no results
+- [ ] Build Inventory Card component
+  - Thumbnail image
+  - Title (truncated to 2 lines)
+  - Offer price (large, bold)
+  - Marked price (strikethrough)
+  - Discount % badge
+  - Condition badge
+  - Tag pills (show top 3 tags)
+  - Click to view details
+- [ ] Implement filter and sort logic (update URL params, fetch results)
+- [ ] Implement pagination
+
+**Product Detail Page (Priority: Critical)**
+- [ ] Build Product Detail page
+  - Breadcrumb navigation (Home > Category > Subcategory > Title)
+  - Image gallery:
+    - Large preview image
+    - Thumbnail strip below (click to change preview)
+    - Zoom on click (optional: lightbox)
+  - Product info section:
+    - Title
+    - Offer price (prominent)
+    - Marked price (strikethrough) + Discount % badge
+    - Condition badge
+    - Category breadcrumb (parent > child)
+    - Tags (clickable tag pills, click to search by tag)
+    - Description (full text)
+  - Seller info section:
+    - Brand name or nickname
+    - "Verified Email" badge
+  - "Buy Now" button (prominent CTA)
+  - Related inventorys section (4 items in carousel)
+- [ ] Implement image gallery interaction
+- [ ] Make tags clickable (navigate to search results filtered by tag)
+- [ ] Connect Buy Now button to payment flow (placeholder for Sprint 4)
+
+**Estimated Story Points:** 22
+
+### Design Tasks
+- [ ] Finalize Homepage layout (hero, search, featured inventorys)
+- [ ] Design empty states (no search results, no inventorys)
+- [ ] Design inventory card hover states
+
+### QA Tasks
+- [ ] Test search with various keywords (products, brands, models, tags)
+- [ ] Test filters (price range, category, subcategory, condition, tags)
+- [ ] Test hierarchical category filtering (parent vs child categories)
+- [ ] Test tag filtering (single tag, multiple tags)
+- [ ] Test sorting (price low-high, high-low, newest)
+- [ ] Test pagination (navigate pages, edge cases)
+- [ ] Test product detail page with 1 image, 5 images
+- [ ] Test tag pills clickability (navigate to filtered search)
+- [ ] Test related inventorys accuracy (same category or shared tags)
+- [ ] Test breadcrumb navigation (home > category > subcategory > product)
+- [ ] Performance test: Search results page load with 100+ inventorys
+- [ ] Mobile responsive testing (filters collapse, grid adapts, tag pills wrap)
+- [ ] Test that sold inventorys are hidden from search
+
+**Sprint 3 Deliverables:**
+- ✅ Homepage with search and featured inventorys live
+- ✅ Search results page with filters (categories, tags, price, condition) and sort working
+- ✅ Hierarchical category filtering (parent/child categories)
+- ✅ Tag-based search and filtering
+- ✅ Product detail page with image gallery and clickable tags
+- ✅ Related inventorys showing (by category or shared tags)
+- ✅ Sold items hidden from search
+- ✅ All tests passing
+
+---
+
+## Sprint 4: Payment Integration & Escrow (Weeks 7-8)
+
+**Goal:** Buyers can purchase items, payments held in escrow, admin can release payments
+
+### Backend Tasks
+
+**Payment Integration (Priority: Critical)**
+- [ ] Integrate Razorpay SDK
+- [ ] Create Transaction model
+  - Fields: buyer (FK), seller (FK), inventory (FK), amount, payment_id (Razorpay), status (pending/escrow/released/refunded/disputed), created_at, updated_at, released_at, admin_notes
+- [ ] POST `/api/transactions/initiate` - Create Razorpay order
+  - Input: inventory_id
+  - Validate: Buyer is logged in, inventory is active (not sold)
+  - Create Razorpay order with amount = inventory.offer_price
+  - Return: order_id, amount, currency (INR)
+- [ ] POST `/api/transactions/verify` - Verify Razorpay payment
+  - Input: payment_id, order_id, signature
+  - Verify signature using Razorpay secret
+  - Update transaction status to "escrow"
+  - Mark inventory as sold
+  - Send emails to buyer and seller with contact info
+  - Return: transaction details
+- [ ] GET `/api/transactions` - Get user's transactions
+  - Buyer: All purchases
+  - Seller: All sales
+- [ ] GET `/api/transactions/:id` - Get transaction details
+  - Include buyer/seller contact info, inventory details, status
+
+**Escrow Management (Admin) (Priority: Critical)**
+- [ ] GET `/api/admin/transactions` - List all transactions
+  - Filter by status (escrow/disputed/released)
+  - Sort by created_at
+- [ ] PATCH `/api/admin/transactions/:id/release` - Release payment to seller
+  - Validate: Transaction in escrow status
+  - Update status to "released"
+  - Trigger payout to seller's bank account (Razorpay Payout API or manual)
+  - Send confirmation email to seller
+  - Log admin action with timestamp
+- [ ] PATCH `/api/admin/transactions/:id/refund` - Refund to buyer
+  - Validate: Transaction in escrow status
+  - Update status to "refunded"
+  - Trigger refund via Razorpay
+  - Send confirmation email to buyer
+  - Log admin action
+
+**Dispute Handling (Priority: High)**
+- [ ] Create Dispute model
+  - Fields: transaction (FK), raised_by (buyer/seller), reason, description, status (new/in_review/resolved), resolution_notes, created_at, resolved_at
+- [ ] POST `/api/transactions/:id/dispute` - Raise dispute
+  - Input: reason, description
+  - Update transaction status to "disputed"
+  - Send notification to admin
+- [ ] GET `/api/admin/disputes` - List all disputes
+- [ ] PATCH `/api/admin/disputes/:id/resolve` - Resolve dispute
+  - Input: resolution_notes, action (release/refund)
+  - Update dispute status to "resolved"
+  - Trigger release or refund
+  - Send emails to buyer and seller
+
+**Estimated Story Points:** 26
+
+### Frontend Tasks
+
+**Payment Flow (Priority: Critical)**
+- [ ] Build Payment page
+  - Display inventory summary (image, title, price)
+  - "Proceed to Pay" button
+  - Integrate Razorpay checkout modal
+  - Handle payment success/failure callbacks
+- [ ] Build Payment Success page
+  - Transaction confirmation
+  - Display seller contact info
+  - Next steps instructions (arrange meetup)
+  - Link to transaction details
+- [ ] Build Payment Failure page
+  - Error message
+  - Retry button
+  - Contact support link
+
+**Transaction Management (Buyer/Seller) (Priority: High)**
+- [ ] Build Transactions page (My Purchases / My Sales)
+  - Tabs for Buyer and Seller views
+  - List transactions with status badges
+  - Filter by status
+  - Click to view transaction details
+- [ ] Build Transaction Detail page
+  - Inventory info
+  - Buyer/seller contact info (visible post-purchase)
+  - Payment status timeline
+  - "Report Dispute" button
+- [ ] Build Dispute Form modal
+  - Reason dropdown
+  - Description textarea
+  - Submit button
+
+**Admin Dashboard (Priority: Critical)**
+- [ ] Build Admin Dashboard (separate route: `/admin`)
+  - Navigation: Transactions, Disputes, Categories
+  - Overview stats: Pending releases, open disputes
+- [ ] Build Admin Transactions page
+  - Table view with filters (status)
+  - Actions: Release Payment, Refund
+  - Search by transaction ID or user
+- [ ] Build Admin Disputes page
+  - Table view with filters (status)
+  - Click to view dispute details
+  - Resolution form (notes, action)
+  - Submit resolution
+
+**Estimated Story Points:** 24
+
+### QA Tasks
+- [ ] Test payment flow end-to-end (test mode Razorpay)
+- [ ] Test payment success scenario
+- [ ] Test payment failure scenario (invalid card, insufficient funds)
+- [ ] Test escrow holding (payment not released immediately)
+- [ ] Test admin release payment flow
+- [ ] Test admin refund flow
+- [ ] Test dispute creation (buyer and seller)
+- [ ] Test admin dispute resolution
+- [ ] Test emails sent at each stage (payment success, release, refund)
+- [ ] Test permissions (only admin can release/refund)
+- [ ] Security testing: Payment signature verification, SQL injection on transaction endpoints
+- [ ] Performance test: Multiple concurrent payment verifications
+
+**Sprint 4 Deliverables:**
+- ✅ Buyers can purchase inventorys via Razorpay
+- ✅ Payments held in escrow
+- ✅ Admin can release payments to sellers
+- ✅ Admin can process refunds
+- ✅ Dispute creation and resolution working
+- ✅ All transaction emails sending
+- ✅ All tests passing
+
+---
+
+## Sprint 5: Polish, Testing & Launch Prep (Weeks 9-10)
+
+**Goal:** Production-ready platform with sample data, legal docs, and monitoring
+
+### Backend Tasks
+
+**Final Polish (Priority: High)**
+- [ ] Implement rate limiting on API endpoints (prevent scraping/abuse)
+  - Auth endpoints: 5 requests/min
+  - Search: 30 requests/min
+  - Inventory creation: 10 requests/hour
+- [ ] Add API documentation (Swagger/OpenAPI or Postman collection)
+- [ ] Optimize database queries (add missing indexes)
+- [ ] Set up database backup automation (daily backups to S3)
+- [ ] Configure CORS for production domain
+- [ ] Set up logging (structured logs to CloudWatch or equivalent)
+- [ ] Configure Redis for session/cache (optional for V1)
+
+**Sample Data Creation (Priority: High)**
+- [ ] Create data seeding script
+  - 10 sample users (5 buyers, 5 sellers with verified emails)
+  - 50-100 gadget inventorys across all categories
+  - Realistic titles, descriptions, prices
+  - 3-5 images per inventory (use stock photos or placeholders)
+  - Mix of conditions (Like New, Good, Fair)
+  - Price range: ₹500 - ₹80,000
+- [ ] Run seeding script on staging environment
+- [ ] Verify search and browse work with sample data
+
+**Security Audit (Priority: Critical)**
+- [ ] Review all endpoints for authentication/authorization
+- [ ] Test for SQL injection vulnerabilities
+- [ ] Test for XSS vulnerabilities
+- [ ] Verify HTTPS enforcement
+- [ ] Verify bank detail encryption
+- [ ] Check for sensitive data in logs
+- [ ] Review CORS configuration
+- [ ] Penetration testing (manual or tool-based)
+
+**Estimated Story Points:** 15
+
+### Frontend Tasks
+
+**UI/UX Polish (Priority: High)**
+- [ ] Implement consistent error handling across all pages
+- [ ] Add loading states for all async operations
+- [ ] Improve form validation messages (clear, helpful)
+- [ ] Add success animations (micro-interactions)
+- [ ] Optimize images (lazy loading, WebP format)
+- [ ] Implement 404 page and error boundaries
+- [ ] Add breadcrumbs on all deep pages
+- [ ] Ensure accessibility (keyboard navigation, ARIA labels, color contrast)
+
+**Static Pages (Priority: High)**
+- [ ] Build Terms of Service page (legal copy from Sprint 0)
+- [ ] Build Privacy Policy page (legal copy from Sprint 0)
+- [ ] Build Safety Guidelines page (content from Sprint 0)
+- [ ] Build About Us page (mission, team, contact)
+- [ ] Build FAQ page (common questions)
+- [ ] Update footer with all legal links
+
+**Performance Optimization (Priority: Medium)**
+- [ ] Code splitting (lazy load routes)
+- [ ] Minify and bundle for production
+- [ ] Add service worker for PWA (optional for V1)
+- [ ] Optimize bundle size (remove unused dependencies)
+- [ ] Add meta tags for SEO (title, description, OG tags)
+
+**Estimated Story Points:** 13
+
+### Design Tasks
+- [ ] Design 404 error page
+- [ ] Design loading skeletons for all major pages
+- [ ] Create favicon and app icons
+- [ ] Finalize color scheme and ensure accessibility (WCAG AA)
+
+### DevOps Tasks
+
+**Production Deployment (Priority: Critical)**
+- [ ] Provision production environment (separate from staging)
+- [ ] Configure production database with automated backups
+- [ ] Set up environment variables for production
+- [ ] Configure production S3 bucket and CloudFront
+- [ ] Switch Razorpay to live mode (obtain live API keys)
+- [ ] Set up SSL certificate (Let's Encrypt auto-renewal)
+- [ ] Configure domain DNS to point to production server
+- [ ] Set up monitoring and alerting:
+  - Uptime monitoring (UptimeRobot)
+  - Error tracking (Sentry)
+  - Performance monitoring (Google Analytics)
+  - Database monitoring (query performance, storage)
+- [ ] Create runbook for common operations:
+  - Deploy new version
+  - Rollback deployment
+  - Database migration
+  - Restore from backup
+
+**Estimated Story Points:** 10
+
+### QA Tasks
+
+**End-to-End Testing (Priority: Critical)**
+- [ ] Full regression test of all user flows (signup → inventory → purchase → escrow release)
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge on desktop)
+- [ ] Mobile testing (iOS Safari, Android Chrome)
+- [ ] Tablet testing (iPad, Android tablet)
+- [ ] Performance testing (page load times, API response times)
+- [ ] Load testing (simulate 100 concurrent users)
+- [ ] Security testing (OWASP Top 10 checklist)
+- [ ] Accessibility testing (screen reader, keyboard navigation)
+
+**Beta Launch Preparation (Priority: High)**
+- [ ] Create beta tester onboarding guide
+  - How to sign up
+  - How to create inventorys
+  - How to purchase items
+  - How to provide feedback
+- [ ] Set up feedback collection (Google Form or Typeform)
+- [ ] Prepare beta invitation email template
+- [ ] Create sample transactions for demo (admin account)
+
+**Estimated Story Points:** 12
+
+### Business Tasks
+
+**Launch Checklist (Priority: Critical)**
+- [ ] Legal review complete (Terms, Privacy, Safety)
+- [ ] Payment gateway live mode activated and tested
+- [ ] All emails tested (send test emails for each type)
+- [ ] Sample data seeded in production
+- [ ] Analytics configured (Google Analytics tracking code)
+- [ ] Error monitoring configured (Sentry alerts)
+- [ ] Admin credentials created and secured
+- [ ] Backup and disaster recovery plan documented
+- [ ] Customer support plan (email, response SLA)
+- [ ] Rollback plan documented
+
+**Beta Recruitment (Priority: High)**
+- [ ] Create list of 50+ potential beta users
+- [ ] Draft beta invitation email
+- [ ] Prepare beta feedback survey questions
+- [ ] Set up communication channel (WhatsApp group, Slack, Discord)
+- [ ] Plan beta kickoff meeting/walkthrough
+
+**Sprint 5 Deliverables:**
+- ✅ Production environment live and stable
+- ✅ Sample data populated
+- ✅ All legal pages published
+- ✅ Security audit complete, vulnerabilities fixed
+- ✅ Monitoring and alerting configured
+- ✅ Beta user list ready
+- ✅ All tests passing
+- ✅ **READY FOR BETA LAUNCH**
+
+---
+
+## Post-Sprint: Beta Launch & Iteration (Week 10+)
+
+**Beta Launch Day (Week 10, Day 1)**
+- [ ] Send beta invitations to first 20-30 users
+- [ ] Host virtual walkthrough/demo session
+- [ ] Monitor system closely (errors, performance, payment issues)
+- [ ] Respond to user questions in real-time
+
+**Beta Week 1**
+- [ ] Daily standup to review user feedback
+- [ ] Fix critical bugs within 24 hours
+- [ ] Monitor KPIs: signups, inventorys created, searches performed
+- [ ] Reach out to users for qualitative feedback
+
+**Beta Week 2-4**
+- [ ] Collect feedback via survey
+- [ ] Prioritize feature requests and bug fixes
+- [ ] Iterate on UX pain points
+- [ ] Expand to next cohort of beta users (50-100 total)
+- [ ] Track progress toward KPI targets:
+  - 1,000 active inventorys
+  - 100 completed transactions
+  - 1% buyer repeat rate
+
+**Beta Review (End of Week 12)**
+- [ ] Analyze metrics against KPI targets
+- [ ] Conduct retrospective with team
+- [ ] Decide: Full launch, pivot, or iterate
+- [ ] Plan next phase (city launch or feature expansion)
+
+---
+
+## Sprint Retrospective Template
+
+**After each sprint, conduct a retrospective to improve:**
+
+### What Went Well?
+- (Team discusses successes, wins, smooth processes)
+
+### What Didn't Go Well?
+- (Team discusses blockers, challenges, missed estimates)
+
+### Action Items for Next Sprint
+- (Concrete changes to improve process, velocity, quality)
+
+---
+
+## Story Point Estimation Reference
+
+**1-3 Points:** Small task (< 1 day)  
+**5 Points:** Medium task (1-2 days)  
+**8 Points:** Large task (3-4 days)  
+**13 Points:** Very large task (1 week)  
+**21+ Points:** Epic (break down into smaller tasks)
+
+---
+
+## Risk Mitigation During Development
+
+**Technical Risks:**
+- **Payment integration complexity:** Allocate buffer time in Sprint 4, start Razorpay integration early
+- **Search performance:** Monitor query times, add indexes proactively
+- **S3 upload failures:** Implement retry logic and error handling from day 1
+
+**Team Risks:**
+- **Developer availability:** Cross-train team members on critical paths
+- **Scope creep:** Stick to PRD, log feature requests for post-V1
+- **Burnout:** Enforce sustainable pace, avoid weekend work
+
+**External Risks:**
+- **Third-party API downtime:** Test with Razorpay sandbox early, have fallback plan
+- **Design delays:** Prioritize critical screens, use placeholders if needed
+- **Legal review delays:** Start legal docs in Sprint 0, don't block on final review
+
+---
+
+## Success Metrics Per Sprint
+
+**Sprint 1:** Auth flows working, 100% test coverage on auth  
+**Sprint 2:** 10 sample inventorys created in staging  
+**Sprint 3:** Search returns results in <500ms  
+**Sprint 4:** Test payment successful in Razorpay sandbox  
+**Sprint 5:** Production deployment successful, zero downtime  
+
+---
+
+## Communication Plan
+
+**Daily Standups (15 min):**
+- What did I complete yesterday?
+- What will I work on today?
+- Any blockers?
+
+**Sprint Planning (2 hours, start of each sprint):**
+- Review sprint goal
+- Assign tasks to team members
+- Estimate story points
+- Commit to sprint backlog
+
+**Sprint Review (1 hour, end of each sprint):**
+- Demo completed features
+- Stakeholder feedback
+- Update roadmap
+
+**Sprint Retrospective (1 hour, end of each sprint):**
+- Discuss what went well, what didn't
+- Action items for improvement
+
+**Ad-hoc Communication:**
+- Slack/Discord for quick questions
+- GitHub for code reviews and PRs
+- Weekly all-hands for cross-team updates
+
+---
+
+## Tools & Resources
+
+**Project Management:** Jira, Trello, or GitHub Projects  
+**Code Repository:** GitHub or GitLab  
+**CI/CD:** GitHub Actions, GitLab CI, or CircleCI  
+**Design:** Figma for mockups, collaboration  
+**Communication:** Slack, Discord, or Microsoft Teams  
+**Documentation:** Notion, Confluence, or Google Docs  
+**Testing:** Pytest (backend), Jest/React Testing Library (frontend)  
+**Monitoring:** Sentry (errors), Google Analytics (usage), UptimeRobot (uptime)  
+
+---
+
+**END OF SPRINT PLAN**
+
+_This is a living document. Update task estimates and timelines based on actual velocity after each sprint._
+
+_Next Review: After Sprint 1 retrospective_
+
+
+==================================================
+FILE: sprint-updates-summary.md
+==================================================
+
+# Sprint Plan Updates - Summary of Changes
+
+## Overview
+
+The sprint plan has been updated with two major enhancements:
+
+1. **Role-Based Authentication** (Sprint 1)
+2. **Advanced Category & Tag Management** (Sprint 2)
+
+---
+
+## Sprint 1 Changes: Role-Based Authentication
+
+### Key Updates
+
+**User Roles System:**
+- Users now have 4 distinct roles: `GUEST`, `BUYER`, `SELLER`, `ADMIN`
+- Default role on signup: `GUEST`
+- Users can upgrade from `GUEST` → `BUYER` or `GUEST` → `SELLER`
+
+### Backend Changes
+
+**New API Endpoint:**
+- `PATCH /api/auth/upgrade-role` - Allows users to upgrade their role
+  - GUEST → BUYER: No additional requirements
+  - GUEST → SELLER: Requires email verification + profile completion
+
+**Permission Decorators:**
+- `@require_role('BUYER')` - Buyer-only endpoints
+- `@require_role('SELLER')` - Seller-only endpoints  
+- `@require_role('ADMIN')` - Admin-only endpoints
+
+**Updated Login Response:**
+- JWT tokens now include user role
+- Frontend can use role for conditional UI rendering
+
+### Frontend Changes
+
+**Role Selection Flow:**
+- New "Role Selection/Upgrade" page for GUEST users
+- Prompts users to choose "I want to buy" or "I want to sell"
+- Can be triggered after first login or via header prompt
+
+**Role-Based Navigation:**
+Header menu now displays different options based on user role:
+
+| Role | Menu Items |
+|------|-----------|
+| **GUEST** | Login, Signup |
+| **BUYER** | My Purchases, Profile, Logout |
+| **SELLER** | My Purchases, My Inventorys, Sell Item, Profile, Logout |
+| **ADMIN** | Dashboard, Categories, Transactions, Disputes, Logout |
+
+**Route Guards:**
+- GUEST users redirected to role selection if accessing protected pages
+- Non-SELLER users cannot access inventory creation
+- Non-ADMIN users cannot access admin dashboard
+
+### Testing Updates
+
+**Additional Test Cases:**
+- Role upgrade flow (GUEST → BUYER, GUEST → SELLER)
+- Role-based access control for all protected routes
+- Role-based menu display verification
+- Role escalation attack prevention
+
+### Story Point Impact
+- Backend: +3 points (21 → 24)
+- Frontend: +3 points (18 → 21)
+- **Total Sprint 1: 45 points** (was 39)
+
+---
+
+## Sprint 2 Changes: Advanced Category & Tag Management
+
+### Key Updates
+
+**1. Hierarchical Categories (django-treebeard)**
+- Support for nested categories and subcategories (unlimited depth)
+- Efficient tree queries using materialized path approach
+- Example structure:
+  ```
+  Phones
+    ├── iPhone
+    ├── Android
+    └── Feature Phones
+  Laptops
+    ├── Windows
+    ├── MacBooks
+    ├── Chromebooks
+    └── Gaming Laptops
+  ```
+
+**2. Flexible Tagging (django-taggit)**
+- Tags can be added to any inventory
+- Tags auto-created on first use (no pre-defined list)
+- Tag autocomplete from popular tags
+- Max 10 tags per inventory
+
+### Backend Changes
+
+**Package Integrations:**
+- `django-treebeard` for hierarchical category management
+- `django-taggit` for flexible tagging system
+
+**Updated Category API:**
+- `GET /api/categories` - Returns nested JSON with parent-child relationships
+- `POST /api/categories` - Create category (requires ADMIN role)
+  - Support for `parent_id` to create subcategories
+- `PUT /api/categories/:id` - Update category (requires ADMIN role)
+- `DELETE /api/categories/:id` - Delete category (requires ADMIN role)
+  - Checks for active inventorys in category AND all subcategories
+- `PATCH /api/categories/:id/move` - Move category to different parent
+
+**Note:** Removed `/admin` prefix from API endpoints (simplified to `/api/categories`)
+
+**New Tag API:**
+- `GET /api/tags` - List all tags with usage count (sorted by popularity)
+- `GET /api/tags/:slug/inventorys` - Get inventorys with specific tag
+
+**Updated Inventory Model:**
+```python
+class Inventory(models.Model):
+    # ... existing fields ...
+    category = ForeignKey(Category)  # Now supports nested categories
+    tags = TaggableManager()  # New field for tagging
+```
+
+**Updated Inventory Endpoints:**
+- `POST /api/inventorys` - Now accepts `tags: ["wireless", "bluetooth", "warranty"]`
+- `PUT /api/inventorys/:id` - Can update tags array
+- `GET /api/inventorys/:id` - Returns tags array
+
+### Frontend Changes
+
+**Category Selection:**
+- Nested category selector component
+- Options: Tree view dropdown OR cascading dropdowns
+- Shows parent → child relationships clearly
+
+**Tag Input Component:**
+- Autocomplete suggestions from popular tags
+- Visual tag pills (removable)
+- Allow creating new tags on-the-fly
+- Max 10 tags per inventory
+
+**Search Enhancements:**
+- Filter by tags (tag cloud or checkboxes)
+- Hierarchical category filtering (parent vs child)
+- Tags included in full-text search
+
+**Inventory Card Updates:**
+- Show top 3 tags as pills on inventory cards
+- Tags clickable (navigate to tag-filtered search)
+
+**Product Detail Page:**
+- Display all tags as clickable pills
+- Category breadcrumb shows hierarchy (Home > Laptops > Gaming Laptops)
+
+### Testing Updates
+
+**Additional Test Cases:**
+- Nested category selection (parent → child)
+- Tag input (autocomplete, create new, max 10 tags)
+- Tag filtering in search
+- Category deletion prevention (when subcategories or inventorys exist)
+- Category tree operations (move category, get children, get ancestors)
+- Hierarchical category filtering
+
+### Story Point Impact
+- Backend: +4 points (24 → 28)
+- Frontend: +4 points (20 → 24)
+- **Total Sprint 2: 52 points** (was 44)
+
+---
+
+## Sprint 3 Updates (Related Changes)
+
+### Search Enhancements
+
+**Backend:**
+- Full-text search now includes tags
+- Filter parameter added: `tags` (comma-separated)
+- Related inventorys algorithm considers shared tags
+
+**Frontend:**
+- Popular tags section in filter sidebar
+- Tag pills on inventory cards (top 3)
+- Clickable tags on product detail page
+
+---
+
+## Updated Sprint Timeline
+
+| Sprint | Focus | Story Points | Change |
+|--------|-------|--------------|--------|
+| Sprint 1 | Auth & User Management | 45 | +6 |
+| Sprint 2 | Inventorys, Categories & Tags | 52 | +8 |
+| Sprint 3 | Search & Browse | 35 | No change |
+| Sprint 4 | Payment & Escrow | 50 | No change |
+| Sprint 5 | Polish & Launch | 50 | No change |
+| **Total** | | **232** | **+14** |
+
+---
+
+## Technical Dependencies
+
+### New Python Packages
+
+**Sprint 0 / Sprint 1:**
+```bash
+pip install django-anymail[amazon-ses] --break-system-packages
+```
+
+**django-anymail:**
+- Unified API for transactional email providers (AWS SES, Mailgun, SendGrid, etc.)
+- Native Django email backend integration
+- Tracking support (opens, clicks, bounces)
+- We'll use AWS SES backend for cost-effectiveness and reliability
+
+**Sprint 2:**
+```bash
+pip install django-treebeard --break-system-packages
+pip install django-taggit --break-system-packages
+```
+
+**django-treebeard:**
+- Efficient tree structures for Django models
+- Supports Materialized Path, Nested Sets, and Adjacency List
+- We'll use MP_Node (Materialized Path) for best query performance
+
+**django-taggit:**
+- Simple tagging for Django
+- Automatic tag creation
+- Tag manager for easy querying
+- Built-in slug generation
+
+### Database Migrations
+
+**Sprint 2 will require:**
+1. Category model migration to MP_Node structure
+2. Add tags field to Inventory model
+3. Seed hierarchical categories
+4. Create indexes for tag lookups
+
+---
+
+## Benefits of These Changes
+
+### Role-Based Authentication
+✅ **Better Security:** Clear permission boundaries  
+✅ **Improved UX:** Users see only relevant features  
+✅ **Scalability:** Easy to add new roles (e.g., MODERATOR)  
+✅ **Analytics:** Track user types separately  
+
+### Hierarchical Categories & Tags
+✅ **Better Organization:** Logical product grouping  
+✅ **Improved Search:** More precise filtering  
+✅ **SEO Friendly:** Category hierarchies improve discoverability  
+✅ **User Flexibility:** Tags provide free-form classification  
+✅ **Future-Proof:** Easy to add new categories without code changes  
+
+---
+
+## Migration Notes
+
+### From Previous Plan
+
+**If you already started development:**
+
+1. **Database Changes Required:**
+   - Add `role` field to User model (migration)
+   - Convert Category model to use django-treebeard
+   - Add tags to Inventory model
+
+2. **Code Updates:**
+   - Add role-based permission decorators
+   - Update all SELLER-only endpoints to check role
+   - Update frontend auth context to include role
+   - Add role-based navigation component
+
+3. **Testing:**
+   - Add role-based test cases
+   - Test category tree operations
+   - Test tag creation and filtering
+
+---
+
+## Questions or Issues?
+
+If you have any questions about these changes or need clarification on implementation details:
+
+1. Check the full sprint plan for detailed task breakdowns
+2. Review the PRD for business context
+3. Consult Django-treebeard docs: https://django-treebeard.readthedocs.io/
+4. Consult Django-taggit docs: https://django-taggit.readthedocs.io/
+
+---
+
+**Updated:** February 2026  
+**Version:** 2.0 - Role-Based Auth + Hierarchical Categories + Tags
+
+
+---
+
+# schema-updates-v2.md : project-plan
+
+_Source: `prd/project-plan/schema-updates-v2.md`_
+
+# Database Schema & Sprint Plan Updates - V2
+
+## Overview of Changes
+
+This document outlines major updates to the database schema and sprint plan based on new requirements:
+
+1. **Enhanced User Model** - 22 fields including UUID, mobile, UPI, seller plans, donations
+2. **Media Model** - Central repository for all images (reusable across profiles and inventorys)
+3. **Auto-Generated Nicknames** - Reddit-style unique nicknames for seller profiles
+4. **Auto Role Assignment** - Roles assigned based on inventory (not manual upgrade)
+5. **Change Password** - Authenticated users can change their password
+6. **Tailwind CSS** - Frontend styling framework
+
+---
+
+## 1. Enhanced User Model
+
+### New Fields Added (Total: 22 fields)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **uuid** | UUID | Unique identifier for each user |
+| **email** | Email | Primary identifier (unchanged) |
+| **username** | String | Unique username (required) |
+| **password** | String | Hashed password (unchanged) |
+| **full_name** | String | User's full name |
+| **is_email_verified** | Boolean | Email verification status |
+| **email_verification_token** | String | Token for email verification |
+| **email_verification_expiry** | DateTime | Token expiry timestamp |
+| **mobile** | String | Phone number (+919876543210) |
+| **mobile_verified** | Boolean | Mobile verification status |
+| **mobile_last_verified_on** | DateTime | Last mobile verification timestamp |
+| **upi_id** | String | UPI ID for payments |
+| **upi_id_last_verified_on** | DateTime | Last UPI verification timestamp |
+| **seller_plan** | Choice | SELF_SELL, SMART_SELL, DONATE |
+| **donation_percentage** | Integer | 50% or 100% (if seller_plan=DONATE) |
+| **net_earnings** | Decimal | Total earnings in INR |
+| **role** | Choice | BUYER, SELLER, ADMIN (auto-assigned) |
+| **favorite_book** | String | Personal preference field |
+| **active** | Boolean | Active status |
+| **archived** | Boolean | Soft delete flag |
+| **created_on** | DateTime | Account creation timestamp |
+| **updated_on** | DateTime | Last update timestamp |
+
+### Removed Fields
+
+- ~~GUEST role~~ - Users are BUYER by default
+- ~~Separate EmailVerificationToken model~~ - Now fields in User model
+- ~~Separate PasswordResetToken model~~ - Token stored in User model
+
+### New Methods
+
+```python
+def auto_assign_role(self):
+    """Auto-assign SELLER if has inventory, otherwise BUYER"""
+    
+def verify_email(self, token):
+    """Verify email with token"""
+    
+def verify_mobile(self):
+    """Mark mobile as verified"""
+    
+def verify_upi_id(self):
+    """Mark UPI ID as verified"""
+    
+def add_earnings(self, amount):
+    """Add to net earnings"""
+```
+
+---
+
+## 2. Media Model - Central Repository
+
+### Concept
+
+One **Media** record can be used by:
+- Multiple inventorys (e.g., same product photo on different inventorys)
+- Multiple user profiles (e.g., default avatar reused)
+- This reduces storage costs and simplifies image management
+
+### Model Structure
+
+```python
+class Media(models.Model):
+    uuid = UUIDField  # Unique identifier
+    file_name = CharField  # Original filename
+    alt_tag = CharField  # Accessibility text
+    file_type = CharField  # image/jpeg, image/png, image/webp
+    s3_url = URLField  # Full S3 URL with CDN
+    created_on = DateTimeField
+    status = BooleanField  # Active/Inactive
+    archived = BooleanField  # Soft delete
+```
+
+### Association Models
+
+**InventoryImage** (Many-to-Many through model)
+- One Inventory → Many InventoryImage → Many Media
+- One Media → Many InventoryImage → Many Inventorys
+- Allows image reuse across inventorys
+
+**ProfileImage** (One-to-One through model)
+- One User → One ProfileImage → One Media
+- One Media → Many ProfileImage → Many Users
+- Allows profile picture reuse
+
+### Benefits
+
+✅ **Cost Savings** - Upload once, use multiple times  
+✅ **Consistency** - Same product shown across inventorys  
+✅ **Centralized Management** - Archive/delete from one place  
+✅ **Analytics** - Track which images are most popular  
+✅ **Performance** - Reduced storage and bandwidth  
+
+---
+
+## 3. Auto-Generated Nicknames
+
+### Format
+
+Reddit-style: `AdjectiveNoun####`
+
+Examples:
+- `CoolPanda4782`
+- `SwiftEagle2193`
+- `MightyDragon5647`
+
+### Implementation
+
+```python
+# In UserProfile.save()
+if not self.nickname:
+    self.nickname = self.generate_unique_nickname()
+
+@staticmethod
+def generate_unique_nickname():
+    adjectives = ['Cool', 'Swift', 'Bright', 'Smart', 'Epic', ...]
+    nouns = ['Panda', 'Tiger', 'Eagle', 'Falcon', 'Phoenix', ...]
+    
+    while True:
+        nickname = f"{random.choice(adjectives)}{random.choice(nouns)}{random.randint(1000, 9999)}"
+        if not UserProfile.objects.filter(nickname=nickname).exists():
+            return nickname
+```
+
+### Benefits
+
+✅ **Privacy** - No need to expose real names  
+✅ **Fun** - Engaging, memorable identifiers  
+✅ **Uniqueness** - Guaranteed unique via database check  
+✅ **Consistency** - Standardized format  
+
+---
+
+## 4. Auto Role Assignment Logic
+
+### Previous Flow (Removed)
+
+❌ User signs up as GUEST  
+❌ User manually upgrades to BUYER or SELLER  
+
+### New Flow
+
+✅ User signs up → Default role = **BUYER**  
+✅ User creates first inventory → Auto-upgrade to **SELLER**  
+✅ User deletes all inventorys → Auto-downgrade to **BUYER**  
+
+### Implementation
+
+```python
+# Called after login
+user.auto_assign_role()
+
+# Called after inventory creation
+inventory.save()
+inventory.seller.auto_assign_role()
+
+# Called after inventory deletion
+inventory.delete()
+seller.auto_assign_role()
+```
+
+### Benefits
+
+✅ **Simpler UX** - No manual role selection  
+✅ **Automatic** - Role reflects actual behavior  
+✅ **Accurate** - Always up-to-date based on inventory  
+
+---
+
+## 5. Change Password Feature
+
+### New API Endpoint
+
+```
+PATCH /api/auth/change-password
+```
+
+**Request Body:**
+```json
+{
+  "current_password": "oldpass123",
+  "new_password": "newpass456"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Password changed successfully"
+}
+```
+
+### Validation
+
+- User must be authenticated (JWT required)
+- Current password must be correct
+- New password must meet strength requirements
+- Cannot reuse current password
+
+### Frontend Flow
+
+1. User clicks "Change Password" in settings
+2. Form with current_password and new_password fields
+3. Submit PATCH request
+4. Show success message
+5. Optional: Force re-login with new password
+
+---
+
+## 6. Tailwind CSS Integration
+
+### Why Tailwind?
+
+✅ **Utility-First** - Rapid development with pre-defined classes  
+✅ **Responsive** - Built-in breakpoints (sm, md, lg, xl)  
+✅ **Customizable** - Easy theme configuration  
+✅ **Small Bundle** - PurgeCSS removes unused styles  
+✅ **Modern** - Industry standard for React projects  
+
+### Setup (Sprint 1)
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+**tailwind.config.js:**
+```javascript
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#007bff',
+        secondary: '#6c757d',
+      }
+    },
+  },
+  plugins: [],
+}
+```
+
+**src/index.css:**
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+### Usage Examples
+
+```jsx
+// Button
+<button className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600">
+  Buy Now
+</button>
+
+// Card
+<div className="bg-white shadow-md rounded-lg p-6">
+  <h2 className="text-xl font-bold mb-2">iPhone 13 Pro</h2>
+  <p className="text-gray-600">₹85,000</p>
+</div>
+
+// Grid
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  {inventorys.map(inventory => <InventoryCard key={inventory.id} {...inventory} />)}
+</div>
+```
+
+---
+
+## Sprint Plan Updates
+
+### Sprint 0 (Pre-Development)
+
+**Add to Design Tasks:**
+- [ ] Configure Tailwind CSS in React project
+- [ ] Define custom theme (colors, fonts, spacing)
+- [ ] Create Tailwind component library (buttons, cards, forms)
+
+### Sprint 1 (Auth & User Management)
+
+**Backend Changes:**
+
+1. **User Model Updates:**
+   - [ ] Add all 22 fields to User model (see table above)
+   - [ ] Remove GUEST role, default to BUYER
+   - [ ] Implement auto_assign_role() method
+   - [ ] Add verify_mobile(), verify_upi_id(), add_earnings() methods
+   - [ ] Store email_verification_token directly in User (no separate table)
+
+2. **New API Endpoints:**
+   - [ ] PATCH `/api/auth/change-password` - Change password for authenticated users
+   - [ ] POST `/api/auth/verify-mobile` - Verify mobile number (optional for V1)
+   - [ ] POST `/api/auth/verify-upi` - Verify UPI ID (optional for V1)
+   - [ ] Remove `/api/auth/upgrade-role` endpoint (auto-assignment instead)
+
+3. **Media Model:**
+   - [ ] Create Media model with UUID, file_name, alt_tag, file_type, s3_url
+   - [ ] Implement Media.create_from_upload() class method
+   - [ ] Create ProfileImage association model (User ↔ Media)
+
+**Frontend Changes:**
+
+1. **Signup/Login Updates:**
+   - [ ] Add username field to signup form
+   - [ ] Add full_name field to signup form
+   - [ ] Remove role selection (auto-assigned)
+   - [ ] Show default role as BUYER after signup
+
+2. **Profile Management:**
+   - [ ] Add change password form
+   - [ ] Add mobile number field (optional)
+   - [ ] Add UPI ID field (optional)
+   - [ ] Add favorite_book field (optional)
+   - [ ] Add seller_plan selection (for sellers)
+   - [ ] Add donation_percentage selection (if DONATE plan)
+   - [ ] Show net_earnings for sellers
+
+3. **Navigation:**
+   - [ ] Remove GUEST-specific UI (no role upgrade prompt)
+   - [ ] Auto-show "Sell Item" button when user becomes SELLER
+
+4. **Tailwind CSS:**
+   - [ ] Install and configure Tailwind
+   - [ ] Convert all Bootstrap/CSS to Tailwind utility classes
+   - [ ] Create reusable Tailwind components
+
+**Estimated Story Points:** Sprint 1 increases from 45 to **55 points** (+10)
+
+### Sprint 2 (Inventorys & Categories)
+
+**Backend Changes:**
+
+1. **Inventory Model Updates:**
+   - [ ] No direct changes (already using relationship to User)
+   - [ ] After inventory creation, call seller.auto_assign_role()
+   - [ ] After inventory deletion, call seller.auto_assign_role()
+
+2. **InventoryImage Updates:**
+   - [ ] Change from direct S3 URL to Media FK relationship
+   - [ ] Support image reuse (multiple inventorys can use same Media)
+   - [ ] Update image upload logic to create Media first, then InventoryImage
+
+**Frontend Changes:**
+
+1. **Image Upload:**
+   - [ ] Upload creates Media record
+   - [ ] Media UUID returned and associated with inventory
+   - [ ] Show existing Media library for image reuse (optional for V1)
+
+**Estimated Story Points:** Sprint 2 increases from 52 to **58 points** (+6)
+
+---
+
+## Updated ERD (Key Changes)
+
+```mermaid
+erDiagram
+    User ||--o{ Inventory : creates
+    User ||--o| ProfileImage : has
+    User ||--o{ Transaction : "buyer/seller"
+    
+    Media ||--o{ InventoryImage : "used_in"
+    Media ||--o{ ProfileImage : "used_as"
+    
+    Inventory ||--o{ InventoryImage : contains
+    InventoryImage }o--|| Media : references
+    
+    ProfileImage }o--|| Media : references
+    
+    User {
+        uuid uuid PK
+        string email UK
+        string username UK
+        string full_name
+        string mobile
+        boolean mobile_verified
+        string upi_id
+        string seller_plan
+        int donation_percentage
+        decimal net_earnings
+        string role
+        string favorite_book
+        boolean active
+        boolean archived
+    }
+    
+    Media {
+        uuid uuid PK
+        string file_name
+        string alt_tag
+        string file_type
+        string s3_url UK
+        boolean status
+        boolean archived
+    }
+    
+    InventoryImage {
+        int inventory_id FK
+        uuid media_id FK
+        int order
+    }
+    
+    ProfileImage {
+        int user_id FK
+        uuid media_id FK
+    }
+```
+
+---
+
+## Migration Strategy
+
+### Order of Migrations
+
+1. **Create Media model** (accounts app)
+   ```bash
+   python manage.py makemigrations accounts
+   ```
+
+2. **Update User model** with all new fields
+   ```bash
+   python manage.py makemigrations accounts
+   ```
+
+3. **Create ProfileImage model** (accounts app)
+   ```bash
+   python manage.py makemigrations accounts
+   ```
+
+4. **Update InventoryImage model** to use Media FK
+   ```bash
+   python manage.py makemigrations inventorys
+   ```
+
+5. **Data Migration** (migrate existing S3 URLs to Media records)
+   ```python
+   # Create Media records for existing inventory images
+   for inventory_image in InventoryImage.objects.all():
+       media = Media.objects.create(
+           file_name=f"legacy_image_{inventory_image.id}",
+           file_type="image/jpeg",
+           s3_url=inventory_image.image_url  # old field
+       )
+       inventory_image.media = media
+       inventory_image.save()
+   ```
+
+6. **Run all migrations**
+   ```bash
+   python manage.py migrate
+   ```
+
+---
+
+## Testing Updates
+
+### New Test Cases
+
+**User Model Tests:**
+- [ ] Test auto_assign_role() - becomes SELLER when has inventorys
+- [ ] Test auto_assign_role() - becomes BUYER when no inventorys
+- [ ] Test verify_email() - valid token
+- [ ] Test verify_email() - expired token
+- [ ] Test verify_mobile()
+- [ ] Test verify_upi_id()
+- [ ] Test add_earnings()
+- [ ] Test all 22 fields save correctly
+
+**Media Model Tests:**
+- [ ] Test create_from_upload() - creates Media record
+- [ ] Test Media can be reused (multiple InventoryImages point to same Media)
+- [ ] Test Media.get_usage_count()
+- [ ] Test Media.is_reusable()
+
+**UserProfile Tests:**
+- [ ] Test auto-generated nickname uniqueness
+- [ ] Test nickname format (AdjectiveNoun####)
+- [ ] Test nickname collision handling
+
+**API Tests:**
+- [ ] Test PATCH /api/auth/change-password - success
+- [ ] Test PATCH /api/auth/change-password - wrong current password
+- [ ] Test PATCH /api/auth/change-password - unauthenticated
+
+---
+
+## Cost Impact
+
+### Storage Costs
+
+**Before (Direct S3 URLs):**
+- 100 inventorys × 5 images = 500 images
+- Each 5MB = 2.5GB storage
+- Cost: ~₹150/month
+
+**After (Media Repository with Reuse):**
+- Assume 30% image reuse across inventorys
+- 500 images → 350 unique Media records
+- Each 5MB = 1.75GB storage
+- Cost: ~₹105/month
+
+**Savings:** ~₹45/month (30% reduction)
+
+---
+
+## Documentation Updates Needed
+
+1. **API Documentation:**
+   - Update User schema (22 fields)
+   - Add PATCH /api/auth/change-password endpoint
+   - Remove /api/auth/upgrade-role endpoint
+   - Update Media-related endpoints
+
+2. **Frontend Documentation:**
+   - Tailwind CSS setup guide
+   - Component library documentation
+   - Image upload flow with Media model
+
+3. **Database Documentation:**
+   - Updated ERD with Media model
+   - Migration guide for existing data
+   - Media reuse best practices
+
+---
+
+## Summary of Changes
+
+| Area | Change | Impact |
+|------|--------|--------|
+| **User Model** | 22 fields (was 5) | +3 story points |
+| **Role Logic** | Auto-assignment (was manual) | -2 story points (simpler) |
+| **Media Model** | New central repository | +5 story points |
+| **Nicknames** | Auto-generated (Reddit-style) | +2 story points |
+| **Change Password** | New endpoint | +2 story points |
+| **Tailwind CSS** | Replace custom CSS | +3 story points (setup) |
+| **Total Sprint 1** | 45 → **55 points** | +10 points |
+| **Total Sprint 2** | 52 → **58 points** | +6 points |
+| **Overall Project** | 232 → **248 points** | +16 points |
+
+---
+
+**Next Steps:**
+
+1. Review and approve these changes
+2. Update database-schema.md with final models
+3. Update sprint-plan.md with new tasks
+4. Create Tailwind CSS setup guide
+5. Create Media upload guide
+
+---
+
+**Version:** 2.0 - Enhanced User Model + Media Repository  
+**Last Updated:** February 2026
+
+
+---
+
+# sprint-plan.md : project-plan
+
+_Source: `prd/project-plan/sprint-plan.md`_
+
+# Development Sprint Plan: Pre-Owned Gadgets Marketplace
+
+## Overview
+
+**Timeline:** 10 weeks (5 sprints × 2 weeks each)  
+**Team Structure:** Backend Dev, Frontend Dev, UI/UX Designer, QA/Tester, DevOps  
+**Sprint Cadence:** 2-week sprints with planning, daily standups, and retrospectives  
+**Definition of Done:** Code reviewed, tested (unit + integration), deployed to staging, documented
+
+### Sprint Summary
+
+**5 Two-Week Sprints:**
+
+1. **Sprint 1 (Weeks 1-2):** Authentication & User Management - 45 story points
+2. **Sprint 2 (Weeks 3-4):** Product Inventorys, Categories & Tags - 52 story points  
+3. **Sprint 3 (Weeks 5-6):** Search, Browse & Product Details - 35 story points
+4. **Sprint 4 (Weeks 7-8):** Payment Integration & Escrow - 50 story points
+5. **Sprint 5 (Weeks 9-10):** Polish, Testing & Launch Prep - 50 story points
+
+**Total:** ~232 story points across all sprints
+
+---
+
+## Sprint 0: Pre-Development Setup (Week 0)
+
+**Duration:** 3-5 days before Sprint 1  
+**Goal:** Foundation ready for development to begin
+
+### DevOps Tasks
+- [ ] Provision AWS account and configure Mumbai region
+- [ ] Create S3 bucket for image storage with CDN (CloudFront)
+- [ ] Set up PostgreSQL database (local dev + staging environment)
+- [ ] Configure GitHub repository with branch protection rules
+- [ ] Set up CI/CD pipeline (GitHub Actions or GitLab CI)
+- [ ] Deploy skeleton Django + React apps to staging
+- [ ] Configure environment variables and secrets management
+- [ ] Set up monitoring (error tracking with Sentry free tier)
+
+### Business/Legal Tasks
+- [ ] Register domain name and configure DNS
+- [ ] Set up Razorpay test account and obtain API keys
+- [ ] Configure AWS SES (Simple Email Service):
+  - Verify sender email address or domain
+  - Request production access (move out of sandbox)
+  - Obtain AWS SES credentials (Access Key ID, Secret Access Key)
+  - Configure SES region (use Mumbai ap-south-1 for India)
+- [ ] Draft Terms of Service (use template + customize)
+- [ ] Draft Privacy Policy (use template + customize)
+- [ ] Create Safety Guidelines page content
+- [ ] Set up Google OAuth credentials for social login
+
+### Design Tasks
+- [ ] Create design system (colors, typography, spacing, components)
+- [ ] Design high-fidelity mockups for priority screens:
+  - Homepage
+  - Signup/Login
+  - Seller Profile
+  - Create Inventory
+  - Search Results
+  - Product Detail
+  - Payment Flow
+- [ ] Create responsive breakpoints (mobile, tablet, desktop)
+- [ ] Export design assets (icons, logos, images)
+
+**Sprint 0 Deliverables:**
+- Staging environment live and accessible
+- Design system documented
+- All third-party accounts configured
+- Repository with initial commit
+
+---
+
+## Sprint 1: Authentication & User Management (Weeks 1-2)
+
+**Goal:** Users can sign up, log in, manage their accounts, and access role-based features
+
+### Backend Tasks
+
+**User Authentication (Priority: Critical)**
+- [ ] Set up Django REST Framework with JWT authentication
+- [ ] Implement user model (extend Django AbstractUser)
+  - Fields: email, password, role (choices: GUEST, BUYER, SELLER, ADMIN), is_email_verified
+  - Default role: GUEST (can upgrade to BUYER or SELLER)
+- [ ] POST `/api/auth/signup` - Email/password registration
+  - Validate email format and password strength
+  - Send verification email with token
+  - Default role: GUEST
+- [ ] POST `/api/auth/verify-email` - Email verification endpoint
+- [ ] POST `/api/auth/login` - Login with email/password
+  - Return JWT access + refresh tokens + user role
+- [ ] POST `/api/auth/refresh` - Refresh JWT token
+- [ ] POST `/api/auth/logout` - Invalidate token
+- [ ] POST `/api/auth/forgot-password` - Send reset email
+- [ ] POST `/api/auth/reset-password` - Reset password with token
+- [ ] POST `/api/auth/google` - Google OAuth integration
+  - Validate Google token
+  - Create or authenticate user
+  - Default role: GUEST
+- [ ] PATCH `/api/auth/upgrade-role` - Upgrade role to BUYER or SELLER
+  - GUEST → BUYER: No additional requirements
+  - GUEST → SELLER: Requires email verification + profile completion
+- [ ] Implement role-based permissions decorators
+  - @require_role('BUYER') for buyer-only endpoints
+  - @require_role('SELLER') for seller-only endpoints
+  - @require_role('ADMIN') for admin-only endpoints
+- [ ] Write unit tests (80%+ coverage for auth flows including role checks)
+
+**User Profile (Priority: High)**
+- [ ] Create UserProfile model
+  - Fields: user (FK), full_name, brand_name, nickname, bank_account_number (encrypted), ifsc_code, bank_name, branch_address, consent_given
+- [ ] GET `/api/profile` - Get current user profile
+- [ ] PUT `/api/profile` - Update profile
+  - Validate IFSC code format (11 characters, alphanumeric)
+  - Encrypt bank details before saving
+- [ ] POST `/api/profile/consent` - Record bank detail consent
+- [ ] Write unit tests for profile CRUD
+
+**Email Service (Priority: High)**
+- [ ] Install and configure **django-anymail** for AWS SES integration
+  ```bash
+  pip install django-anymail[amazon-ses] --break-system-packages
+  ```
+- [ ] Configure django-anymail in Django settings:
+  ```python
+  INSTALLED_APPS = [
+      # ...
+      'anymail',
+  ]
+  
+  ANYMAIL = {
+      "AMAZON_SES_CLIENT_PARAMS": {
+          "aws_access_key_id": env('AWS_SES_ACCESS_KEY_ID'),
+          "aws_secret_access_key": env('AWS_SES_SECRET_ACCESS_KEY'),
+          "region_name": "ap-south-1",  # Mumbai region
+      },
+  }
+  EMAIL_BACKEND = 'anymail.backends.amazon_ses.EmailBackend'
+  DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+  SERVER_EMAIL = 'admin@yourdomain.com'
+  ```
+- [ ] Create email templates (HTML + plain text fallback):
+  - Welcome email
+  - Email verification
+  - Password reset
+  - Transaction notifications (payment received, escrow held, payment released)
+- [ ] Implement email sending functions using django-anymail:
+  ```python
+  from django.core.mail import send_mail
+  from anymail.message import AnymailMessage
+  ```
+- [ ] Add email tracking (optional): Opens, clicks via SES notifications
+- [ ] Implement async email sending (Celery + Redis optional, or Django background tasks)
+- [ ] Write unit tests for email sending (use Anymail test backend)
+
+**Estimated Story Points:** 24
+
+### Frontend Tasks
+
+**Authentication UI (Priority: Critical)**
+- [ ] Set up React Router for navigation
+- [ ] Create Auth context for global user state management (includes user role)
+- [ ] Build Signup page
+  - Email/password form with validation
+  - Google OAuth button
+  - Link to Login and Terms/Privacy
+  - Default role: GUEST
+- [ ] Build Email Verification success/pending pages
+- [ ] Build Login page
+  - Email/password form
+  - Google OAuth button
+  - "Forgot Password" link
+  - Store user role in auth context after login
+- [ ] Build Forgot Password flow
+  - Email input page
+  - Success message page
+  - Reset password form page
+- [ ] Build Role Selection/Upgrade page
+  - For GUEST users: Choose "I want to buy" (BUYER) or "I want to sell" (SELLER)
+  - Show after first login or as prompt in header
+  - Call upgrade-role API endpoint
+- [ ] Implement JWT token storage (localStorage + secure httpOnly cookies)
+- [ ] Create PrivateRoute component for protected pages
+- [ ] Implement role-based route guards
+  - Redirect GUEST to role selection if accessing protected pages
+  - Prevent non-SELLER from accessing inventory creation
+  - Prevent non-ADMIN from accessing admin dashboard
+- [ ] Handle token refresh logic
+
+**Profile Management UI (Priority: High)**
+- [ ] Build Seller Profile page
+  - Form with all fields (name, brand, bank details)
+  - Consent checkbox for bank detail storage
+  - Save and edit modes
+  - Profile completion indicator
+- [ ] Create reusable form components (Input, Select, Button, Checkbox)
+- [ ] Implement form validation (client-side)
+- [ ] Show success/error messages on save
+
+**Shared Components (Priority: Medium)**
+- [ ] Header/Navigation component
+  - Logo, search bar placeholder
+  - User menu with role-based options:
+    - **GUEST:** Login, Signup
+    - **BUYER:** My Purchases, Profile, Logout
+    - **SELLER:** My Purchases, My Inventorys, Sell Item, Profile, Logout
+    - **ADMIN:** Dashboard, Categories, Transactions, Disputes, Logout
+  - "Upgrade to Seller" prompt for BUYER users (optional CTA)
+- [ ] Footer component
+  - Links to Terms, Privacy, Safety Guidelines
+- [ ] Loading spinner component
+- [ ] Toast/notification component for alerts
+- [ ] Role guard wrapper component (conditionally renders based on user role)
+
+**Estimated Story Points:** 21
+
+### QA Tasks
+- [ ] Test all signup flows (email, Google OAuth)
+- [ ] Test email verification (valid/expired tokens)
+- [ ] Test login flows (success, wrong password, unverified email)
+- [ ] Test forgot password flow end-to-end
+- [ ] Test profile creation and editing
+- [ ] Test role upgrade flow (GUEST → BUYER, GUEST → SELLER)
+- [ ] Test role-based access control:
+  - GUEST cannot access protected pages
+  - BUYER cannot access seller-only pages
+  - SELLER cannot access admin pages
+  - ADMIN can access all pages
+- [ ] Test role-based menu display (correct items shown per role)
+- [ ] Test form validations (client + server side)
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- [ ] Mobile responsive testing (iOS Safari, Android Chrome)
+- [ ] Security testing: SQL injection, XSS attempts on forms, role escalation attempts
+
+**Sprint 1 Deliverables:**
+- ✅ Users can sign up with email or Google
+- ✅ Email verification working
+- ✅ Login/logout functional
+- ✅ Password reset working
+- ✅ Role-based authentication (GUEST, BUYER, SELLER, ADMIN)
+- ✅ Role upgrade functionality (GUEST → BUYER/SELLER)
+- ✅ Role-based menu and navigation display
+- ✅ Role-based access control on routes and API endpoints
+- ✅ Seller profile CRUD complete
+- ✅ All tests passing
+
+---
+
+## Sprint 2: Product Inventorys & Categories (Weeks 3-4)
+
+**Goal:** Sellers can create, edit, and manage product inventorys
+
+### Backend Tasks
+
+**Category Management (Priority: High)**
+- [ ] Install and configure **django-treebeard** for hierarchical category management
+  - Supports nested categories and subcategories (unlimited depth)
+  - Efficient tree queries (materialized path approach)
+- [ ] Create Category model using Treebeard's MP_Node
+  - Fields: name, slug, description, icon_url, is_active, parent (FK to self for hierarchy)
+  - Methods: get_children(), get_ancestors(), get_descendants()
+- [ ] Seed default categories with subcategories:
+  - Phones (iPhone, Android, Feature Phones)
+  - Laptops (Windows, MacBooks, Chromebooks, Gaming Laptops)
+  - Tablets (iPads, Android Tablets, Windows Tablets)
+  - Accessories (Chargers, Cases, Headphones, Cables)
+  - Other
+- [ ] GET `/api/categories` - List all active categories with tree structure
+  - Return nested JSON with parent-child relationships
+  - Option to flatten for simple dropdown
+- [ ] GET `/api/categories/:id` - Get single category with children
+- [ ] POST `/api/categories` - Create category (requires ADMIN role)
+  - Input: name, description, parent_id (optional for subcategory)
+  - Auto-generate slug from name
+- [ ] PUT `/api/categories/:id` - Update category (requires ADMIN role)
+- [ ] DELETE `/api/categories/:id` - Delete category (requires ADMIN role)
+  - Check for active inventorys in this category and all subcategories
+  - Prevent deletion if inventorys exist (show count)
+- [ ] PATCH `/api/categories/:id/move` - Move category to different parent (requires ADMIN role)
+- [ ] Write unit tests for category CRUD and tree operations
+
+**Tag Management (Priority: High)**
+- [ ] Install and configure **django-taggit** for flexible tagging
+  - Simple, reusable tagging for any model
+  - Automatic tag creation (no pre-defined tag list needed)
+- [ ] Add tagging to Inventory model
+  - Use TaggableManager from django-taggit
+  - Tags stored separately, linked via many-to-many
+- [ ] GET `/api/tags` - List all tags with usage count
+  - Return: tag name, slug, inventory count
+  - Sort by popularity (most used tags first)
+- [ ] GET `/api/tags/:slug/inventorys` - Get all inventorys with specific tag
+- [ ] Inventory endpoints automatically handle tags:
+  - POST `/api/inventorys` includes `tags: ["wireless", "bluetooth", "new"]`
+  - PUT `/api/inventorys/:id` can update tags
+  - GET `/api/inventorys/:id` returns tags array
+- [ ] Search integration: Tags included in full-text search
+- [ ] Write unit tests for tag operations
+
+**Product Inventory (Priority: Critical)**
+- [ ] Create Inventory model
+  - Fields: seller (FK to User), title, description, marked_price, offer_price, discount_percentage (auto-calculated), condition (choices: Like New, Good, Fair), category (FK), tags (TaggableManager), status (draft/active/sold), created_at, updated_at
+  - Constraint: Only users with role=SELLER can create inventorys
+- [ ] Create InventoryImage model
+  - Fields: inventory (FK), image_url, order, uploaded_at
+  - Constraint: Max 5 images per inventory
+- [ ] POST `/api/inventorys` - Create new inventory (requires SELLER role)
+  - Validate: title length, prices (offer ≤ marked), condition, category exists
+  - Auto-calculate discount percentage
+  - Save as draft or active based on request
+  - Input includes tags array: `["wireless", "bluetooth", "warranty"]`
+  - Tags auto-created if they don't exist
+- [ ] POST `/api/inventorys/:id/images` - Upload images to S3
+  - Validate: File type (JPG, PNG, WEBP), size (max 100MB)
+  - Generate thumbnail (resize to 300x300)
+  - Store S3 URL in database
+  - Support batch upload (1-5 images)
+- [ ] GET `/api/inventorys/:id` - Get single inventory with images and tags
+- [ ] GET `/api/inventorys/my-inventorys` - Get current seller's inventorys
+- [ ] PUT `/api/inventorys/:id` - Update inventory (requires SELLER role)
+  - Only seller can edit their own inventory
+  - Can update tags array
+- [ ] PATCH `/api/inventorys/:id/status` - Mark as sold/active
+- [ ] DELETE `/api/inventorys/:id/images/:image_id` - Delete image
+- [ ] Write unit tests for inventory CRUD and image upload
+
+**File Upload Service (Priority: High)**
+- [ ] Configure AWS S3 bucket permissions (public read, authenticated write)
+- [ ] Implement image compression before upload (Pillow library)
+- [ ] Generate unique file names (UUID + timestamp)
+- [ ] Create CloudFront distribution for image CDN
+- [ ] Write helper functions for S3 upload/delete
+
+**Estimated Story Points:** 28
+
+### Frontend Tasks
+
+**Inventory Management UI (Priority: Critical)**
+- [ ] Build Create Inventory page
+  - Multi-step form or single page with sections
+  - Step 1: Basic info (title, description, category with subcategory dropdown, condition)
+  - Step 2: Pricing (marked price, offer price, auto-show discount)
+  - Step 3: Photos (drag-and-drop upload, preview, reorder, delete)
+  - Step 4: Tags (tag input with autocomplete from popular tags, create new tags)
+  - Save as draft or publish
+  - Only accessible to users with SELLER role
+- [ ] Build Edit Inventory page (reuse Create Inventory components)
+- [ ] Build My Inventorys dashboard
+  - Table/grid view of seller's inventorys
+  - Filter by status (draft/active/sold)
+  - Quick actions: Edit, Mark as Sold, Delete
+  - Inventory stats: Views (future), Inquiries (future)
+  - Only accessible to users with SELLER role
+- [ ] Image upload component
+  - Drag-and-drop zone
+  - File type and size validation
+  - Progress bar during upload
+  - Image preview grid with reorder/delete
+  - Max 5 images enforcement
+- [ ] Tag input component
+  - Autocomplete suggestions from popular tags
+  - Allow creating new tags
+  - Visual tag pills (removable)
+  - Max 10 tags per inventory
+
+**Reusable Components (Priority: Medium)**
+- [ ] Price input component with INR formatting
+- [ ] Image uploader component
+- [ ] Nested category selector component (tree view or cascading dropdowns)
+- [ ] Tag input component with autocomplete
+- [ ] Rich text editor for description (optional: simple textarea is fine for V1)
+
+**Estimated Story Points:** 24
+
+### Design Tasks
+- [ ] Design Admin Category Management screen (hierarchical tree view)
+- [ ] Design tag input interaction (autocomplete, pills)
+- [ ] Design image upload interaction (drag-drop states)
+- [ ] Create inventory card component design (for search results)
+
+### QA Tasks
+- [ ] Test inventory creation flow end-to-end
+- [ ] Test nested category selection (parent → child)
+- [ ] Test tag input (autocomplete, create new, max 10 tags)
+- [ ] Test image upload (valid files, invalid types, oversized files)
+- [ ] Test auto-calculation of discount percentage
+- [ ] Test edit inventory (change prices, categories, tags, add/remove images)
+- [ ] Test mark as sold functionality
+- [ ] Test My Inventorys dashboard filtering
+- [ ] Test permissions (non-SELLER cannot create inventorys)
+- [ ] Test permissions (seller can't edit other seller's inventorys)
+- [ ] Test category deletion prevention (when inventorys exist)
+- [ ] Performance test: Upload 5 images × 100MB simultaneously
+- [ ] Mobile responsive testing for create/edit forms
+
+**Sprint 2 Deliverables:**
+- ✅ Sellers can create inventorys with 1-5 photos
+- ✅ Inventorys support nested categories and subcategories (django-treebeard)
+- ✅ Inventorys support flexible tagging (django-taggit)
+- ✅ Tag autocomplete and creation working
+- ✅ Inventorys stored in database with S3 image URLs
+- ✅ Edit and mark as sold working
+- ✅ Categories (with hierarchy) manageable by ADMIN role via API
+- ✅ All tests passing
+
+---
+
+## Sprint 3: Search, Browse & Product Details (Weeks 5-6)
+
+**Goal:** Buyers can search, filter, and view product inventorys
+
+### Backend Tasks
+
+**Search & Browse (Priority: Critical)**
+- [ ] Implement PostgreSQL full-text search
+  - Create search vector on inventory title + description + tags
+  - Index for performance
+- [ ] GET `/api/inventorys` - List/search inventorys with filters
+  - Query params: `q` (search keyword), `category`, `condition`, `min_price`, `max_price`, `tags` (comma-separated), `sort` (price_asc, price_desc, newest)
+  - Auto-exclude sold inventorys (status != sold)
+  - Pagination: 20 items per page
+  - Return: inventorys with first image, basic info, tags
+- [ ] Optimize query performance (select_related, prefetch_related)
+- [ ] GET `/api/inventorys/:id/related` - Get 4 related inventorys
+  - Same category, similar price range (+/- 20%), or shared tags
+  - Exclude current inventory and sold items
+- [ ] Write unit tests for search and filter logic including tag filtering
+
+**Analytics (Priority: Low - Future Enhancement)**
+- [ ] (Optional) Track inventory views - create InventoryView model
+  - Fields: inventory (FK), viewer_ip, viewed_at
+
+**Estimated Story Points:** 13
+
+### Frontend Tasks
+
+**Homepage (Priority: Critical)**
+- [ ] Build Homepage
+  - Hero section with value proposition
+  - Search bar (prominent CTA)
+  - Featured/Recent inventorys grid (latest 12 inventorys)
+  - Category quick links
+  - Trust signals (email verified, escrow, safety)
+- [ ] Implement search bar with autocomplete (optional for V1, can be simple input)
+- [ ] Featured inventorys carousel or grid
+
+**Search & Results (Priority: Critical)**
+- [ ] Build Search Results page
+  - Search bar at top (sticky)
+  - Filter sidebar:
+    - Price range slider (₹0 - ₹100,000)
+    - Category checkboxes (dynamic from API, hierarchical)
+    - Condition checkboxes
+    - Popular tags (clickable tag cloud or checkboxes)
+  - Sort dropdown (Price Low-High, Price High-Low, Newest)
+  - Inventory grid (responsive: 4 cols desktop, 2 cols tablet, 1 col mobile)
+  - Pagination controls
+  - Empty state when no results
+- [ ] Build Inventory Card component
+  - Thumbnail image
+  - Title (truncated to 2 lines)
+  - Offer price (large, bold)
+  - Marked price (strikethrough)
+  - Discount % badge
+  - Condition badge
+  - Tag pills (show top 3 tags)
+  - Click to view details
+- [ ] Implement filter and sort logic (update URL params, fetch results)
+- [ ] Implement pagination
+
+**Product Detail Page (Priority: Critical)**
+- [ ] Build Product Detail page
+  - Breadcrumb navigation (Home > Category > Subcategory > Title)
+  - Image gallery:
+    - Large preview image
+    - Thumbnail strip below (click to change preview)
+    - Zoom on click (optional: lightbox)
+  - Product info section:
+    - Title
+    - Offer price (prominent)
+    - Marked price (strikethrough) + Discount % badge
+    - Condition badge
+    - Category breadcrumb (parent > child)
+    - Tags (clickable tag pills, click to search by tag)
+    - Description (full text)
+  - Seller info section:
+    - Brand name or nickname
+    - "Verified Email" badge
+  - "Buy Now" button (prominent CTA)
+  - Related inventorys section (4 items in carousel)
+- [ ] Implement image gallery interaction
+- [ ] Make tags clickable (navigate to search results filtered by tag)
+- [ ] Connect Buy Now button to payment flow (placeholder for Sprint 4)
+
+**Estimated Story Points:** 22
+
+### Design Tasks
+- [ ] Finalize Homepage layout (hero, search, featured inventorys)
+- [ ] Design empty states (no search results, no inventorys)
+- [ ] Design inventory card hover states
+
+### QA Tasks
+- [ ] Test search with various keywords (products, brands, models, tags)
+- [ ] Test filters (price range, category, subcategory, condition, tags)
+- [ ] Test hierarchical category filtering (parent vs child categories)
+- [ ] Test tag filtering (single tag, multiple tags)
+- [ ] Test sorting (price low-high, high-low, newest)
+- [ ] Test pagination (navigate pages, edge cases)
+- [ ] Test product detail page with 1 image, 5 images
+- [ ] Test tag pills clickability (navigate to filtered search)
+- [ ] Test related inventorys accuracy (same category or shared tags)
+- [ ] Test breadcrumb navigation (home > category > subcategory > product)
+- [ ] Performance test: Search results page load with 100+ inventorys
+- [ ] Mobile responsive testing (filters collapse, grid adapts, tag pills wrap)
+- [ ] Test that sold inventorys are hidden from search
+
+**Sprint 3 Deliverables:**
+- ✅ Homepage with search and featured inventorys live
+- ✅ Search results page with filters (categories, tags, price, condition) and sort working
+- ✅ Hierarchical category filtering (parent/child categories)
+- ✅ Tag-based search and filtering
+- ✅ Product detail page with image gallery and clickable tags
+- ✅ Related inventorys showing (by category or shared tags)
+- ✅ Sold items hidden from search
+- ✅ All tests passing
+
+---
+
+## Sprint 4: Payment Integration & Escrow (Weeks 7-8)
+
+**Goal:** Buyers can purchase items, payments held in escrow, admin can release payments
+
+### Backend Tasks
+
+**Payment Integration (Priority: Critical)**
+- [ ] Integrate Razorpay SDK
+- [ ] Create Transaction model
+  - Fields: buyer (FK), seller (FK), inventory (FK), amount, payment_id (Razorpay), status (pending/escrow/released/refunded/disputed), created_at, updated_at, released_at, admin_notes
+- [ ] POST `/api/transactions/initiate` - Create Razorpay order
+  - Input: inventory_id
+  - Validate: Buyer is logged in, inventory is active (not sold)
+  - Create Razorpay order with amount = inventory.offer_price
+  - Return: order_id, amount, currency (INR)
+- [ ] POST `/api/transactions/verify` - Verify Razorpay payment
+  - Input: payment_id, order_id, signature
+  - Verify signature using Razorpay secret
+  - Update transaction status to "escrow"
+  - Mark inventory as sold
+  - Send emails to buyer and seller with contact info
+  - Return: transaction details
+- [ ] GET `/api/transactions` - Get user's transactions
+  - Buyer: All purchases
+  - Seller: All sales
+- [ ] GET `/api/transactions/:id` - Get transaction details
+  - Include buyer/seller contact info, inventory details, status
+
+**Escrow Management (Admin) (Priority: Critical)**
+- [ ] GET `/api/admin/transactions` - List all transactions
+  - Filter by status (escrow/disputed/released)
+  - Sort by created_at
+- [ ] PATCH `/api/admin/transactions/:id/release` - Release payment to seller
+  - Validate: Transaction in escrow status
+  - Update status to "released"
+  - Trigger payout to seller's bank account (Razorpay Payout API or manual)
+  - Send confirmation email to seller
+  - Log admin action with timestamp
+- [ ] PATCH `/api/admin/transactions/:id/refund` - Refund to buyer
+  - Validate: Transaction in escrow status
+  - Update status to "refunded"
+  - Trigger refund via Razorpay
+  - Send confirmation email to buyer
+  - Log admin action
+
+**Dispute Handling (Priority: High)**
+- [ ] Create Dispute model
+  - Fields: transaction (FK), raised_by (buyer/seller), reason, description, status (new/in_review/resolved), resolution_notes, created_at, resolved_at
+- [ ] POST `/api/transactions/:id/dispute` - Raise dispute
+  - Input: reason, description
+  - Update transaction status to "disputed"
+  - Send notification to admin
+- [ ] GET `/api/admin/disputes` - List all disputes
+- [ ] PATCH `/api/admin/disputes/:id/resolve` - Resolve dispute
+  - Input: resolution_notes, action (release/refund)
+  - Update dispute status to "resolved"
+  - Trigger release or refund
+  - Send emails to buyer and seller
+
+**Estimated Story Points:** 26
+
+### Frontend Tasks
+
+**Payment Flow (Priority: Critical)**
+- [ ] Build Payment page
+  - Display inventory summary (image, title, price)
+  - "Proceed to Pay" button
+  - Integrate Razorpay checkout modal
+  - Handle payment success/failure callbacks
+- [ ] Build Payment Success page
+  - Transaction confirmation
+  - Display seller contact info
+  - Next steps instructions (arrange meetup)
+  - Link to transaction details
+- [ ] Build Payment Failure page
+  - Error message
+  - Retry button
+  - Contact support link
+
+**Transaction Management (Buyer/Seller) (Priority: High)**
+- [ ] Build Transactions page (My Purchases / My Sales)
+  - Tabs for Buyer and Seller views
+  - List transactions with status badges
+  - Filter by status
+  - Click to view transaction details
+- [ ] Build Transaction Detail page
+  - Inventory info
+  - Buyer/seller contact info (visible post-purchase)
+  - Payment status timeline
+  - "Report Dispute" button
+- [ ] Build Dispute Form modal
+  - Reason dropdown
+  - Description textarea
+  - Submit button
+
+**Admin Dashboard (Priority: Critical)**
+- [ ] Build Admin Dashboard (separate route: `/admin`)
+  - Navigation: Transactions, Disputes, Categories
+  - Overview stats: Pending releases, open disputes
+- [ ] Build Admin Transactions page
+  - Table view with filters (status)
+  - Actions: Release Payment, Refund
+  - Search by transaction ID or user
+- [ ] Build Admin Disputes page
+  - Table view with filters (status)
+  - Click to view dispute details
+  - Resolution form (notes, action)
+  - Submit resolution
+
+**Estimated Story Points:** 24
+
+### QA Tasks
+- [ ] Test payment flow end-to-end (test mode Razorpay)
+- [ ] Test payment success scenario
+- [ ] Test payment failure scenario (invalid card, insufficient funds)
+- [ ] Test escrow holding (payment not released immediately)
+- [ ] Test admin release payment flow
+- [ ] Test admin refund flow
+- [ ] Test dispute creation (buyer and seller)
+- [ ] Test admin dispute resolution
+- [ ] Test emails sent at each stage (payment success, release, refund)
+- [ ] Test permissions (only admin can release/refund)
+- [ ] Security testing: Payment signature verification, SQL injection on transaction endpoints
+- [ ] Performance test: Multiple concurrent payment verifications
+
+**Sprint 4 Deliverables:**
+- ✅ Buyers can purchase inventorys via Razorpay
+- ✅ Payments held in escrow
+- ✅ Admin can release payments to sellers
+- ✅ Admin can process refunds
+- ✅ Dispute creation and resolution working
+- ✅ All transaction emails sending
+- ✅ All tests passing
+
+---
+
+## Sprint 5: Polish, Testing & Launch Prep (Weeks 9-10)
+
+**Goal:** Production-ready platform with sample data, legal docs, and monitoring
+
+### Backend Tasks
+
+**Final Polish (Priority: High)**
+- [ ] Implement rate limiting on API endpoints (prevent scraping/abuse)
+  - Auth endpoints: 5 requests/min
+  - Search: 30 requests/min
+  - Inventory creation: 10 requests/hour
+- [ ] Add API documentation (Swagger/OpenAPI or Postman collection)
+- [ ] Optimize database queries (add missing indexes)
+- [ ] Set up database backup automation (daily backups to S3)
+- [ ] Configure CORS for production domain
+- [ ] Set up logging (structured logs to CloudWatch or equivalent)
+- [ ] Configure Redis for session/cache (optional for V1)
+
+**Sample Data Creation (Priority: High)**
+- [ ] Create data seeding script
+  - 10 sample users (5 buyers, 5 sellers with verified emails)
+  - 50-100 gadget inventorys across all categories
+  - Realistic titles, descriptions, prices
+  - 3-5 images per inventory (use stock photos or placeholders)
+  - Mix of conditions (Like New, Good, Fair)
+  - Price range: ₹500 - ₹80,000
+- [ ] Run seeding script on staging environment
+- [ ] Verify search and browse work with sample data
+
+**Security Audit (Priority: Critical)**
+- [ ] Review all endpoints for authentication/authorization
+- [ ] Test for SQL injection vulnerabilities
+- [ ] Test for XSS vulnerabilities
+- [ ] Verify HTTPS enforcement
+- [ ] Verify bank detail encryption
+- [ ] Check for sensitive data in logs
+- [ ] Review CORS configuration
+- [ ] Penetration testing (manual or tool-based)
+
+**Estimated Story Points:** 15
+
+### Frontend Tasks
+
+**UI/UX Polish (Priority: High)**
+- [ ] Implement consistent error handling across all pages
+- [ ] Add loading states for all async operations
+- [ ] Improve form validation messages (clear, helpful)
+- [ ] Add success animations (micro-interactions)
+- [ ] Optimize images (lazy loading, WebP format)
+- [ ] Implement 404 page and error boundaries
+- [ ] Add breadcrumbs on all deep pages
+- [ ] Ensure accessibility (keyboard navigation, ARIA labels, color contrast)
+
+**Static Pages (Priority: High)**
+- [ ] Build Terms of Service page (legal copy from Sprint 0)
+- [ ] Build Privacy Policy page (legal copy from Sprint 0)
+- [ ] Build Safety Guidelines page (content from Sprint 0)
+- [ ] Build About Us page (mission, team, contact)
+- [ ] Build FAQ page (common questions)
+- [ ] Update footer with all legal links
+
+**Performance Optimization (Priority: Medium)**
+- [ ] Code splitting (lazy load routes)
+- [ ] Minify and bundle for production
+- [ ] Add service worker for PWA (optional for V1)
+- [ ] Optimize bundle size (remove unused dependencies)
+- [ ] Add meta tags for SEO (title, description, OG tags)
+
+**Estimated Story Points:** 13
+
+### Design Tasks
+- [ ] Design 404 error page
+- [ ] Design loading skeletons for all major pages
+- [ ] Create favicon and app icons
+- [ ] Finalize color scheme and ensure accessibility (WCAG AA)
+
+### DevOps Tasks
+
+**Production Deployment (Priority: Critical)**
+- [ ] Provision production environment (separate from staging)
+- [ ] Configure production database with automated backups
+- [ ] Set up environment variables for production
+- [ ] Configure production S3 bucket and CloudFront
+- [ ] Switch Razorpay to live mode (obtain live API keys)
+- [ ] Set up SSL certificate (Let's Encrypt auto-renewal)
+- [ ] Configure domain DNS to point to production server
+- [ ] Set up monitoring and alerting:
+  - Uptime monitoring (UptimeRobot)
+  - Error tracking (Sentry)
+  - Performance monitoring (Google Analytics)
+  - Database monitoring (query performance, storage)
+- [ ] Create runbook for common operations:
+  - Deploy new version
+  - Rollback deployment
+  - Database migration
+  - Restore from backup
+
+**Estimated Story Points:** 10
+
+### QA Tasks
+
+**End-to-End Testing (Priority: Critical)**
+- [ ] Full regression test of all user flows (signup → inventory → purchase → escrow release)
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge on desktop)
+- [ ] Mobile testing (iOS Safari, Android Chrome)
+- [ ] Tablet testing (iPad, Android tablet)
+- [ ] Performance testing (page load times, API response times)
+- [ ] Load testing (simulate 100 concurrent users)
+- [ ] Security testing (OWASP Top 10 checklist)
+- [ ] Accessibility testing (screen reader, keyboard navigation)
+
+**Beta Launch Preparation (Priority: High)**
+- [ ] Create beta tester onboarding guide
+  - How to sign up
+  - How to create inventorys
+  - How to purchase items
+  - How to provide feedback
+- [ ] Set up feedback collection (Google Form or Typeform)
+- [ ] Prepare beta invitation email template
+- [ ] Create sample transactions for demo (admin account)
+
+**Estimated Story Points:** 12
+
+### Business Tasks
+
+**Launch Checklist (Priority: Critical)**
+- [ ] Legal review complete (Terms, Privacy, Safety)
+- [ ] Payment gateway live mode activated and tested
+- [ ] All emails tested (send test emails for each type)
+- [ ] Sample data seeded in production
+- [ ] Analytics configured (Google Analytics tracking code)
+- [ ] Error monitoring configured (Sentry alerts)
+- [ ] Admin credentials created and secured
+- [ ] Backup and disaster recovery plan documented
+- [ ] Customer support plan (email, response SLA)
+- [ ] Rollback plan documented
+
+**Beta Recruitment (Priority: High)**
+- [ ] Create list of 50+ potential beta users
+- [ ] Draft beta invitation email
+- [ ] Prepare beta feedback survey questions
+- [ ] Set up communication channel (WhatsApp group, Slack, Discord)
+- [ ] Plan beta kickoff meeting/walkthrough
+
+**Sprint 5 Deliverables:**
+- ✅ Production environment live and stable
+- ✅ Sample data populated
+- ✅ All legal pages published
+- ✅ Security audit complete, vulnerabilities fixed
+- ✅ Monitoring and alerting configured
+- ✅ Beta user list ready
+- ✅ All tests passing
+- ✅ **READY FOR BETA LAUNCH**
+
+---
+
+## Post-Sprint: Beta Launch & Iteration (Week 10+)
+
+**Beta Launch Day (Week 10, Day 1)**
+- [ ] Send beta invitations to first 20-30 users
+- [ ] Host virtual walkthrough/demo session
+- [ ] Monitor system closely (errors, performance, payment issues)
+- [ ] Respond to user questions in real-time
+
+**Beta Week 1**
+- [ ] Daily standup to review user feedback
+- [ ] Fix critical bugs within 24 hours
+- [ ] Monitor KPIs: signups, inventorys created, searches performed
+- [ ] Reach out to users for qualitative feedback
+
+**Beta Week 2-4**
+- [ ] Collect feedback via survey
+- [ ] Prioritize feature requests and bug fixes
+- [ ] Iterate on UX pain points
+- [ ] Expand to next cohort of beta users (50-100 total)
+- [ ] Track progress toward KPI targets:
+  - 1,000 active inventorys
+  - 100 completed transactions
+  - 1% buyer repeat rate
+
+**Beta Review (End of Week 12)**
+- [ ] Analyze metrics against KPI targets
+- [ ] Conduct retrospective with team
+- [ ] Decide: Full launch, pivot, or iterate
+- [ ] Plan next phase (city launch or feature expansion)
+
+---
+
+## Sprint Retrospective Template
+
+**After each sprint, conduct a retrospective to improve:**
+
+### What Went Well?
+- (Team discusses successes, wins, smooth processes)
+
+### What Didn't Go Well?
+- (Team discusses blockers, challenges, missed estimates)
+
+### Action Items for Next Sprint
+- (Concrete changes to improve process, velocity, quality)
+
+---
+
+## Story Point Estimation Reference
+
+**1-3 Points:** Small task (< 1 day)  
+**5 Points:** Medium task (1-2 days)  
+**8 Points:** Large task (3-4 days)  
+**13 Points:** Very large task (1 week)  
+**21+ Points:** Epic (break down into smaller tasks)
+
+---
+
+## Risk Mitigation During Development
+
+**Technical Risks:**
+- **Payment integration complexity:** Allocate buffer time in Sprint 4, start Razorpay integration early
+- **Search performance:** Monitor query times, add indexes proactively
+- **S3 upload failures:** Implement retry logic and error handling from day 1
+
+**Team Risks:**
+- **Developer availability:** Cross-train team members on critical paths
+- **Scope creep:** Stick to PRD, log feature requests for post-V1
+- **Burnout:** Enforce sustainable pace, avoid weekend work
+
+**External Risks:**
+- **Third-party API downtime:** Test with Razorpay sandbox early, have fallback plan
+- **Design delays:** Prioritize critical screens, use placeholders if needed
+- **Legal review delays:** Start legal docs in Sprint 0, don't block on final review
+
+---
+
+## Success Metrics Per Sprint
+
+**Sprint 1:** Auth flows working, 100% test coverage on auth  
+**Sprint 2:** 10 sample inventorys created in staging  
+**Sprint 3:** Search returns results in <500ms  
+**Sprint 4:** Test payment successful in Razorpay sandbox  
+**Sprint 5:** Production deployment successful, zero downtime  
+
+---
+
+## Communication Plan
+
+**Daily Standups (15 min):**
+- What did I complete yesterday?
+- What will I work on today?
+- Any blockers?
+
+**Sprint Planning (2 hours, start of each sprint):**
+- Review sprint goal
+- Assign tasks to team members
+- Estimate story points
+- Commit to sprint backlog
+
+**Sprint Review (1 hour, end of each sprint):**
+- Demo completed features
+- Stakeholder feedback
+- Update roadmap
+
+**Sprint Retrospective (1 hour, end of each sprint):**
+- Discuss what went well, what didn't
+- Action items for improvement
+
+**Ad-hoc Communication:**
+- Slack/Discord for quick questions
+- GitHub for code reviews and PRs
+- Weekly all-hands for cross-team updates
+
+---
+
+## Tools & Resources
+
+**Project Management:** Jira, Trello, or GitHub Projects  
+**Code Repository:** GitHub or GitLab  
+**CI/CD:** GitHub Actions, GitLab CI, or CircleCI  
+**Design:** Figma for mockups, collaboration  
+**Communication:** Slack, Discord, or Microsoft Teams  
+**Documentation:** Notion, Confluence, or Google Docs  
+**Testing:** Pytest (backend), Jest/React Testing Library (frontend)  
+**Monitoring:** Sentry (errors), Google Analytics (usage), UptimeRobot (uptime)  
+
+---
+
+**END OF SPRINT PLAN**
+
+_This is a living document. Update task estimates and timelines based on actual velocity after each sprint._
+
+_Next Review: After Sprint 1 retrospective_
+
+
+---
+
+# sprint-updates-summary.md : project-plan
+
+_Source: `prd/project-plan/sprint-updates-summary.md`_
+
+# Sprint Plan Updates - Summary of Changes
+
+## Overview
+
+The sprint plan has been updated with two major enhancements:
+
+1. **Role-Based Authentication** (Sprint 1)
+2. **Advanced Category & Tag Management** (Sprint 2)
+
+---
+
+## Sprint 1 Changes: Role-Based Authentication
+
+### Key Updates
+
+**User Roles System:**
+- Users now have 4 distinct roles: `GUEST`, `BUYER`, `SELLER`, `ADMIN`
+- Default role on signup: `GUEST`
+- Users can upgrade from `GUEST` → `BUYER` or `GUEST` → `SELLER`
+
+### Backend Changes
+
+**New API Endpoint:**
+- `PATCH /api/auth/upgrade-role` - Allows users to upgrade their role
+  - GUEST → BUYER: No additional requirements
+  - GUEST → SELLER: Requires email verification + profile completion
+
+**Permission Decorators:**
+- `@require_role('BUYER')` - Buyer-only endpoints
+- `@require_role('SELLER')` - Seller-only endpoints  
+- `@require_role('ADMIN')` - Admin-only endpoints
+
+**Updated Login Response:**
+- JWT tokens now include user role
+- Frontend can use role for conditional UI rendering
+
+### Frontend Changes
+
+**Role Selection Flow:**
+- New "Role Selection/Upgrade" page for GUEST users
+- Prompts users to choose "I want to buy" or "I want to sell"
+- Can be triggered after first login or via header prompt
+
+**Role-Based Navigation:**
+Header menu now displays different options based on user role:
+
+| Role | Menu Items |
+|------|-----------|
+| **GUEST** | Login, Signup |
+| **BUYER** | My Purchases, Profile, Logout |
+| **SELLER** | My Purchases, My Inventorys, Sell Item, Profile, Logout |
+| **ADMIN** | Dashboard, Categories, Transactions, Disputes, Logout |
+
+**Route Guards:**
+- GUEST users redirected to role selection if accessing protected pages
+- Non-SELLER users cannot access inventory creation
+- Non-ADMIN users cannot access admin dashboard
+
+### Testing Updates
+
+**Additional Test Cases:**
+- Role upgrade flow (GUEST → BUYER, GUEST → SELLER)
+- Role-based access control for all protected routes
+- Role-based menu display verification
+- Role escalation attack prevention
+
+### Story Point Impact
+- Backend: +3 points (21 → 24)
+- Frontend: +3 points (18 → 21)
+- **Total Sprint 1: 45 points** (was 39)
+
+---
+
+## Sprint 2 Changes: Advanced Category & Tag Management
+
+### Key Updates
+
+**1. Hierarchical Categories (django-treebeard)**
+- Support for nested categories and subcategories (unlimited depth)
+- Efficient tree queries using materialized path approach
+- Example structure:
+  ```
+  Phones
+    ├── iPhone
+    ├── Android
+    └── Feature Phones
+  Laptops
+    ├── Windows
+    ├── MacBooks
+    ├── Chromebooks
+    └── Gaming Laptops
+  ```
+
+**2. Flexible Tagging (django-taggit)**
+- Tags can be added to any inventory
+- Tags auto-created on first use (no pre-defined list)
+- Tag autocomplete from popular tags
+- Max 10 tags per inventory
+
+### Backend Changes
+
+**Package Integrations:**
+- `django-treebeard` for hierarchical category management
+- `django-taggit` for flexible tagging system
+
+**Updated Category API:**
+- `GET /api/categories` - Returns nested JSON with parent-child relationships
+- `POST /api/categories` - Create category (requires ADMIN role)
+  - Support for `parent_id` to create subcategories
+- `PUT /api/categories/:id` - Update category (requires ADMIN role)
+- `DELETE /api/categories/:id` - Delete category (requires ADMIN role)
+  - Checks for active inventorys in category AND all subcategories
+- `PATCH /api/categories/:id/move` - Move category to different parent
+
+**Note:** Removed `/admin` prefix from API endpoints (simplified to `/api/categories`)
+
+**New Tag API:**
+- `GET /api/tags` - List all tags with usage count (sorted by popularity)
+- `GET /api/tags/:slug/inventorys` - Get inventorys with specific tag
+
+**Updated Inventory Model:**
+```python
+class Inventory(models.Model):
+    # ... existing fields ...
+    category = ForeignKey(Category)  # Now supports nested categories
+    tags = TaggableManager()  # New field for tagging
+```
+
+**Updated Inventory Endpoints:**
+- `POST /api/inventorys` - Now accepts `tags: ["wireless", "bluetooth", "warranty"]`
+- `PUT /api/inventorys/:id` - Can update tags array
+- `GET /api/inventorys/:id` - Returns tags array
+
+### Frontend Changes
+
+**Category Selection:**
+- Nested category selector component
+- Options: Tree view dropdown OR cascading dropdowns
+- Shows parent → child relationships clearly
+
+**Tag Input Component:**
+- Autocomplete suggestions from popular tags
+- Visual tag pills (removable)
+- Allow creating new tags on-the-fly
+- Max 10 tags per inventory
+
+**Search Enhancements:**
+- Filter by tags (tag cloud or checkboxes)
+- Hierarchical category filtering (parent vs child)
+- Tags included in full-text search
+
+**Inventory Card Updates:**
+- Show top 3 tags as pills on inventory cards
+- Tags clickable (navigate to tag-filtered search)
+
+**Product Detail Page:**
+- Display all tags as clickable pills
+- Category breadcrumb shows hierarchy (Home > Laptops > Gaming Laptops)
+
+### Testing Updates
+
+**Additional Test Cases:**
+- Nested category selection (parent → child)
+- Tag input (autocomplete, create new, max 10 tags)
+- Tag filtering in search
+- Category deletion prevention (when subcategories or inventorys exist)
+- Category tree operations (move category, get children, get ancestors)
+- Hierarchical category filtering
+
+### Story Point Impact
+- Backend: +4 points (24 → 28)
+- Frontend: +4 points (20 → 24)
+- **Total Sprint 2: 52 points** (was 44)
+
+---
+
+## Sprint 3 Updates (Related Changes)
+
+### Search Enhancements
+
+**Backend:**
+- Full-text search now includes tags
+- Filter parameter added: `tags` (comma-separated)
+- Related inventorys algorithm considers shared tags
+
+**Frontend:**
+- Popular tags section in filter sidebar
+- Tag pills on inventory cards (top 3)
+- Clickable tags on product detail page
+
+---
+
+## Updated Sprint Timeline
+
+| Sprint | Focus | Story Points | Change |
+|--------|-------|--------------|--------|
+| Sprint 1 | Auth & User Management | 45 | +6 |
+| Sprint 2 | Inventorys, Categories & Tags | 52 | +8 |
+| Sprint 3 | Search & Browse | 35 | No change |
+| Sprint 4 | Payment & Escrow | 50 | No change |
+| Sprint 5 | Polish & Launch | 50 | No change |
+| **Total** | | **232** | **+14** |
+
+---
+
+## Technical Dependencies
+
+### New Python Packages
+
+**Sprint 0 / Sprint 1:**
+```bash
+pip install django-anymail[amazon-ses] --break-system-packages
+```
+
+**django-anymail:**
+- Unified API for transactional email providers (AWS SES, Mailgun, SendGrid, etc.)
+- Native Django email backend integration
+- Tracking support (opens, clicks, bounces)
+- We'll use AWS SES backend for cost-effectiveness and reliability
+
+**Sprint 2:**
+```bash
+pip install django-treebeard --break-system-packages
+pip install django-taggit --break-system-packages
+```
+
+**django-treebeard:**
+- Efficient tree structures for Django models
+- Supports Materialized Path, Nested Sets, and Adjacency List
+- We'll use MP_Node (Materialized Path) for best query performance
+
+**django-taggit:**
+- Simple tagging for Django
+- Automatic tag creation
+- Tag manager for easy querying
+- Built-in slug generation
+
+### Database Migrations
+
+**Sprint 2 will require:**
+1. Category model migration to MP_Node structure
+2. Add tags field to Inventory model
+3. Seed hierarchical categories
+4. Create indexes for tag lookups
+
+---
+
+## Benefits of These Changes
+
+### Role-Based Authentication
+✅ **Better Security:** Clear permission boundaries  
+✅ **Improved UX:** Users see only relevant features  
+✅ **Scalability:** Easy to add new roles (e.g., MODERATOR)  
+✅ **Analytics:** Track user types separately  
+
+### Hierarchical Categories & Tags
+✅ **Better Organization:** Logical product grouping  
+✅ **Improved Search:** More precise filtering  
+✅ **SEO Friendly:** Category hierarchies improve discoverability  
+✅ **User Flexibility:** Tags provide free-form classification  
+✅ **Future-Proof:** Easy to add new categories without code changes  
+
+---
+
+## Migration Notes
+
+### From Previous Plan
+
+**If you already started development:**
+
+1. **Database Changes Required:**
+   - Add `role` field to User model (migration)
+   - Convert Category model to use django-treebeard
+   - Add tags to Inventory model
+
+2. **Code Updates:**
+   - Add role-based permission decorators
+   - Update all SELLER-only endpoints to check role
+   - Update frontend auth context to include role
+   - Add role-based navigation component
+
+3. **Testing:**
+   - Add role-based test cases
+   - Test category tree operations
+   - Test tag creation and filtering
+
+---
+
+## Questions or Issues?
+
+If you have any questions about these changes or need clarification on implementation details:
+
+1. Check the full sprint plan for detailed task breakdowns
+2. Review the PRD for business context
+3. Consult Django-treebeard docs: https://django-treebeard.readthedocs.io/
+4. Consult Django-taggit docs: https://django-taggit.readthedocs.io/
+
+---
+
+**Updated:** February 2026  
+**Version:** 2.0 - Role-Based Auth + Hierarchical Categories + Tags

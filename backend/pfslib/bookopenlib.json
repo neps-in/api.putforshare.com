@@ -1,0 +1,78 @@
+{
+    "title": "",
+    "number_of_pages": "",
+    "isbn_10""publishers": []
+    "publish_date"
+}
+
+{'ISBN: 9781565922259': {'url': 'https: //openlibrary.org/books/OL19879076M/sed_awk', 
+'key': '/books/OL19879076M', 
+'title': 'sed & awk', 
+'authors': [
+            {'url': 'https: //openlibrary.org/authors/OL424686A/Dale_Dougherty', 
+            'name': 'Dale Dougherty'
+            },
+            {'url': 'https: //openlibrary.org/authors/OL38875A/Arnold_Robbins',
+             'name': 'Arnold Robbins'
+            }
+        ], 
+        'number_of_pages': 407, 'pagination': 'xxii,
+        407 p. ;', 'by_statement': 'Dale Dougherty and Arnold Robbins.', 'identifiers': {'librarything': ['140152'
+            ], 'goodreads': ['354484'
+            ], 'isbn_10': ['1565922255'
+            ], 'oclc': ['43802934'
+            ], 'openlibrary': ['OL19879076M'
+            ]
+        }, 'classifications': {'lc_classifications': ['QA76.76.U84 D69 1997', 'QA76.76.U84 D69 1997xb'
+            ], 'dewey_decimal_class': ['005.74'
+            ]
+        }, 'publishers': [
+            {'name': 'O’Reilly Media'
+            }
+        ], 'publish_places': [
+            {'name': 'Cambridge'
+            },
+            {'name': 'Sebastopol, CA'
+            }
+        ], 'publish_date': '1997', 'subjects': [
+            {'name': 'Awk', 
+            'url': 'https: //openlibrary.org/subjects/awk'}, 
+                {'name': 'Sed (Computer file)', 
+            'url': 'https: //openlibrary.org/subjects/sed_(computer_file)'}, 
+                    {'name': 'UNIX (Computer file)', 
+            'url': 'https: //openlibrary.org/subjects/unix_(computer_file)'}, 
+                        {'name': 'Utilities (Computer programs)', 
+            'url': 'https: //openlibrary.org/subjects/utilities_(computer_programs)'}, 
+                            {'name': 'UNIX (Computer operating system)', 
+            'url': 'https: //openlibrary.org/subjects/unix_(computer_operating_system)'}, 
+                                {'name': "UNIX (système d'exploitation des ordinateurs)", 
+            'url': "https://openlibrary.org/subjects/unix_(système_d'exploitation_des_ordinateurs)"
+                                },
+                                {'name': 'Utilitaires (logiciels)', 
+            'url': 'https: //openlibrary.org/subjects/utilitaires_(logiciels)'}, 
+                                    {'name': 'Sed (tekstverwerking)', 
+            'url': 'https: //openlibrary.org/subjects/sed_(tekstverwerking)'}, 
+                                        {'name': 'Programmatuurtechniek', 
+            'url': 'https: //openlibrary.org/subjects/programmatuurtechniek'}, 
+                                            {'name': 'Sed', 
+            'url': 'https: //openlibrary.org/subjects/sed'}], 
+            'excerpts': [
+                                                    {'text': 'This book is about a set of oddly named UNIX utilities, sed and awk.', 
+            'comment': '', 'first_sentence': True
+                                                    }
+                                                ], 
+            'notes': '"UNIX power tools"--Cover.\r\n\r\nIncludes index.', 
+            'links': [
+                                                    {'title': "Book on O'Reilly", 
+                'url': 'https: //www.oreilly.com/library/view/sed-awk/1565922255/'}], 
+                'ebooks': [
+                                                            {'preview_url': 'https: //archive.org/details/sedawk00doug_139', 
+                    'availability': 'full', 
+                    'formats': {'pdf': {'url': 'https: //archive.org/download/sedawk00doug_139/sedawk00doug_139.pdf'}, 
+                    'epub': {'url': 'https: //archive.org/download/sedawk00doug_139/sedawk00doug_139.epub'}, 
+                     'text': {'url': 'https: //archive.org/download/sedawk00doug_139/sedawk00doug_139_djvu.txt'}}, 
+                     'read_url': 'https: //archive.org/stream/sedawk00doug_139'}],
+                      'cover': {
+                        'small': 'https: //covers.openlibrary.org/b/id/7440402-S.jpg', 
+                        'medium': 'https: //covers.openlibrary.org/b/id/7440402-M.jpg',
+                         'large': 'https: //covers.openlibrary.org/b/id/7440402-L.jpg'}}}

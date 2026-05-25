@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<p><strong>Type:</strong> {{ template_obj.type }} |
+   <strong>Channel:</strong> {{ template_obj.channel }}</p>
+
+<form method="post" style="margin-top: 1rem;">
+  {% csrf_token %}
+  <fieldset class="module aligned">
+    <div class="form-row">
+      <label for="id_context_json"><strong>Context (JSON):</strong></label>
+      <textarea name="context_json" id="id_context_json" rows="8" cols="80">{{ context_json }}</textarea>
+      <p class="help">This JSON will be passed as template context.</p>
+    </div>
+  </fieldset>
+
+  <div class="submit-row">
+    <input type="submit" value="Render Preview" class="default">
+  </div>
+</form>
+
+{% if rendered_subject or rendered_body %}
+  <h2>Rendered Subject</h2>
+  <pre style="background:#f5f5f5;padding:10px;">{{ rendered_subject|default:"(empty)" }}</pre>
+
+  <h2>Rendered Body</h2>
+  <div style="background:#f5f5f5;padding:10px;">
+    {{ rendered_body|safe }}
+  </div>
+{% endif %}
+
+<p style="margin-top:1rem;">
+  <a href="{% url 'admin:notifications_notificationtemplate_change' template_obj.pk %}">Back to template</a>
+</p>
+{% endblock %}

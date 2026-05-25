@@ -1,0 +1,146 @@
+erDiagram
+    User ||--o{ UserProfile : has
+    User ||--o{ Inventory : creates
+    User ||--o{ Transaction : "buyer/seller"
+    User ||--o{ Dispute : raises
+    User ||--o{ EmailVerificationToken : has
+    User ||--o{ PasswordResetToken : has
+    
+    Category ||--o{ Category : "parent/child"
+    Category ||--o{ Inventory : categorizes
+    
+    Inventory ||--o{ InventoryImage : has
+    Inventory ||--|{ Tag : "tagged_with"
+    Inventory ||--o| Transaction : "sold_in"
+    Inventory ||--o{ InventoryView : "viewed_by"
+    
+    Transaction ||--o| Dispute : has
+    
+    User {
+        int id PK
+        string email UK "Unique, indexed"
+        string password "Hashed"
+        string role "GUEST, BUYER, SELLER, ADMIN"
+        boolean is_email_verified "Default: False"
+        datetime date_joined
+        datetime last_login
+    }
+    
+    UserProfile {
+        int id PK
+        int user_id FK "One-to-One with User"
+        string full_name "Required"
+        string brand_name "Optional"
+        string nickname "Optional"
+        binary bank_account_number "Encrypted"
+        string ifsc_code "11 chars, validated"
+        string bank_name "Required"
+        text branch_address "Optional"
+        boolean consent_given "Required for bank details"
+        datetime consent_timestamp
+        datetime created_at
+        datetime updated_at
+    }
+    
+    Category {
+        int id PK
+        string path UK "Treebeard materialized path"
+        int depth "Tree depth level"
+        int numchild "Number of children"
+        string name "Category name"
+        string slug UK "URL-safe, indexed"
+        text description "Optional"
+        string icon_url "Optional"
+        boolean is_active "Default: True, indexed"
+        datetime created_at
+    }
+    
+    Inventory {
+        int id PK
+        int seller_id FK "Must be SELLER role"
+        int category_id FK "Protected on delete"
+        string title "Max 200 chars, indexed"
+        text description "Full description"
+        decimal marked_price "Original price (10,2)"
+        decimal offer_price "Selling price (10,2), indexed"
+        decimal discount_percentage "Auto-calculated (5,2)"
+        string condition "LIKE_NEW, GOOD, FAIR"
+        string status "DRAFT, ACTIVE, SOLD, indexed"
+        tsvector search_vector "Full-text search, GIN indexed"
+        datetime created_at "Indexed"
+        datetime updated_at
+    }
+    
+    InventoryImage {
+        int id PK
+        int inventory_id FK "Cascade on delete"
+        string image_url "S3 URL (max 500 chars)"
+        int order "Image order (0-4)"
+        datetime uploaded_at
+    }
+    
+    Tag {
+        int id PK
+        string name UK "Tag name, unique"
+        string slug UK "URL-safe slug"
+    }
+    
+    TaggedItem {
+        int id PK
+        int tag_id FK "django-taggit"
+        int object_id "Inventory ID"
+        string content_type "inventorys.Inventory"
+    }
+    
+    Transaction {
+        int id PK
+        int buyer_id FK "Protected on delete"
+        int seller_id FK "Protected on delete"
+        int inventory_id FK "One-to-One, Protected"
+        decimal amount "Transaction amount (10,2)"
+        string payment_id UK "Razorpay ID, indexed"
+        string status "PENDING, ESCROW, RELEASED, REFUNDED, DISPUTED"
+        text admin_notes "Admin annotations"
+        datetime created_at "Indexed"
+        datetime updated_at
+        datetime released_at "Nullable"
+    }
+    
+    Dispute {
+        int id PK
+        int transaction_id FK "One-to-One, Cascade"
+        int raised_by_id FK "User who raised, Protected"
+        string reason "NOT_AS_DESCRIBED, PAYMENT_ISSUE, MEETUP_FAILED, OTHER"
+        text description "Dispute details"
+        string status "NEW, IN_REVIEW, RESOLVED, indexed"
+        text resolution_notes "Admin resolution"
+        int resolved_by_id FK "Admin user, nullable"
+        datetime created_at "Indexed"
+        datetime resolved_at "Nullable"
+    }
+    
+    EmailVerificationToken {
+        int id PK
+        int user_id FK "Cascade on delete"
+        string token UK "100 chars, indexed"
+        datetime created_at
+        datetime expires_at "24 hours validity"
+        boolean is_used "Default: False"
+    }
+    
+    PasswordResetToken {
+        int id PK
+        int user_id FK "Cascade on delete"
+        string token UK "100 chars, indexed"
+        datetime created_at
+        datetime expires_at "24 hours validity"
+        boolean is_used "Default: False"
+    }
+    
+    InventoryView {
+        int id PK
+        int inventory_id FK "Cascade on delete"
+        string viewer_ip "IP address"
+        int user_id FK "Nullable, SET_NULL"
+        datetime viewed_at "Indexed with inventory_id"
+    }

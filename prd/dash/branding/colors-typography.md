@@ -1,0 +1,30 @@
+1. remove AI gradient background across all sections, all cards.
+
+# Colors
+
+Navbar background color:
+--e-global-color-primary: #007073;
+
+Other colors you can use
+
+--e-global-color-secondary: #007073;
+--e-global-color-text: #424242;
+--e-global-color-accent: #007073;
+--e-global-color-3fdf10c: #731d00;
+--e-global-color-0038742: #666;
+--e-global-color-e36957e: #262626;
+--e-global-color-de602a8: #f3f9f9;
+--e-global-color-1a519d7: #f4c833;
+--e-global-color-4990f41: #fff1ec;
+--e-global-color-d9e3bd8: #d8e6e6;
+--e-global-color-d491196: #f13aff;
+--e-global-color-898a5ca: #f81284;
+
+"& .RaDatagrid-headerCell": {
+backgroundColor: "#007073",
+color: '#ede039'
+},
+
+"& .RaMenuItemLink-active": {
+backgroundColor: 'yellow',
+},

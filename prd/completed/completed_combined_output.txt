@@ -1,0 +1,1119 @@
+==================================================
+FILE: 1-re-store.md
+==================================================
+
+Have separate api inventory to filter price=1 in store [x]
+
+also create few products where u have only 1 rupee as the price. [x]
+
+Add menu in the store navbar "1 Re Store" - clicking will show products with price = 1 Rupee [x]
+
+in the pricing tab of product add - special promo about 1 Re Store" - Only the shipping fees + Product cost is 1 Re. [x]
+
+
+==================================================
+FILE: backend-completed-prd.md
+==================================================
+
+# Author , Publishers , Category listing
+
+1. Backend: author/publisher count APIs + GraphQL support
+
+- Added serializers:
+  - backend/apps/api/serializers.py
+    - AuthorWithProductCountSerializer
+    - PublisherWithProductCountSerializer
+- Added querysets + list views:
+  - backend/apps/api/views.py
+    - get_author_count_queryset()
+    - get_publisher_count_queryset()
+    - AuthorWithProductCountListAPIView
+    - PublisherWithProductCountListAPIView
+- Added REST endpoints:
+  - backend/apps/api/urls.py
+    - GET /api/v1/inventory/authors/
+    - GET /api/v1/inventory/publishers/
+- Extended GraphQL handler fields:
+  - authorsWithProductCount
+  - publishersWithProductCount
+
+2. Frontend: Browse links + new pages
+
+- Added API functions:
+  - store/src/api.js
+    - fetchAuthorsWithProductCount()
+    - fetchPublishersWithProductCount()
+    - updated fetchBrowseMenuSummary() to return real author/publisher counts
+- Updated Browse submenu links in header:
+  - store/src/App.jsx
+    - Authors (count) now links to /authors
+    - Publishers (count) now links to /publishers
+- Added pages/routes:
+  - store/src/App.jsx
+    - AuthorsPage
+    - PublishersPage
+    - routes:
+      - /authors
+      - /publishers
+
+Also added related API tests in backend/apps/api/tests.py for author/publisher count endpoints and GraphQL query.
+
+# Human readable error - Completed & Verified [x]
+
+All 400 bad request are converted to error response and displayed in the frontend.
+
+- store/src/App.jsx
+  - Added username state in SignupPage.
+  - Inserted Username input as second field (after Full name, before Email).
+  - Updated submit call to signup({ fullName, username, email, password }).
+  - Split inline errors so full_name and username show on their own fields.
+- store/src/authClient.js
+  - Updated signup to accept and pass explicit username (no auto-derive from email anymore).
+
+# Backend Completed PRD
+
+Migrations for 'inventory': [x]
+apps/inventory/migrations/0005_alter_author_options_alter_publisher_options_and_more.py
+~ Change Meta options on author
+~ Change Meta options on publisher + Add field is_featured to author + Add field slug to author + Add field is_featured to publisher + Add field slug to publisher
+
+# Photos app created
+
+- New app scaffold at backend/apps/photos/ (admin.py, apps.py, models.py, views.py, tests.py, migrations/**init**.py).
+- Set app config path in backend/apps/photos/apps.py:5 to name = "apps.photos".
+- Registered app in backend/config/settings.py:26 by adding "apps.photos" to INSTALLED_APPS.
+- Ran Django validation: ./.venv/bin/python manage.py check -> System check identified no issues (0 silenced).
+
+- add favourite_book - textfield [x]
+
+---
+
+• Done. Added 1:1 photo links for all three models and wired API/UI.
+
+Model changes
+
+- backend/apps/inventory/models.py
+  - Author.photo → OneToOneField("photos.Photo", null=True, blank=True, on_delete=SET_NULL)
+  - Publisher.brand_image → OneToOneField("photos.Photo", null=True, blank=True, on_delete=SET_NULL)
+- backend/apps/users/models.py
+  - User.profile_image → OneToOneField("photos.Photo", null=True, blank=True, on_delete=SET_NULL)
+
+Migrations
+
+- backend/apps/inventory/migrations/0012_author_photo_publisher_brand_image.py
+- backend/apps/users/migrations/0008_user_profile_image.py
+- Applied successfully with manage.py migrate.
+
+API serializer updates
+
+- backend/apps/api/serializers.py
+  - AuthorSerializer now supports photo_uuid
+  - PublisherSerializer now supports brand_image_uuid
+  - UserSerializer exposes profile_image_uuid (read)
+  - ProfileEditSerializer supports profile_image_uuid (write)
+
+Dashboard updates
+
+- dash/src/index.jsx
+  - Author create/edit: added photo selector (photo_uuid) from photos resource
+  - Publisher create/edit: added brand image selector (brand_image_uuid)
+  - Author/Publisher show: displays photo/brand image UUID
+  - Edit profile: added Profile Image UUID field and save support
+
+Verification
+
+- backend: manage.py check passed
+- dash: npm run build passed
+  • Done. Added photo support for publisher and user as well.
+
+  What I changed:
+
+  - Backend (backend/apps/api/serializers.py)
+    - PublisherSerializer:
+      - added brand_image_url (read)
+    - UserSerializer:
+      - added profile_image_url (read)
+    - ProfileEditSerializer:
+      - added profile_image_url (read)
+  - Frontend (dash/src/index.jsx)
+    - Publisher list:
+      - added round brand image preview column from brand_image_url
+    - Publisher show:
+      - added large brand image block in header (like author photo style)
+    - User:
+      - top nav avatar now uses identity.profile_image_url if present (fallback to initial)
+
+  Already done in prior step:
+
+  - Author list/show photo rendering from photo_url.
+
+## Forgot-password email send/reset flow
+
+    Make sure these things exists in /reset-password form
+    only 3 text boxes should be there
+    1. Don' t send email, display in django console
+    2. reset token - disabled
+    3. ask for new password and also have a eye like icon at the end of the new password textbox
+    to show or hide.
+    4. confirm new password
+
+And once you "Save New Password" delete verification token [x]
+
+
+==================================================
+FILE: cart.md
+==================================================
+
+# **Product Requirements Document (PRD)**
+
+## **Cart Management System**
+
+---
+
+## **1. Overview**
+
+The Cart Management System enables both **guest users** and **authenticated users** to add, manage, and review products before checkout. It supports persistent carts, accurate pricing, and seamless transition from guest to logged-in sessions.
+
+The system will maintain cart state, calculate totals, and integrate with inventory and product pricing.
+
+---
+
+## **2. Objectives**
+
+- Support shopping carts for:
+
+  - Guest users (not logged in)
+  - Registered and logged-in users
+
+- Maintain cart persistence
+- Accurately calculate item and cart-level totals
+- Integrate with inventory/product pricing
+- Support auditability and lifecycle management (active/archived carts)
+
+---
+
+## **3. Scope**
+
+### In Scope
+
+- Cart creation and management
+- Cart items management
+- Price calculation
+- Inventory integration
+- Guest-to-user cart migration
+- Metadata tracking
+
+### Out of Scope
+
+- Payment processing
+- Order fulfillment
+- Shipping calculations
+- Promotions/discounts (future scope)
+
+---
+
+## **4. User Types**
+
+### 4.1 Guest Users
+
+- Not authenticated
+- Identified via session/cookie/token
+- Cart stored temporarily
+
+### 4.2 Authenticated Users
+
+- Logged-in users
+- Cart linked to user account
+- Persistent across devices
+
+---
+
+## **5. Functional Requirements**
+
+### 5.1 Cart Management
+
+#### FR-01: Cart Creation
+
+- System shall create a cart when:
+
+  - A guest adds the first item
+  - A logged-in user adds the first item
+
+#### FR-02: Cart Ownership
+
+- Cart must be associated with:
+
+  - `user` (for authenticated users)
+  - `session_id` / `guest_token` (for guests)
+
+#### FR-03: One Active Cart
+
+- Each user/session can have only one active cart at a time.
+
+#### FR-04: Cart Lifecycle
+
+- Cart statuses:
+
+  - Active
+  - Archived
+
+- Archived carts are read-only.
+
+---
+
+### 5.2 Cart Item Management
+
+#### FR-05: Cart Items
+
+- Each cart can contain multiple cart items.
+- Each cart item must be linked to:
+
+  - One cart
+  - One inventory/product item
+
+#### FR-06: Quantity Management
+
+- Quantity must be:
+
+  - A positive integer
+  - Minimum value: 1
+
+#### FR-07: Add/Update/Remove Items
+
+- Users must be able to:
+
+  - Add new items
+  - Update quantity
+  - Remove items
+
+---
+
+### 5.3 Pricing & Calculations
+
+#### FR-08: Inventory Price Retrieval
+
+- System must retrieve unit price from the inventory/product module.
+
+#### FR-09: Item Total Calculation
+
+- Each cart item must calculate:
+
+  ```
+  item_total = unit_price × quantity
+  ```
+
+#### FR-10: Cart Total Calculation
+
+- Cart must calculate:
+
+  - Total items count
+  - Subtotal price
+  - Grand total
+
+#### FR-11: Dynamic Recalculation
+
+- Totals must update when:
+
+  - Quantity changes
+  - Item is added/removed
+  - Price changes
+
+---
+
+### 5.4 Guest to User Migration
+
+#### FR-12: Cart Merge on Login
+
+- When a guest logs in:
+
+  - Guest cart must be merged with user cart
+  - Duplicate items must be consolidated
+  - Quantities must be aggregated
+
+---
+
+### 5.5 Metadata Management
+
+#### FR-13: Metadata Fields
+
+All carts and cart items must store:
+
+- `is_active` (Boolean)
+- `is_archived` (Boolean)
+- `created_at` (Timestamp)
+- `updated_at` (Timestamp)
+
+---
+
+## **6. Data Model Requirements**
+
+### 6.1 Cart Model inherit uuid model
+
+Add the relevant fields from below
+
+| Field Name  | Type              | Description      |
+| ----------- | ----------------- | ---------------- |
+| id          | UUID/PK           | Primary key      |
+| user        | FK (nullable)     | Linked user      |
+| guest_token | String (nullable) | Guest identifier |
+| is_active   | Boolean           | Active cart flag |
+| is_archived | Boolean           | Archive flag     |
+| created_at  | DateTime          | Creation time    |
+| updated_at  | DateTime          | Last update      |
+
+---
+
+### 6.2 CartItem Model inherit uuid model,
+
+Add the relevant fields from below
+
+| Field Name  | Type            | Description              |
+| ----------- | --------------- | ------------------------ |
+| id          | UUID/PK         | Primary key              |
+| cart        | FK              | Parent cart              |
+| inventory   | FK              | Linked inventory/product |
+| quantity    | PositiveInteger | Item quantity            |
+| is_active   | Boolean         | Active flag              |
+| is_archived | Boolean         | Archive flag             |
+| created_at  | DateTime        | Creation time            |
+| updated_at  | DateTime        | Last update              |
+
+---
+
+## **7. Business Logic Requirements**
+
+### 7.1 Price Functions
+
+#### BL-01: Get Unit Price
+
+```
+get_inventory_unit_price(inventory_id) → Decimal
+```
+
+Returns current unit price from inventory.
+
+#### BL-02: Get Item Total
+
+```
+get_item_total() = unit_price × quantity
+```
+
+#### BL-03: Get Cart Total
+
+```
+get_cart_total() = Σ(item_total)
+```
+
+#### BL-04: Get Total Items
+
+```
+get_total_items() = Σ(quantity)
+```
+
+---
+
+### 7.2 Validation Rules
+
+- Quantity must be ≥ 1
+- Inventory must exist and be active
+- Out-of-stock items cannot be added
+- Archived carts/items cannot be modified
+
+---
+
+## **8. API Requirements (High-Level)**
+
+### Cart APIs
+
+| Endpoint     | Method | Description       |
+| ------------ | ------ | ----------------- |
+| /cart        | GET    | Fetch active cart |
+| /cart/add    | POST   | Add item          |
+| /cart/update | PUT    | Update quantity   |
+| /cart/remove | DELETE | Remove item       |
+| /cart/merge  | POST   | Merge guest cart  |
+
+---
+
+### Cart Item APIs
+
+| Endpoint         | Method | Description     |
+| ---------------- | ------ | --------------- |
+| /cart/items      | GET    | List cart items |
+| /cart/items/{id} | PUT    | Update item     |
+| /cart/items/{id} | DELETE | Remove item     |
+
+---
+
+## **9. Non-Functional Requirements**
+
+### Performance
+
+- Cart retrieval < 200ms
+- Price calculation < 100ms
+
+### Scalability
+
+- Support concurrent users
+- Handle large carts (100+ items)
+
+### Security
+
+- Prevent cart hijacking
+- Secure guest tokens
+- Validate ownership
+
+### Reliability
+
+- Cart data must not be lost
+- Automatic backup
+
+---
+
+## **10. Reporting & Monitoring**
+
+- Track:
+
+  - Abandoned carts
+  - Average cart size
+  - Conversion rate
+
+- Log:
+
+  - Cart creation
+  - Item changes
+  - Merges
+
+---
+
+## **11. Acceptance Criteria**
+
+### AC-01
+
+User (guest or logged-in) can add items to cart.
+
+### AC-02
+
+System correctly calculates totals.
+
+### AC-03
+
+Guest cart persists until login or expiry.
+
+### AC-04
+
+Cart merges correctly after login.
+
+### AC-05
+
+Archived carts cannot be modified.
+
+---
+
+## **12. Risks & Mitigations**
+
+| Risk            | Impact             | Mitigation                 |
+| --------------- | ------------------ | -------------------------- |
+| Price mismatch  | Revenue loss       | Real-time sync             |
+| Cart loss       | UX degradation     | Session backup             |
+| Duplicate carts | Data inconsistency | Enforce single active cart |
+
+---
+
+## **13. Future Enhancements (Optional)**
+
+- Coupons & discounts
+- Saved carts
+- Multi-currency support
+- Wishlist integration
+- Stock reservation
+- Cart reminders
+
+---
+
+If you'd like, I can next help you convert this into:
+
+✅ Django model design
+✅ DRF API specification
+✅ Database schema
+✅ System architecture diagram
+✅ Engineering implementation plan
+
+Tell me which you want first.
+
+
+==================================================
+FILE: categories-tags.md
+==================================================
+
+# Category & Tag - Sat 14 Feb 16:59 2026 - completed
+
+## General
+
+1. Use Graphql in both frontend and backend whenever required. [x]
+2. Create Mock data for tags, categories, books, products. soaps. [x]
+
+## Backend
+
+1. All results should be paginated, use django pagination. [x]
+2. GRAPHQL API to list all products. [x]
+3. GRAPHQL API to list all tags with count of products linked to it. [x]
+4. GRAPHQL API to list all category with count of products linked to it.[x]
+5. GRAPHQL API to list all tags with count of products linked to the tag.[x]
+6. GRAPHQL API to list all products in a category.[x]
+7. GRAPHQL API to list all prod in a tag. [x]
+8. GRAPHQL API to fetch product detail along with category, tags, author, publisher [x]
+
+## Frontend
+
+inside store/
+
+1. Add route and page to list all tags with count of products linked to it. [x]
+2. route and page API to list all category with count of products linked to it. [x]
+3. route and pageAPI to list all tags with count of products linked to the tag. [x]
+4. route and pageAPI to list all products in a category. [x]
+5. route and pageAPI to list all prod in a tag. [x]
+6. route and pageAPI to fetch product detail along with category, tags by uuid. [x]
+
+
+==================================================
+FILE: completed-to-verify.md
+==================================================
+
+## Add Author, Publisher clickable in product detail page
+
+- Added GraphQL support for author/publisher book filtering:
+  - productsByAuthor and productsByPublisher handlers wired in backend/apps/api/views.py:318
+  - Query methods added in backend/apps/api/views.py:416 and backend/apps/api/views.py:423
+- Added frontend API queries/helpers:
+  - PRODUCTS_BY_AUTHOR_QUERY and PRODUCTS_BY_PUBLISHER_QUERY in store/src/api.js:166 and store/src/api.js:184
+  - fetchProductsByAuthor and fetchProductsByPublisher in store/src/api.js:278 and store/src/api.js:287
+- Made author/publisher cards clickable to book-list pages:
+  - Authors list card link in store/src/App.jsx:430
+  - Publishers list card link in store/src/App.jsx:487
+- Added new pages and routes:
+  - AuthorBooksPage in store/src/App.jsx:694
+  - PublisherBooksPage in store/src/App.jsx:789
+  - Routes /author/:slug/books and /publisher/:slug/books in store/src/App.jsx:1566 and store/src/App.jsx:1567
+- Updated product detail page links:
+  - Publisher clickable link in store/src/App.jsx:949
+  - Author clickable links in store/src/App.jsx:962
+
+Sanity checks passed: backend file compiles and frontend build succeeds.
+
+Product detail now shows:
+
+- Associated category
+- Associated tags
+- Full book metadata (when product type is BOOK): ISBN-10, ISBN-13, language, edition, cover type, page count, published year,
+  publisher, authors.
+
+Updated files:
+
+- backend/apps/api/serializers.py
+  - Added ProductDetailSerializer with book_details
+  - Added nested serializers for book/publisher/author detail
+- backend/apps/api/views.py
+  - ProductViewSet now uses ProductDetailSerializer for retrieve
+  - GraphQL productDetail now returns ProductDetailSerializer
+- store/src/api.js
+  - Expanded PRODUCT_DETAIL_QUERY to fetch product_type + book_details
+- store/src/App.jsx
+  - ProductDetailPage now renders full “Book Details” section
+- store/src/styles.css
+  - Added styling for book details layout
+
+Also added a test for this behavior in:
+
+- backend/apps/api/tests.py (test_product_detail_includes_book_details)
+
+• Current /dash code work completed:
+
+1. App shell and routing
+
+- dash/src/App.jsx: React-Admin app setup with theme, resources, auth/data providers.
+- dash/src/App.jsx: Added basename="/dash" so dashboard routes work under /dash/\*.
+- dash/src/App.jsx: Custom routes added for /signup, /forgot-password, /reset-password, /me, /change-password.
+
+2. App entry
+
+- dash/src/main.jsx: React app bootstrap.
+
+3. Authentication integration
+
+- dash/src/auth/authProvider.js: login/logout/checkAuth/checkError/getIdentity/getPermissions.
+- dash/src/auth/authProvider.js: role gating to only allow SELLER and ADMIN.
+- dash/src/auth/authProvider.js: user normalization to pfs_role, uuid, and shared auth client usage.
+
+4. Auth and profile pages UI
+
+- dash/src/auth/pages.jsx: LoginPage
+- dash/src/auth/pages.jsx: SignupPage
+- dash/src/auth/pages.jsx: ForgotPasswordPage
+- dash/src/auth/pages.jsx: ResetPasswordPage
+- dash/src/auth/pages.jsx: ChangePasswordPage
+- dash/src/auth/pages.jsx: MyProfilePage with /auth/me/ GET/PATCH integration.
+- dash/src/auth/pages.jsx: profile fields include favourite_book, verified-mobile indicator (✔✔ Verified), read-only
+  inventories, net_earnings, is_active, created_on, updated_on, and “Change My Password” link.
+
+5. Dashboard and menu
+
+- dash/src/components/Dashboard.jsx: KPI cards for admin/seller.
+- dash/src/components/Menu.jsx: menu items for profile and change password.
+
+6. Data provider layer
+
+- dash/src/data/provider.js: fake data provider with scope filtering (scope=my) by resource owner field.
+- dash/src/data/seedData.js: seed dataset for local dashboard resources.
+
+7. Resource CRUD screens
+
+- dash/src/resources/users.jsx: users list.
+- dash/src/resources/orders.jsx: list/create/edit.
+- dash/src/resources/addresses.jsx: list/create/edit.
+- dash/src/resources/packages.jsx: list/create/edit.
+- dash/src/resources/pickupRequests.jsx: list/create/edit.
+- dash/src/resources/photos.jsx: list/create/edit.
+- dash/src/resources/\*: edit views now use actions={false} to bypass React-Admin CloneButton runtime issue.
+
+8. Build status
+
+- dash builds successfully with Vite (npm run build passed).
+
+Note:
+
+- Git currently shows dash/ as untracked (?? dash/), so these are present in workspace but not yet committed.
+
+
+==================================================
+FILE: logistics-v2.md
+==================================================
+
+# Logistics app v2
+
+# All model in logistics app is inherited from UUIDModel [x]
+
+# PINCODE Service Check [x]
+
+1.  List all pincodes [x]
+2.  CRUD operation [x]
+3.  search by ('pincode', 'office_name',
+    'division_name', 'region_name',
+    'circle_name', 'taluk',
+    'district_name', 'state_name') [x]
+4.  Pincode model [x] done
+
+```py
+    # For GeoCoding
+     # sudo apt-get install gdal-bin
+    from django.contrib.gis.db import models
+    from django.contrib.gis.geos import Point
+
+    class Pincodes(models.Model):
+
+         office_name = models.CharField(max_length=200, blank=True, default='')
+
+         pincode = models.CharField(max_length=16, blank=True, default='')
+         office_type = models.CharField(max_length=200, blank=True, default='')
+         delivery_status = models.CharField(max_length=200, blank=True, default='')
+         division_name = models.CharField(max_length=200, blank=True, default='')
+         region_name = models.CharField(max_length=200, blank=True, default='')
+         circle_name = models.CharField(max_length=200, blank=True, default='')
+         taluk = models.CharField(max_length=200, blank=True, default='')
+         district_name = models.CharField(max_length=200, blank=True, default='')
+         state_name = models.CharField(max_length=200, blank=True, default='')
+         state_short_name = models.CharField(max_length=200, blank=True, default='')
+         telephone = models.CharField(max_length=20, blank=True, default='')
+         alternate_telephone = models.CharField(
+             max_length=20, blank=True, default='')
+         mobile_number = models.CharField(max_length=20, blank=True, default='')
+         head_post_master = models.CharField(max_length=255, blank=True, default='')
+         head_post_master_mobile_number = models.CharField(
+             max_length=255, blank=True, default='')
+         related_suboffice = models.CharField(
+             max_length=200, blank=True, default='')
+         related_headoffice = models.CharField(
+             max_length=200, blank=True, default='')
+         post_office_address = models.TextField(blank=True, default='')
+         # For Plus code https://maps.google.com/pluscodes/
+         plus_code = models.CharField(max_length=255, blank=True, default='')
+         po_latitude = models.PointField(geography=True, default=Point(0.0, 0.0))
+         po_longitude = models.PointField(geography=True, default=Point(0.0, 0.0))
+
+         # These lat, long can be discarded,
+         longitude = models.CharField(max_length=50, blank=True, default='')
+         latitude = models.CharField(max_length=50, blank=True, default='')
+
+         # Service Unavailable temporarily due to emergency
+         # protocol from the GOVT.
+         embargo = models.BooleanField(default=False)
+
+         # Some remarks when updating the pincode details
+         remark = models.CharField(
+             max_length=255, blank=True, default='', null=True)
+         archived = models.BooleanField(default=False)
+
+         class Meta:
+             ordering = ('-updated_on', 'office_name', 'pincode')
+             verbose_name_plural = "pincodes"
+
+```
+
+4. Shipper Model inherited from uuidmodel [x]
+
+```py
+class Shipper():
+
+    id = models.BigAutoField(primary_key=True)
+
+    # FK To User table from Shipment Tbl
+    owner = models.ForeignKey(User, related_name='shipperowner',
+                              on_delete=models.DO_NOTHING, null=True, default='')
+    shipper_shortname = models.CharField(
+        max_length=255, blank=False, default='')
+    shipper_name = models.CharField(max_length=255, blank=False, default='')
+    shipper_account_number = models.CharField(
+        max_length=255, blank=False, default='')
+    shipper_account_name = models.CharField(
+        max_length=255, blank=False, default='')
+
+    def __str__(self):
+        # Prefer description if available, otherwise show an ID fallback
+        return f"Shipper #{self.id} - {self.shipper_shortname}"
+
+    class Meta:
+        ordering = ('-updated_on',)
+```
+
+# 5. Package Model [x]
+
+```py
+class Package(models.Model):
+
+    id = models.BigAutoField(primary_key=True)
+
+    # FK To User table from Package Tbl.
+    # One user - many packages
+    owner = models.ForeignKey(User), related_name='packs',
+
+    # FK to Pickup Request
+    # One pickup req - many packages
+    pickup = models.ForeignKey(PickupRequest)
+
+    # later this will be used
+    awb_number = models.CharField(max_length=255, blank=False, default='')
+
+    # Weight in Kg
+    weight_per_package = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+    # Dimension in CM
+    package_dimension_length = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+    package_dimension_breadth = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+    package_dimension_height = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+    # Predefined content
+    package_category = models.CharField(
+        max_length=255, blank=False, default='')
+
+    hsn_code = models.CharField(max_length=255, blank=False, default='')
+    # Removed
+    # package_content = models.CharField(max_length=255, blank=False, default='')
+
+    # Something narrative
+    package_name = models.CharField(
+        max_length=255, blank=False, default='')
+
+    package_description = models.CharField(
+        max_length=255, blank=False, default='')
+
+    # No of books/items in the package
+    quantity = models.IntegerField(default='0')
+
+    def __str__(self):
+        # Prefer description if available, otherwise show an ID fallback
+        return f"Package #{self.id} - {self.package_description}"
+
+    class Meta:
+        ordering = ('-updated_at',)
+```
+
+# 6. Pickup Request Model [x]
+
+```py
+class PickupRequest(models.Model):
+    id = models.BigAutoField(primary_key=True)
+
+    # FK To User table from Pickuo Request Tbl
+    owner = models.ForeignKey(User)
+
+    # Pickup Request ID generated by Shipper's System
+    shipper_pkreqid = models.CharField(max_length=255, blank=True, default='')
+
+    # FK to Shipper model - One shipper - many pickup req
+    shipper = models.ForeignKey(Shipper), related_name='shipperpickups',
+                                on_delete=models.DO_NOTHING, blank=True, null=True, default='')
+
+    # awb_number: ( FK to shipment table)
+    # awb_number = models.CharField(
+    #     max_length=255, blank=True, null=True, default='')
+
+    from_user = models.ForeignKey(User)
+    from_address = models.ForeignKey(Address)
+
+    # FK to user
+    to_user = models.ForeignKey(User)
+    to_address = models.ForeignKey(Address)
+
+    pickup_scheduled_date = models.DateField(auto_now_add=False)
+    pickup_ready_start_time = models.DateTimeField(blank=True, null=True)
+    pickup_ready_end_time = models.DateTimeField(blank=True, null=True)
+
+    # packages - One pickup req has many packages
+
+    no_of_packages = models.IntegerField(default=0)
+
+    total_weight = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+    total_invoice_value = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+    fright_charges = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+    pickup_status = models.CharField(max_length=255, choices=settings.INBOUND_PICKUP_STATUS_CHOICES,
+                              blank=True, null=True, default='')
+
+    pickup_mode = models.CharField(
+        max_length=50,
+        choices=settings.SHIPMENT_MODE_CHOICES,
+        default='ROADWAYS_ECONOMY'
+    )
+
+    # Any pickup instructions for the audience
+    pickup_instruction = models.CharField(
+        max_length=255, blank=True, null=True, default='')
+
+    # In the frontend ask only if the choice selected by
+    # the user is request for calcellation
+    reason_for_cancellation = models.CharField(
+        max_length=255, blank=True, null=True, default='')
+    # def clean(self):
+    # Ensure pickup_scheduled_for is greater than pickup_created_at
+    # Generally.
+
+    #     if self.pickup_scheduled_date <= created_on_date or \
+    #             self.pickup_scheduled_date <= last_modified_on_date:
+    #         raise ValidationError({
+    #             'pickup_scheduled_date': 'Pickup scheduled date must be atleast one day after the date of creation(today). Please contact support phone number in that case immediately to prioritize your pickup.'
+    #         })
+
+    #     if self.from_user == self.to_user:
+    #         raise ValidationError({
+    #             'to_user': 'Make sure from user and to user are different.'
+    #         })
+
+    #     if self.from_address == self.to_address:
+    #         raise ValidationError({
+    #             'from_address': 'Make sure From address and to address are different.'
+    #         })
+
+    # if self.no_of_packages <= 0:
+    #     raise ValidationError({
+    #         'no_of_packages': 'Make sure you have added at least one package.'
+    #     })
+
+    def save(self, *args, **kwargs):
+        # Run full_clean before saving to ensure validations are applied
+        # And report the error in the frontend
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+```
+
+# PackageProfile model [x]
+
+```py
+class PackageProfile(models.Model):
+
+    id = models.BigAutoField(primary_key=True)
+
+    # For now
+    # FK to inventory model
+    # later once catalog model is built
+    # it can be related to catalog
+    inventory - FK to inventory model
+
+    # Can be applied to ine category
+    package_profile_category = models.CharField(
+        max_length=255, blank=False, default='')
+
+    hsn_code = models.CharField(max_length=255, blank=False, default='')
+
+    # Something narrative
+    package_profile_description = models.CharField(
+        max_length=255, blank=False, default='')
+
+    # Weight in grams of single unit item
+    weight_per_package = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+    # Dimension in cm and grams
+    package_dimension_length = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+    package_dimension_breadth = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+    package_dimension_height = models.DecimalField(
+        max_digits=10, decimal_places=2, default='1.00')
+
+
+```
+
+
+==================================================
+FILE: product-listing.md
+==================================================
+
+- tags - crud , listing [x],
+- list products by tags [x]
+- Cart model to be implemented [x]
+- Checkout & payment gateway integration . [x]
+- Create Author, Publisher models and CRUD, listing from PRD. [x]
+
+
+==================================================
+FILE: send_emails.md
+==================================================
+
+# Notifications + Email Delivery (PutForShare)
+
+Status as of 2026-05-24.
+
+## SES verification
+
+| Check | Result |
+|---|---|
+| Domain `putforshare.com` in `ap-south-1` | ✅ Verified |
+| IAM `ses:SendRawEmail` for `arn:aws:iam::080338028715:user/nepscl` | ✅ Works |
+| Account sending enabled, EnforcementStatus | ✅ HEALTHY |
+| Sandbox status | ⚠️ Still in sandbox (`ProductionAccessEnabled: False`, 200/day, 1/sec) |
+
+Sending to non-verified recipients (real users at gmail/yahoo/etc.) will be rejected with `MessageRejected: Email address is not verified` until production access is requested via the AWS console.
+
+## From / Reply-To wiring
+
+| Setting | Value |
+|---|---|
+| `DEFAULT_FROM_EMAIL` | `notifications@putforshare.com` |
+| `EMAIL_REPLY_TO` | `hi@putforshare.com` |
+| `EMAIL_BACKEND` | `anymail.backends.amazon_ses.EmailBackend` |
+| Region | `ap-south-1` |
+
+Both are set in `backend/.env.production` and have defaults in `backend/config/settings.py`. The provider attaches Reply-To via `EmailMultiAlternatives(from_email=..., reply_to=[...])` in `apps/notifications/providers/email.py`.
+
+## Audit fixes shipped (16 items)
+
+The notifications app was audited; 15 broken items + 1 perf item were fixed.
+
+| # | Item | Fix |
+|---|---|---|
+| 1 | `models.py` duplicate `created_at` | Removed earlier declaration |
+| 2 | `Notification.send_email_now()` missing imports | Added `send_mail`, `settings`, `timezone`; tightened nil-recipient guard |
+| 3 | Dead `tasks.py` shadowed by `tasks/` package | Deleted file + stale `.pyc` |
+| 4 | Tests using `user=` kwarg | Rewritten to use `recipient=` |
+| 5 | Tests importing the dead module | Rewritten against `apps.notifications.tasks.email_delivery` with `EmailProvider`-level mocks |
+| 6 | `admin.py` missing `apps.` prefix | Fixed import path on retry action |
+| 7 | `NotificationViewSet` open for write | Now `ReadOnlyModelViewSet` + paginated `unread`, `mark_all_read`, `mark_read` actions |
+| 8 | `services.send()` missing fields | Accepts `title`, `message`, `target_url`, `email_subject`, `email_body`, `actor`; sets `send_email=True` when email is in channels |
+| 9 | Two parallel create APIs | `utils/create.py` is now a thin wrapper over `notification_service.send` |
+| 10 | Empty `whatsapp.py`, missing `sms.py` | Deleted empty file; `_enqueue_delivery` now marks unsupported channels `GAVE_UP` with a clear reason instead of silently no-oping |
+| 11 | `UserNotificationPreference` ignored | `_channel_allowed_by_preference` consulted in `services.send`, honoring both global toggles and `per_type` overrides |
+| 12 | DB-backed `NotificationTemplate` empty | New `seed_notification_templates` management command + render pipeline now uses an `Engine` with `settings.EMAIL_TEMPLATE_DIRS` so `{% extends "email_base.html" %}` resolves |
+| 13 | `prd/email-templates/*` not wired | Added `settings.EMAIL_TEMPLATE_DIRS = [BASE_DIR.parent / "prd" / "email-templates"]`; seeded 3 rows (`welcome`, `password_reset`, `email_verification`). Welcome `action_url` default updated to `https://dash.putforshare.com/onboarding` |
+| 14 | Empty test files | `test_services.py` (4 tests), `test_providers.py` (3 tests), `test_tasks.py` (3 tests) — all real assertions |
+| 15 | Orphan `template-preview.html` + duplicate name | Moved to `templates/admin/notifications/template_preview.html` (path the admin actually loads); removed stray `templates/notification_template.py` snippet and `tests.py` |
+| 16 | Task fetched delivery/notification/user in 3 queries | Added `select_related("notification", "notification__recipient")` — confirmed collapsed to 1 JOINed SELECT |
+
+## Test status
+
+`pytest apps/notifications/tests/` → **14 passed**, `python manage.py check` clean.
+
+## Templates seeded
+
+| Type | Source file | Subject |
+|---|---|---|
+| `welcome` | `prd/email-templates/welcome.html` | Welcome to PutForShare |
+| `password_reset` | `prd/email-templates/forgot_password.html` | Reset your PutForShare password |
+| `email_verification` | `prd/email-templates/email_verification.html` | Verify your PutForShare email |
+
+Re-run `python manage.py seed_notification_templates` after editing any HTML in `prd/email-templates/` to push the new content into `NotificationTemplate`.
+
+## Address rename
+
+`support@putforshare.com` → `hi@putforshare.com` everywhere it appeared:
+- `backend/.env.production`, `backend/config/settings.py`
+- All `prd/email-templates/*.html` and `*.txt`
+- `nstore/src/components/Footer.jsx`
+- PRD docs in `prd/dash/` and `prd/backend/`
+
+> Heads-up: the sed sweep also touched compiled `nstore/.next/` bundles. Those are git-ignored build artifacts — run `npm run build` once before the next deploy to regenerate them so source maps line up.
+
+## SendGrid retired
+
+`pfslib.helper.send_sgemail()` had zero callers and has been deleted along with:
+- `sendgrid` imports in `backend/pfslib/helper.py`
+- `SENDGRID_API_KEY` / `SENDGRID_FROM_EMAIL` settings in `backend/config/settings.py`
+- All `SENDGRID_*` env vars in `backend/.env.production` (active + commented variants)
+- `sendgrid==6.11.0` from `backend/requirements.txt`
+
+Run `pip uninstall sendgrid python-http-client` in the deployed venv to actually remove the package; nothing in the codebase imports it anymore.
+
+## Remaining (out of scope for code)
+
+- **SES sandbox lift** — `PutAccountDetails` request submitted 2026-05-24 (RequestId `b1d4f5e2-c00f-45fe-88b0-9bf4603c2f4c`), review status PENDING. AWS will email both contact addresses with the decision.
+
+
+==================================================
+FILE: store.md
+==================================================
+
+# store
+
+# PRD v2
+
+## Tech stack
+
+Backend: DRF + Graphql + postgres + celery + redis
+Frontend: Reactjs + tailwindcss
+
+## Django models
+
+1. Create common model called UUIDModel should have uuid and all other models should subclass. [x]
+2. All routing should be through uuid eg: inventory/:uuid [x]
+3. Standardize identifiers as: [x]
+   - `id` for internal DB relations (primary key)
+   - `uuid` for public APIs/routes (`UUIDField(default=uuid.uuid4, unique=True, db_index=True, editable=False)`)
+
+# User management
+
+User model - use the following user model, any suggestions welcome [x]
+
+## User actions
+
+1. Signup [x]
+2. login [x]
+   1. ui validation - check if its a valid email [x]
+   2. backend validation - check if the email exist [x]
+3. forgotpass [x]
+   1. ui validation - check if its a valid email [x]
+
+## My Profile
+
+edit profile [x]
+after login change password [x]
+
+
