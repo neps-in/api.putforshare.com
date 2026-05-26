@@ -29,4 +29,28 @@ app.conf.beat_schedule = {
             "run_mode": "FULL",
         },
     },
+    # ISBN resolver — PRD §7.2:
+    # Daily 02:00 UTC sweep of Books past their 1-year stale window.
+    "isbn-refresh-stale-books-daily": {
+        "task": "apps.inventory.services.isbnapi.tasks.refresh_stale_books_task",
+        "schedule": crontab(hour=2, minute=0),
+    },
+    # Weekly Sunday 03:00 UTC purge of >6-month-old suppression rows.
+    "isbn-cleanup-not-found-cache-weekly": {
+        "task": "apps.inventory.services.isbnapi.tasks.cleanup_not_found_cache_task",
+        "schedule": crontab(hour=3, minute=0, day_of_week=0),
+    },
+    # Weekly Sunday 03:30 UTC purge of >90-day-old ISBNLookupLog audit rows.
+    # Offset 30 min from the not-found cleanup so the two deletes don't pile
+    # up against each other.
+    "isbn-cleanup-lookup-log-weekly": {
+        "task": "apps.inventory.services.isbnapi.tasks.cleanup_isbn_lookup_log_task",
+        "schedule": crontab(hour=3, minute=30, day_of_week=0),
+    },
+    # Daily 04:00 UTC metrics rollup — emits a single isbn.daily_metrics
+    # structlog event aggregating the prior 24h of cascade activity.
+    "isbn-daily-metrics-rollup": {
+        "task": "apps.inventory.services.isbnapi.tasks.daily_isbn_metrics_task",
+        "schedule": crontab(hour=4, minute=0),
+    },
 }

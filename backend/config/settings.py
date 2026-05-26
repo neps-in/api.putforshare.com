@@ -1,28 +1,29 @@
 import os
 from pathlib import Path
 
-try:
-    from dotenv import load_dotenv
-except Exception:
-    load_dotenv = None
+from decouple import Config, Csv, RepositoryEmpty
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_name = os.environ.get("DJANGO_ENV", "").lower()
+# DJANGO_ENV is a bootstrap variable read via os.getenv (decouple isn't initialized yet).
+env_name = os.getenv("DJANGO_ENV", "").lower()
 env_file = BASE_DIR / (".env.production" if env_name == "production" else ".env")
 
-if load_dotenv:
-    load_dotenv(env_file)
-else:
-    if env_file.exists():
-        for line in env_file.read_text().splitlines():
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            key = key.strip()
-            value = value.strip().strip('"').strip("'")
-            os.environ.setdefault(key, value)
+# Load env file into os.environ so subprocesses (Celery workers, etc.) inherit it.
+# Avoids python-dotenv per project convention — decouple is the canonical config lib.
+if env_file.exists():
+    for line in env_file.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+# All config reads go through decouple. RepositoryEmpty → decouple reads from os.environ + defaults only.
+config = Config(RepositoryEmpty())
+
+# Csv cast that filters empty strings (matches the legacy _env_list helper).
+_csv = Csv(post_process=lambda items: [i for i in items if i])
 
 
 # Sentry Error logging integration only for production
@@ -32,7 +33,7 @@ if env_name == "production":
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
-        dsn=os.environ.get("SENTRY_DSN", ""),
+        dsn=config("SENTRY_DSN", default=""),
         integrations=[
             DjangoIntegration(),
         ],
@@ -50,22 +51,46 @@ if env_name == "production":
 # Sentry Error logging integration ends
 
 
-def _env_bool(name: str, default: bool = False) -> bool:
-    return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
+# Structlog — JSON in production, pretty console output in dev.
+# Used by the ISBN resolver (and any future module that imports
+# `structlog.get_logger`). Standalone configuration; doesn't compete with
+# Django's default logging — calls to `logger.info("event", k=v, ...)` go
+# straight through structlog's processor chain.
+import structlog as _structlog
 
-
-def _env_list(name: str, default: str = "") -> list[str]:
-    return [item.strip() for item in os.environ.get(name, default).split(",") if item.strip()]
+_structlog.configure(
+    processors=[
+        _structlog.contextvars.merge_contextvars,
+        _structlog.processors.add_log_level,
+        _structlog.processors.TimeStamper(fmt="iso", utc=True),
+        _structlog.processors.StackInfoRenderer(),
+        _structlog.processors.format_exc_info,
+        (
+            _structlog.processors.JSONRenderer()
+            if env_name == "production"
+            else _structlog.dev.ConsoleRenderer()
+        ),
+    ],
+    cache_logger_on_first_use=True,
+)
 
 
 # For ISBNAPI Service
-BOOK_CACHE_DIR = os.environ.get("BOOK_CACHE_DIR", str(BASE_DIR / "book_cache")).strip()
-BOOK_CACHE_TTL = int(os.environ.get("BOOK_CACHE_TTL", str(48 * 60 * 60)))
+BOOK_CACHE_DIR = config("BOOK_CACHE_DIR", default=str(BASE_DIR / "book_cache")).strip()
+# BOOK_CACHE_TTL is retained as a legacy setting but is no longer enforced by
+# the resolver — the filesystem cache is permanent (see PRD §12). Kept here
+# only so any external tooling that reads it doesn't break.
+BOOK_CACHE_TTL = config("BOOK_CACHE_TTL", default=48 * 60 * 60, cast=int)
+
+# ISBN metadata source API keys (all optional)
+GOOGLE_BOOKS_API_KEY = config("GOOGLE_BOOKS_API_KEY", default="")  # raises quota from 1K → 100K/day
+ISBNDB_API_KEY = config("ISBNDB_API_KEY", default="")               # Tier 3, paid (~$15/mo)
+UPCITEMDB_API_KEY = config("UPCITEMDB_API_KEY", default="")         # raises trial 100/day cap
 
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key-change-me")
-DEBUG = _env_bool("DJANGO_DEBUG", True)
-ALLOWED_HOSTS = _env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+SECRET_KEY = config("DJANGO_SECRET_KEY", default="dev-secret-key-change-me")
+DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=_csv)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -84,12 +109,12 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
-    
+
     # 3rd party packages
     "taggit",
     "django_celery_beat",
     "anymail",
-    
+
     # App Specific
     "apps.common",
     "apps.users",
@@ -103,9 +128,9 @@ INSTALLED_APPS = [
     "apps.s3browser",
     "apps.logistics",
     # "apps.notifications",
-    
+
     # Notifications
-    "apps.notifications.apps.NotificationsConfig", 
+    "apps.notifications.apps.NotificationsConfig",
 
 ]
 
@@ -169,7 +194,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-FRONTEND_BASE_URL = os.environ.get("FRONTEND_BASE_URL", "http://localhost:3000").rstrip("/")
+FRONTEND_BASE_URL = config("FRONTEND_BASE_URL", default="http://localhost:3000").rstrip("/")
 
 _default_frontend_origins = ",".join(
     [
@@ -181,9 +206,9 @@ _default_frontend_origins = ",".join(
     ]
 )
 
-CORS_ALLOWED_ORIGINS = _env_list("CORS_ALLOWED_ORIGINS", _default_frontend_origins)
-CSRF_TRUSTED_ORIGINS = _env_list("CSRF_TRUSTED_ORIGINS", _default_frontend_origins)
-CORS_ALLOW_CREDENTIALS = _env_bool("CORS_ALLOW_CREDENTIALS", True)
+CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default=_default_frontend_origins, cast=_csv)
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default=_default_frontend_origins, cast=_csv)
+CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=True, cast=bool)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -199,9 +224,15 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "verify_email_resend": "3/hour",
         "password_reset_request": "5/hour",
+        # ISBN metadata resolver — PRD §8.3. Same scope covers both GET and the
+        # cache-invalidate DELETE so a single attacker can't burn quota on either path.
+        "book_metadata": "100/hour",   # default (anonymous reads + authenticated alike)
+        # NOTE: PRD §8.3 also calls for a higher 10,000/hour rate for authenticated
+        # users — wire that with a per-class throttle override in views.py if/when
+        # the throttling pressure justifies it.
     },
-    
-    # API Docs generation 
+
+    # API Docs generation
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
@@ -215,44 +246,42 @@ SPECTACULAR_SETTINGS = {
 }
 
 
-AWS_S3_BUCKET_NAME = os.environ.get("AWS_S3_BUCKET_NAME", "") or os.environ.get(
-    "AWS_STORAGE_BUCKET_NAME", ""
-)
+AWS_S3_BUCKET_NAME = config("AWS_S3_BUCKET_NAME", default="") or config("AWS_STORAGE_BUCKET_NAME", default="")
 AWS_STORAGE_BUCKET_NAME = AWS_S3_BUCKET_NAME
-AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "")
-AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", "")
-AWS_S3_PUBLIC_BASE_URL = os.environ.get("AWS_S3_PUBLIC_BASE_URL", "")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="")
+AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL", default="")
+AWS_S3_PUBLIC_BASE_URL = config("AWS_S3_PUBLIC_BASE_URL", default="")
 
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
-AWS_SESSION_TOKEN = os.environ.get("AWS_SESSION_TOKEN", "")
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default="")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default="")
+AWS_SESSION_TOKEN = config("AWS_SESSION_TOKEN", default="")
 
-PHOTO_STORAGE_BACKEND = os.environ.get("PHOTO_STORAGE_BACKEND", "").strip().lower()
-PHOTO_S3_UPLOAD_PREFIX = os.environ.get("PHOTO_S3_UPLOAD_PREFIX", "uploads/photos")
-PHOTO_S3_PRESIGNED_EXPIRES = int(os.environ.get("PHOTO_S3_PRESIGNED_EXPIRES", "900"))
-PHOTO_MAX_UPLOAD_BYTES = int(os.environ.get("PHOTO_MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))
+PHOTO_STORAGE_BACKEND = config("PHOTO_STORAGE_BACKEND", default="").strip().lower()
+PHOTO_S3_UPLOAD_PREFIX = config("PHOTO_S3_UPLOAD_PREFIX", default="uploads/photos")
+PHOTO_S3_PRESIGNED_EXPIRES = config("PHOTO_S3_PRESIGNED_EXPIRES", default=900, cast=int)
+PHOTO_MAX_UPLOAD_BYTES = config("PHOTO_MAX_UPLOAD_BYTES", default=10 * 1024 * 1024, cast=int)
 PHOTO_ALLOWED_CONTENT_TYPES = [
     item.strip().lower()
-    for item in os.environ.get(
+    for item in config(
         "PHOTO_ALLOWED_CONTENT_TYPES",
-        "image/jpeg,image/png,image/webp,image/heic,image/heif",
+        default="image/jpeg,image/png,image/webp,image/heic,image/heif",
     ).split(",")
     if item.strip()
 ]
 
-BUNNY_STORAGE_ZONE = os.environ.get("BUNNY_STORAGE_ZONE", "").strip()
-BUNNY_STORAGE_ENDPOINT = os.environ.get("BUNNY_STORAGE_ENDPOINT", "storage.bunnycdn.com").strip()
+BUNNY_STORAGE_ZONE = config("BUNNY_STORAGE_ZONE", default="").strip()
+BUNNY_STORAGE_ENDPOINT = config("BUNNY_STORAGE_ENDPOINT", default="storage.bunnycdn.com").strip()
 # Canonical access key (matches .env.production); legacy aliases kept below.
-BUNNY_STORAGE_ACCESS_KEY = os.environ.get("BUNNY_STORAGE_ACCESS_KEY", "").strip()
-BUNNY_STORAGE_PASSWORD = os.environ.get("BUNNY_STORAGE_PASSWORD", "").strip()
-BUNNY_ACCESS_KEY = os.environ.get("BUNNY_ACCESS_KEY", "").strip()
+BUNNY_STORAGE_ACCESS_KEY = config("BUNNY_STORAGE_ACCESS_KEY", default="").strip()
+BUNNY_STORAGE_PASSWORD = config("BUNNY_STORAGE_PASSWORD", default="").strip()
+BUNNY_ACCESS_KEY = config("BUNNY_ACCESS_KEY", default="").strip()
 # Canonical CDN hostname (e.g. "pfs-store.b-cdn.net"); legacy aliases kept below.
-BUNNY_CDN_HOSTNAME = os.environ.get("BUNNY_CDN_HOSTNAME", "").strip()
-BUNNY_CDN_BASE_URL = os.environ.get("BUNNY_CDN_BASE_URL", "").strip()
-BUNNY_CDN_URL = os.environ.get("BUNNY_CDN_URL", "").strip()
+BUNNY_CDN_HOSTNAME = config("BUNNY_CDN_HOSTNAME", default="").strip()
+BUNNY_CDN_BASE_URL = config("BUNNY_CDN_BASE_URL", default="").strip()
+BUNNY_CDN_URL = config("BUNNY_CDN_URL", default="").strip()
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", CELERY_BROKER_URL)
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default=CELERY_BROKER_URL)
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
@@ -262,43 +291,49 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": os.environ.get("DJANGO_CACHE_REDIS_URL", "redis://localhost:6379/1"),
+        "LOCATION": config("DJANGO_CACHE_REDIS_URL", default="redis://localhost:6379/1"),
         "KEY_PREFIX": "pfs",
     }
 }
 
-MERCHANT_FEED_INTERVAL_HOURS = int(os.environ.get("MERCHANT_FEED_INTERVAL_HOURS", "12"))
-MERCHANT_FEED_CURRENCY = os.environ.get("MERCHANT_FEED_CURRENCY", "INR")
-MERCHANT_FEED_DEFAULT_IMAGE_URL = os.environ.get("MERCHANT_FEED_DEFAULT_IMAGE_URL", "").strip()
-ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "").strip()
-MERCHANT_PUSH_DEBOUNCE_MINUTES = int(os.environ.get("MERCHANT_PUSH_DEBOUNCE_MINUTES", "15"))
-MERCHANT_PUSH_MAX_RUNS_PER_MINUTE = int(os.environ.get("MERCHANT_PUSH_MAX_RUNS_PER_MINUTE", "4"))
-MERCHANT_PUSH_BATCH_SIZE = int(os.environ.get("MERCHANT_PUSH_BATCH_SIZE", "50"))
-MERCHANT_PUSH_REDIS_URL = os.environ.get("MERCHANT_PUSH_REDIS_URL", "").strip()
+MERCHANT_FEED_INTERVAL_HOURS = config("MERCHANT_FEED_INTERVAL_HOURS", default=12, cast=int)
+MERCHANT_FEED_CURRENCY = config("MERCHANT_FEED_CURRENCY", default="INR")
+MERCHANT_FEED_DEFAULT_IMAGE_URL = config("MERCHANT_FEED_DEFAULT_IMAGE_URL", default="").strip()
+ADMIN_EMAIL = config("ADMIN_EMAIL", default="").strip()
+MERCHANT_PUSH_DEBOUNCE_MINUTES = config("MERCHANT_PUSH_DEBOUNCE_MINUTES", default=15, cast=int)
+MERCHANT_PUSH_MAX_RUNS_PER_MINUTE = config("MERCHANT_PUSH_MAX_RUNS_PER_MINUTE", default=4, cast=int)
+MERCHANT_PUSH_BATCH_SIZE = config("MERCHANT_PUSH_BATCH_SIZE", default=50, cast=int)
+MERCHANT_PUSH_REDIS_URL = config("MERCHANT_PUSH_REDIS_URL", default="").strip()
 
 # =============================================================================
 # Email (AWS SES via django-anymail)
 # =============================================================================
 
-EMAIL_BACKEND = os.environ.get(
-    "EMAIL_BACKEND", "anymail.backends.amazon_ses.EmailBackend"
-)
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="anymail.backends.amazon_ses.EmailBackend")
 
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "notifications@putforshare.com")
-SERVER_EMAIL = os.environ.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
-EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO", "hi@putforshare.com")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="notifications@putforshare.com")
+SERVER_EMAIL = config("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+EMAIL_REPLY_TO = config("EMAIL_REPLY_TO", default="hi@putforshare.com")
 
 # anymail picks up AWS creds from boto3's standard chain (env vars / IAM role),
 # so we only need to pin the region here.
+AWS_SES_CONFIGURATION_SET = config("AWS_SES_CONFIGURATION_SET", default="pfs-configuration-set").strip()
+
 ANYMAIL = {
     "AMAZON_SES_CLIENT_PARAMS": {
-        "region_name": os.environ.get(
+        "region_name": config(
             "AWS_SES_REGION",
-            os.environ.get("AWS_DEFAULT_REGION", "ap-south-1"),
+            default=config("AWS_DEFAULT_REGION", default="ap-south-1"),
         ),
-        "aws_access_key_id": os.environ.get("AWS_ACCESS_KEY_ID", "") or None,
-        "aws_secret_access_key": os.environ.get("AWS_SECRET_ACCESS_KEY", "") or None,
+        "aws_access_key_id": config("AWS_ACCESS_KEY_ID", default="") or None,
+        "aws_secret_access_key": config("AWS_SECRET_ACCESS_KEY", default="") or None,
     },
+    # Tag every outbound message with this SES configuration set so its
+    # event destinations (SNS) receive bounce/complaint notifications.
+    "AMAZON_SES_CONFIGURATION_SET_NAME": AWS_SES_CONFIGURATION_SET,
+    # Shared secret for the SNS HTTPS webhook (anymail.urls). Required in
+    # production (anymail emits a system check if missing).
+    "WEBHOOK_SECRET": config("ANYMAIL_WEBHOOK_SECRET", default="").strip() or None,
 }
 
 # =============================================================================
