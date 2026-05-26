@@ -97,6 +97,17 @@ def send_notification_delivery_email_task(self, delivery_id: int) -> None:
         delivery.save(update_fields=["status", "last_error"])
         return
 
+    # Skip addresses we've already suppressed (hard bounce / complaint).
+    # Permanent → mark gave_up, do not retry, do not call SES.
+    from apps.notifications.models import SuppressedEmail
+    normalized_target = delivery.target.lower().strip()
+    suppression = SuppressedEmail.objects.filter(email=normalized_target).first()
+    if suppression:
+        delivery.status = DeliveryStatus.GAVE_UP
+        delivery.last_error = f"Suppressed ({suppression.reason}): not sent"
+        delivery.save(update_fields=["status", "last_error"])
+        return
+
     subject, body = render_email_from_notification(notification)
 
     try:

@@ -13,6 +13,8 @@ from .models import (
     Notification,
     NotificationDelivery,
     NotificationTemplate,
+    SesEvent,
+    SuppressedEmail,
     UserNotificationPreference,
     Channel,
     DeliveryStatus,
@@ -262,6 +264,41 @@ class UserNotificationPreferenceAdmin(admin.ModelAdmin):
     search_fields = ("user__email", "user__username")
     raw_id_fields = ("user",)
     readonly_fields = ("updated_at",)
+
+
+@admin.register(SuppressedEmail)
+class SuppressedEmailAdmin(admin.ModelAdmin):
+    list_display = ("email", "reason", "created_at", "updated_at")
+    list_filter = ("reason", "created_at")
+    search_fields = ("email", "notes")
+    readonly_fields = ("created_at", "updated_at")
+    ordering = ("-created_at",)
+
+
+@admin.register(SesEvent)
+class SesEventAdmin(admin.ModelAdmin):
+    list_display = (
+        "received_at",
+        "event_type",
+        "subtype",
+        "recipient",
+        "message_id",
+        "delivery",
+    )
+    list_filter = ("event_type", "subtype", "received_at")
+    search_fields = ("recipient", "message_id", "diagnostic")
+    readonly_fields = (
+        "event_type",
+        "subtype",
+        "message_id",
+        "recipient",
+        "diagnostic",
+        "raw",
+        "delivery",
+        "received_at",
+    )
+    date_hierarchy = "received_at"
+    ordering = ("-received_at",)
 
 
 

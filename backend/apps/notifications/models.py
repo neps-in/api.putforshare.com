@@ -267,6 +267,81 @@ class NotificationTemplate(models.Model):
         return f"{self.type} ({self.channel})"
 
 
+class SuppressionReason(models.TextChoices):
+    """Why an address is on the suppression list."""
+    HARD_BOUNCE = "hard_bounce", "Hard bounce"
+    COMPLAINT = "complaint", "Spam complaint"
+    MANUAL = "manual", "Manual"
+
+
+class SuppressedEmail(models.Model):
+    """
+    Addresses that must not receive further email.
+    Populated by SES bounce/complaint events; checked before every send.
+    """
+    email = models.EmailField(unique=True, db_index=True)
+    reason = models.CharField(max_length=32, choices=SuppressionReason.choices)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["reason"])]
+
+    def __str__(self) -> str:
+        return f"{self.email} ({self.reason})"
+
+
+class SesEventType(models.TextChoices):
+    BOUNCE = "bounce", "Bounce"
+    COMPLAINT = "complaint", "Complaint"
+    DELIVERY = "delivery", "Delivery"
+    REJECT = "reject", "Reject"
+    SEND = "send", "Send"
+    OTHER = "other", "Other"
+
+
+class SesEvent(models.Model):
+    """
+    Raw audit log of SES notifications received via SNS.
+    Kept separately from NotificationDelivery because:
+      - One delivery may produce multiple events (send → bounce → complaint).
+      - Some events arrive before our DB row exists (replies / forwarded mail).
+    """
+    event_type = models.CharField(
+        max_length=32, choices=SesEventType.choices, db_index=True
+    )
+    # SES Message-ID — links back to NotificationDelivery.provider_message_id.
+    message_id = models.CharField(max_length=255, blank=True, db_index=True)
+    recipient = models.EmailField(blank=True, db_index=True)
+    # bounce: "Permanent" / "Transient" / "Undetermined"; complaint: "abuse" / "fraud" / ...
+    subtype = models.CharField(max_length=64, blank=True)
+    diagnostic = models.TextField(blank=True)
+    # Full SES payload — keep verbatim for forensic queries.
+    raw = models.JSONField(default=dict, blank=True)
+
+    delivery = models.ForeignKey(
+        "NotificationDelivery",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="ses_events",
+    )
+
+    received_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-received_at"]
+        indexes = [
+            models.Index(fields=["event_type", "received_at"]),
+            models.Index(fields=["recipient", "event_type"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.event_type} → {self.recipient or self.message_id}"
+
+
 class UserNotificationPreference(models.Model):
     """
     Optional per-user settings to respect privacy/legal/cost preferences.
