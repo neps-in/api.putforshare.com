@@ -1,5 +1,547 @@
 # Changelog
 
+# 27-May-2026
+
+## [02:11 AM IST] ISBN resolver — Phase 11 observability
+
+PRD §11.1, §11.2, §11.4. §11.3 (Sentry) was already wired in `settings.py` during the decouple migration.
+
+### 11.1 — structlog events (6 events)
+
+Configured in `settings.py` — JSON in production, console in dev. `service.py` emits per-decision events with consistent `isbn.*` prefix:
+
+`isbn.invalid_input` · `isbn.cache_hit` · `isbn.suppressed` · `isbn.no_sources_enabled` · `isbn.all_miss` · `isbn.cascade_complete`
+
+All include `latency_ms` measured from `time.monotonic()` at the start of `get()`.
+
+### 11.2 — `daily_isbn_metrics_task`
+
+Single annotated query against `ISBNLookupLog` for the last 24h, emitting `isbn.daily_metrics` event with per-source `total / hits / misses / errors / rate_limited / success_rate / avg_latency_ms` + totals + `new_books_enriched` (from `Book.last_fetched_at`). Beat: daily 04:00 UTC.
+
+### 11.3 — Sentry
+
+Already wired in `settings.py` during the decouple migration — listed here for completeness.
+
+### 11.4 — `GET /healthz/`
+
+Public, no auth. Three checks: **db** (`SELECT 1`), **redis** (`ping()` with 2s socket timeout), **filesystem_cache** (write/read/delete probe). Returns:
+
+```json
+{"status": "ok" | "degraded",
+ "checks": {"db": {...}, "redis": {...}, "filesystem_cache": {...}}}
+```
+
+HTTP 200 when all ok, 503 if any fails. **Bunny CDN intentionally not probed** — covers are deferred per project memory.
+
+### Sample real-world metrics (this dev DB, last 24h)
+
+```
+total_lookups: 43, distinct_isbns: 6, new_books_enriched: 1
+  google_books  total=12 hits=0  success=  0.0%  avg=1041.5 ms
+  open_library  total=12 hits=0  success=  0.0%  avg=7356.4 ms
+```
+
+Both 0% reflects the still-pending `GOOGLE_BOOKS_API_KEY` TODO and the AWS-IP block on Open Library.
+
+### Pending
+
+- `daily_isbn_metrics_task` output isn't currently shipped to any external store (just structlog → systemd journal). When a log collector (Loki, CloudWatch, etc.) is wired, the events are already structured for direct ingestion.
+- The healthcheck doesn't probe Bunny CDN — see project memory.
+
+## [02:05 AM IST] ISBN resolver — ISBNLookupLog purge cron
+
+Closes the last gap from the Phase 9 changelog entry: `ISBNLookupLog` was growing unboundedly (one row per source per cascade attempt) with no purge.
+
+### What landed
+
+- New constant `LOOKUP_LOG_PURGE_DAYS = 90` in `apps/inventory/services/isbnapi/tasks.py`.
+- New task `cleanup_isbn_lookup_log_task()` — single `DELETE` of rows whose `created_on < now - 90 days`. Returns `{"deleted": N, "cutoff": "..."}`.
+- New beat entry `isbn-cleanup-lookup-log-weekly` — `crontab(hour=3, minute=30, day_of_week=0)`. Sundays 03:30 UTC, offset 30 minutes from the existing not-found-cache cleanup so the two deletes don't pile up.
+
+### Why 90 days
+
+| Window | Trade-off |
+|---|---|
+| 30 days | Smallest table; loses quarterly trend visibility |
+| **90 days** (chosen) | Enough for trend analysis and post-incident forensics; keeps the table bounded |
+| 180 days | Mirror of `cleanup_not_found_cache_task`; but lookup logs are higher-volume |
+| Never | Unbounded growth; not viable at scale |
+
+### Verified
+
+| Path | Outcome |
+|---|---|
+| Plant 2 rows at `created_on = now - 100d` + 2 rows at `created_on = now - 30d` | seed succeeds |
+| `cleanup_isbn_lookup_log_task.apply()` | `{"deleted": 2, "cutoff": "..."}` — only the 100d-old pair purged |
+| Surviving rows | 2 (the 30d-old pair) — as expected |
+| `celery -A config inspect registered` | `cleanup_isbn_lookup_log_task` listed alongside the other 3 ISBN tasks |
+
+### State of all four resolver crons
+
+```
+isbn-refresh-stale-books-daily         daily   02:00 UTC
+isbn-cleanup-not-found-cache-weekly    weekly  Sun 03:00 UTC  (180-day retention)
+isbn-cleanup-lookup-log-weekly         weekly  Sun 03:30 UTC  (90-day retention)
+enrich_isbn_task                       on-demand only
+```
+
+## [02:00 AM IST] ISBN resolver — Phase 9 admin
+
+PRD §9.1 + §9.2 + §9.3 (cover-related items skipped per the deferred-covers decision). All new admin surfaces in `apps/inventory/admin.py`.
+
+### BookAdmin — resolver-aware columns + manual-review workflow
+
+| Surface | Before | After |
+|---|---|---|
+| `list_display` | name, uuid, sku, publisher, is_active | **isbn_13**, name, **primary_author** (computed), **cover_type**, **metadata_quality_score**, **manual_review_needed**, **is_stale**, **last_fetched_at** |
+| `list_filter` | is_active, publisher, category | + **manual_review_needed**, **is_stale**, **cover_type** |
+| `search_fields` | name, sku, uuid, isbn_10, isbn_13 | + **subtitle**, **authors__name** |
+| `readonly_fields` | (none) | **last_fetched_at**, **last_refreshed_at**, **sources**, **field_origins** (resolver-owned columns) |
+| `ordering` | (default) | **`-last_fetched_at`** (freshly-enriched first) |
+| `inlines` | BookAuthorInline | unchanged |
+
+`get_queryset` now does `select_related("publisher").prefetch_related("book_authors__author")` so the `primary_author` column doesn't N+1.
+
+Three new actions:
+
+| Action | What it does |
+|---|---|
+| **Re-enrich selected books (force_refresh=True)** | For each selected book with an ISBN, calls `enrich_isbn_task.delay(isbn, force_refresh=True)`. Books without isbn_13 OR isbn_10 are skipped, count shown in the success message. |
+| **Mark as manual review needed** | `queryset.update(manual_review_needed=True)`. |
+| **Clear manual review flag** | `queryset.update(manual_review_needed=False)`. |
+
+The PRD's **"Regenerate covers"** action is intentionally absent — covers are deferred to the existing product-image system, not the resolver.
+
+### New admin pages
+
+**ISBNLookupLog** — read-only audit view of every cascade fetch. `has_add_permission()` and `has_change_permission()` both return False; delete only for superusers (lets us bulk-purge old rows by hand until a periodic purge task is added). Columns: `created_on, isbn, source, status, http_status, latency_ms`. Filters: source, status, created_on. `date_hierarchy="created_on"` for fast time-slicing.
+
+**ISBNNotFoundCache** — suppression rows for ISBNs no source has metadata for. Columns: `isbn_13, attempts, is_active_suppression (computed bool), last_attempt_at, retry_after`. Action **"Clear suppression"** deletes selected rows so the next lookup runs the cascade. `has_add_permission()` returns False — rows are written by the resolver only.
+
+### AuthorAdmin — better dedup support + book-count column
+
+- `list_display` adds **`normalized_name`** and **`book_count`** (number of BookAuthor links).
+- `search_fields` adds **`normalized_name`** so admins can find dedup candidates.
+- `readonly_fields` adds `normalized_name` (computed by the resolver / `_normalize_author_name`).
+- `book_count` uses `Count("author_books")` annotation on the queryset, not a per-row count, so the changelist doesn't N+1.
+
+### Verified
+
+| Path | Outcome |
+|---|---|
+| `GET /admin/inventory/book/` (superuser) | `200` |
+| `GET /admin/inventory/author/` (superuser) | `200` |
+| `GET /admin/inventory/isbnlookuplog/` (superuser) | `200` |
+| `GET /admin/inventory/isbnnotfoundcache/` (superuser) | `200` |
+| `GET /admin/inventory/book/1509/change/` | `200`, `last_fetched_at` readonly visible |
+| `BookAdmin.reenrich_books` action with 5 selected (3 with isbn_13, 2 without) | `.delay()` called 3 times with `(isbn,) force_refresh=True`; 2 skipped |
+| `BookAdmin.mark_manual_review_needed` on 3 books | 3 flagged; clear action resets to 0 |
+| `ISBNNotFoundCacheAdmin.clear_suppression` on 2 planted rows | 0 rows remaining |
+| `ISBNLookupLogAdmin.has_add_permission` | `False` (audit-only) |
+| `ISBNLookupLogAdmin.has_change_permission` | `False` |
+| `AuthorAdmin` queryset annotation `_book_count` | present in compiled SQL; per-row column resolves without extra queries |
+
+### Still pending
+
+- A periodic purge for `ISBNLookupLog` (the audit table grows unboundedly; no `cleanup` task yet).
+- Inline view of `ISBNLookupLog` rows from a Book's change-form (linkable via `isbn`, but not wired).
+
+## [01:53 AM IST] ISBN resolver — Celery tasks + async enrichment endpoints
+
+Phase 7 + Phase 8-remainder complete. Services restarted, `manage.py check` clean, all 3 tasks visible to the worker, all DRF tests pass.
+
+### 3 Celery tasks (registered with the worker)
+
+| Task | Schedule | Behavior |
+|---|---|---|
+| `enrich_isbn_task(isbn, force_refresh=False)` | on-demand | resolve → if matching `Book` exists, `persist_merged_book` |
+| `refresh_stale_books_task()` | daily 02:00 UTC | enqueue enrich for every Book with `last_fetched_at < 1y` or NULL |
+| `cleanup_not_found_cache_task()` | weekly Sun 03:00 UTC | purge `ISBNNotFoundCache` rows >180d old |
+
+Retry config: `max_retries=3`, `acks_late=True`, exponential backoff with jitter (caps at 10 min). Discovery wired via a single import in `apps/inventory/tasks.py` since Celery's autodiscover only scans `<app>/tasks.py`, not nested service packages.
+
+### 3 new DRF endpoints
+
+| Method + URL | Auth | Behavior |
+|---|---|---|
+| `POST /api/v1/books/enrich/` | required | Validate ISBN → enqueue → `202` + `{task_id, isbn, status_url}` |
+| `GET /api/v1/books/enrich/<task_id>/` | public | Celery `AsyncResult` state/result poll |
+| `POST /api/v1/books/bulk/` | required | Up to 100 ISBNs per request (PRD §8.1 hard cap), per-task enqueue |
+
+URL ordering: literal `enrich/` and `bulk/` declared before `<str:isbn>/` so Django doesn't greedily route them as ISBNs. Throttling reuses the `book_metadata` scope (100/hour) so attackers can't bypass per-IP limits by switching shapes.
+
+### Verified
+
+| Path | Outcome |
+|---|---|
+| `enrich_isbn_task.apply(...)` synchronously | Book #1509 enriched, `last_fetched_at` set, sources=`['upcitemdb']` |
+| `cleanup_not_found_cache_task` with 1 old + 1 fresh planted row | old deleted, fresh kept |
+| `refresh_stale_books_task` (mocked delay) | enqueued 504 of 508 books — matches the dev-DB stale-set |
+| `POST enrich/` authed | `202` + valid task_id |
+| `POST enrich/` no auth | `401` |
+| `POST enrich/` bad ISBN | `400` |
+| `GET enrich/<task_id>/` | `200` + Celery state |
+| `POST bulk/` 3 valid + 1 invalid | `202`, `enqueued_count=3`, `invalid=['not-an-isbn']` |
+| `POST bulk/` 101 ISBNs | `400` — caught by serializer `max_length=100` |
+| `celery -A config inspect registered` | all 3 task names present |
+
+### Still pending (intentionally deferred)
+
+- `10000/hour` per-class throttle for authenticated users (PRD §8.3)
+- The `is_stale` boolean flag — currently only `last_fetched_at` drives staleness logic
+
+## [01:45 AM IST] ISBN resolver — DRF API at `/api/v1/books/`
+
+Rewrote the bare async `View` classes at `apps/inventory/services/isbnapi/views.py` as proper DRF `APIView`s, added a serializer that enforces the `list_price_usd`-never-exposed rule, mounted the URLs at `/api/v1/books/` (the previous routes weren't actually mounted — `apps/inventory/urls.py` was empty, so the API wasn't reachable before today). PRD §8.1 / §8.2 / §8.3.
+
+**Endpoints (now live):**
+
+- `GET /api/v1/books/<isbn>/` — resolve metadata for ISBN-10 or ISBN-13. Accepts `?force_refresh=true` (or `1`/`yes`/`on`) to bypass both the FS cache and the `ISBNNotFoundCache` suppression row.
+- `DELETE /api/v1/books/<isbn>/cache/` — invalidate the FS cache file. Idempotent; returns 204. Requires authentication (project default `IsAuthenticatedOrReadOnly`).
+
+**Status code mapping** (`_status_for(result)` in views.py):
+
+| Resolver outcome | HTTP status |
+|---|---|
+| Success (book payload, even partial — title or isbn13 present) | 200 |
+| `Invalid ISBN: ...` / `ISBN is empty.` from Phase 1 normalize | 400 |
+| `No metadata found for ISBN X (suppressed; ...)` (suppression hit) | 404 |
+| `No metadata found for ISBN X (attempt #N; ...)` (all-miss this run) | 404 |
+| `No metadata sources available ...` (no enabled adapters) | 503 |
+| Other error path (defensive fallthrough) | 502 |
+
+**`list_price_usd` exclusion (the regression-critical bit):**
+
+- New `serializers.py` with `MergedBookResponseSerializer`. Fields are listed *explicitly* (not via `__all__` or auto-detection from the dataclass) so adding a new dataclass field requires a deliberate decision about public exposure.
+- `list_price_usd` is **not** in the serializer's field list.
+- `to_representation` also scrubs the `list_price_usd` key out of `field_origins` — otherwise the merger's per-field provenance dict would leak the internal field's existence (`{"list_price_usd": "upcitemdb"}`) even though the value itself wasn't being serialized.
+- Smoke test asserts neither the top-level `list_price_usd` nor the `field_origins.list_price_usd` key appears in any response shape (200, 400, 404).
+
+**Throttling** (`settings.py` → `REST_FRAMEWORK.DEFAULT_THROTTLE_RATES`):
+
+- New scope `book_metadata` at `100/hour`, applied to both endpoints via `ScopedRateThrottle`. Single scope across GET and DELETE so a single attacker can't burn budget on either path.
+- PRD §8.3 also calls for `10000/hour` for authenticated users — left as a follow-up; a per-class throttle override goes in views.py when traffic justifies it.
+
+**OpenAPI / schema:**
+
+- Both views carry `@extend_schema` so `drf-spectacular` generates correct docs. `BookMetadataView` documents the `force_refresh` query param and all four status codes; `BookCacheInvalidateView` documents the 204 no-content response.
+
+**URL mounting** (`config/urls.py`):
+
+- Added `path("api/v1/books/", include("apps.inventory.services.isbnapi.urls"))`.
+- The previous `apps/inventory/urls.py` was empty, so the resolver API was effectively dead code prior to today — the views existed but no URL routed to them.
+
+**Smoke test (DRF `APIClient` with `override_settings(ALLOWED_HOSTS=["*"])`):**
+
+| Scenario | Status | Notes |
+|---|---|---|
+| GET cached ISBN | 200 | `cached=true`, no `list_price_usd` in body, no `list_price_usd` key in `field_origins`. |
+| GET with `?force_refresh=true` | 200 | `cached=false` — cache + suppression both bypassed. |
+| GET with malformed ISBN (`not-an-isbn`) | 400 | `error="ISBN is empty."` (Phase 1 cleans to empty string). |
+| GET with planted suppression row | 404 | error contains "(suppressed; attempts=N, retry after T)". |
+| GET suppressed + `?force_refresh=true` | 200 | Suppression bypassed, cascade ran, FS cache written. |
+| DELETE unauthenticated | 401 | `IsAuthenticatedOrReadOnly` blocks unsafe methods. |
+
+**Note on the `apps/inventory/urls.py` empty file:** left empty; the resolver lives one level deeper at `apps/inventory/services/isbnapi/urls.py` and is mounted directly from `config/urls.py` rather than chained through the inventory app's URLconf. This is intentional — the resolver is a self-contained service module, not a generic inventory CRUD surface.
+
+**Still pending (Phase 7+):**
+
+- DRF endpoints for `POST /api/v1/books/enrich/` (Celery enqueue) and `POST /api/v1/books/bulk/` — both require the resolver Celery tasks (PRD Phase 7) which haven't been built yet.
+- Higher per-class throttle for authenticated users (`10000/hour`).
+
+## [01:37 AM IST] ISBN resolver — `force_refresh` plumbed through the resolver
+
+Wires the `force_refresh: bool = False` parameter end-to-end so admin "Re-fetch" actions (and the future API endpoint) can bypass both caching layers.
+
+Signature changes:
+
+- `BookMetadataService.get(raw_isbn, force_refresh=False)` — new parameter.
+- `get_book_metadata_sync(isbn, force_refresh=False)` — passes through to `BookMetadataService.get`.
+- `enrich_book(book, force_refresh=False)` — was already accepting the kwarg but ignoring it; now passes it down to `get_book_metadata_sync`.
+
+Behavior when `force_refresh=True` (inside `BookMetadataService.get`):
+
+- **Step 1 (FS cache check)** — skipped. Even if `{isbn_13}.json` is on disk, the cascade runs fresh.
+- **Step 1.5 (ISBNNotFoundCache suppression check)** — skipped. Admins/operators need a way to retry a suppressed ISBN before the 1d/7d/30d/90d backoff expires (e.g., after a source-side issue is fixed).
+- **Step 4 (all-miss branch)** — `invalidate_book(isbn)` now runs unconditionally in this branch (PRD §12.5 invalidation rule: a stale cache file must be dropped when the explicit re-fetch comes back empty). Safe no-op when no file exists, so `force_refresh=False` paths are unaffected.
+- **Step 5b (clear suppression on success)** — unchanged: any cascade that returns at least one non-None source clears the suppression row, regardless of `force_refresh`.
+
+`record_miss` on a force-refreshed miss still increments `attempts` (advances the backoff). It does not reset to 1 — a manual re-attempt that fails is treated as an additional failure data point.
+
+End-to-end test (mock sources via a `ToggleSource(hit=True/False)`):
+
+- `force_refresh=False` after a successful initial cascade → served from FS cache (`cached=True`).
+- `force_refresh=True` → cache bypassed, fresh cascade runs; on miss the FS file is invalidated and `ISBNNotFoundCache` row created (attempts=1).
+- Suppression row in place + `force_refresh=False` → suppressed in ~1.5 ms (no cascade). Same call with `force_refresh=True` → cascade runs (~13 ms), `attempts` bumps from 1 → 2.
+- `force_refresh=True` with a hitting source → suppression row cleared, FS cache overwritten with the fresh result.
+
+Still deferred:
+
+- DRF API endpoint exposing `?force_refresh=true` query param.
+- `cleanup_not_found_cache_task` periodic purge.
+
+# 26-May-2026
+
+## AWS SNS bounce / complaint plumbing for SES
+
+Set up the AWS infrastructure that turns SES bounce and complaint events into Django state, plus the Django side that records them and stops re-sending to broken addresses.
+
+AWS (account 080338028715, region `ap-south-1`):
+
+- Created SNS topics `ses-bounces-prod` and `ses-complaints-prod`.
+- Added two event destinations to the existing `pfs-configuration-set`:
+  - `bounces` → matches `BOUNCE`, `REJECT`, `RENDERING_FAILURE`, publishes to `ses-bounces-prod`.
+  - `complaints` → matches `COMPLAINT`, publishes to `ses-complaints-prod`.
+- Subscribed `write2aruld@gmail.com` to both topics. **State: `PendingConfirmation`.** CloudWatch confirms AWS delivered the confirmation emails to Gmail's SMTP (`NumberOfNotificationsDelivered=3, Failed=0`), but Gmail filtering hides them — searches for `from:no-reply@sns.amazonaws.com` returned nothing. Path forward is either a Gmail filter audit or switching to the HTTPS webhook subscription described below (auto-confirms server-to-server, no inbox click).
+- Discovered IAM user `nepscl` had no `iam:List*`, `sns:*`, or `sesv2:Put*` policies. User attached `AmazonSNSFullAccess` + `AmazonSESFullAccess` mid-task to unblock topic creation.
+
+Backend (Django, all under `backend/apps/notifications/`):
+
+- New models in `models.py`:
+  - `SuppressedEmail(email, reason ∈ {hard_bounce, complaint, manual}, notes, …)` — unique on `email`, indexed on `reason`.
+  - `SesEvent(event_type, message_id, recipient, subtype, diagnostic, raw=JSONField, delivery=FK→NotificationDelivery, received_at)` — raw audit log of every SES notification, linked back to the originating delivery via `provider_message_id`.
+  - Enum classes `SuppressionReason` and `SesEventType`.
+- New `signals.py` listening on `anymail.signals.tracking`: persists every SES event, marks the matching `NotificationDelivery` `gave_up` on permanent bounce / complaint / reject, and upserts into `SuppressedEmail` for permanent bounces (`subtype="Permanent"`) and all complaints.
+- `apps.py` `ready()` now imports `signals` so the handler registers at startup.
+- `tasks/email_delivery.py` short-circuits before calling SES if `SuppressedEmail` contains the target — marks the delivery `gave_up` with `Suppressed (...) : not sent`, no retries, no provider call.
+- Admin pages for `SuppressedEmail` and `SesEvent` registered in `admin.py` (read-only on `SesEvent`).
+- Migration `backend/apps/notifications/migrations/0002_suppressedemail_sesevent.py` adds both tables.
+
+Wiring:
+
+- `backend/config/urls.py` now mounts `path("anymail/", include("anymail.urls"))` — exposes Anymail's SES tracking endpoint at `/anymail/amazon_ses/tracking/<WEBHOOK_SECRET>/`, ready as the SNS HTTPS subscription target.
+- `backend/config/settings.py` adds `AWS_SES_CONFIGURATION_SET` (default `"pfs-configuration-set"`) and configures Anymail with `AMAZON_SES_CONFIGURATION_SET_NAME` so every outbound SES `SendEmail` includes `ConfigurationSetName` — without this, the new event destinations would never fire. Also adds `ANYMAIL.WEBHOOK_SECRET` from `ANYMAIL_WEBHOOK_SECRET` (currently unset; harmless until HTTPS subscription goes live).
+
+Verification:
+
+- `manage.py check`: 0 issues.
+- `pytest apps/notifications -x -q`: 14 passed.
+- Migration applied manually by user; `gunicorn-api.putforshare.com`, `celery-worker-putforshare`, `celery-beat-putforshare` restarted and confirmed `active`.
+
+Outstanding (resolved by the HTTPS cutover below; left here for the historical trail):
+
+- Two SNS email subscriptions are still `PendingConfirmation`. Either resolve the Gmail delivery (filter rule / blocked list) and click both confirmation links, or pivot to the HTTPS webhook (set `ANYMAIL_WEBHOOK_SECRET`, subscribe `https://api.putforshare.com/anymail/amazon_ses/tracking/<secret>/` to both topics — SNS confirms automatically and events start flowing into `SesEvent`).
+- Optional smoke test once subscriptions are confirmed: send to `bounce@simulator.amazonses.com` (works from SES sandbox when sending from the verified domain) and verify a `SesEvent` row appears and the address is added to `SuppressedEmail`.
+
+## SES SNS — HTTPS webhook cutover + production reachability fix
+
+Followed up on the morning's work after the SNS email confirmations never surfaced in Gmail (CloudWatch reported `Delivered=3, Failed=0`, but searches for `from:no-reply@sns.amazonaws.com` returned nothing — Gmail black box). Cut over to the HTTPS webhook path that anymail can auto-confirm server-to-server, and unblocked two surprises along the way.
+
+Webhook secret + env loading:
+
+- Generated a 32-byte `secrets.token_urlsafe(32)` value and wrote `backend/.env.production` (mode `0600`, owner `ubuntu`) with `ANYMAIL_WEBHOOK_SECRET`. Settings.py picks it up via `python-dotenv` when `DJANGO_ENV=production`.
+- Added `.env.production` and the broader `.env.*` glob to `backend/.gitignore` — the existing `.env` / `*.env` rules did not match `.env.production`. Verified with `git check-ignore`.
+
+Production reachability — `DisallowedHost` was already broken before SNS cutover:
+
+- After restarting gunicorn, every request to `https://api.putforshare.com/*` returned `400 DisallowedHost`. Root cause: `ALLOWED_HOSTS = _env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")` at `backend/config/settings.py:68` plus no env override anywhere — gunicorn's systemd unit sets only `DJANGO_ENV=production`, and `backend/.env.production` didn't exist until today. Existed silently because no traffic was hitting these paths during recent development; the SNS HTTPS subscription would have failed for the same reason.
+- Fixed by adding `DJANGO_ALLOWED_HOSTS=api.putforshare.com,dash.putforshare.com,devdash.putforshare.com,localhost,127.0.0.1` to `backend/.env.production`. Sanity-checked: `GET /api/docs/` returns `200`.
+
+Anymail `WEBHOOK_SECRET` format gotcha (caused the first HTTPS subscription attempt to fail):
+
+- Anymail compares the decoded Basic-auth value (the full `username:password` string) byte-for-byte against `WEBHOOK_SECRET` — it does **not** strip the username half. Set `ANYMAIL_WEBHOOK_SECRET=anymail:<random_token>` to match the `anymail:<token>@host/...` form used in the SNS subscription URL. Documented inline in `backend/.env.production`.
+- Sequence after the fix: SNS POSTs without auth → anymail returns `401` + `WWW-Authenticate: Basic` → SNS retries with auth → anymail validates auth, runs `validate_request`, sees `SubscriptionConfirmation`, fetches `SubscribeURL` server-side, returns `200`. Verified in `nginx access.log` (IP `52.95.73.x`, UA `Amazon Simple Notification Service Agent`, status sequence `401, 200`).
+
+AWS:
+
+- Subscribed `https://anymail:****@api.putforshare.com/anymail/amazon_ses/tracking/` to both `ses-bounces-prod` and `ses-complaints-prod`. Both flipped from `PendingConfirmation` to real `SubscriptionArn` values (`...:49c58a62-...` and `...:f230340d-...`) once anymail confirmed.
+
+End-to-end smoke test:
+
+- From a Django shell, sent `EmailMultiAlternatives` from `notifications@putforshare.com` to `bounce@simulator.amazonses.com` (SES simulator works from sandbox when From is on the verified domain). Anymail returned `message_id=0109019e6383e361-...`, status `queued`.
+- ~15 seconds later: `SesEvent` table had 1 row (`event_type=bounce`, `subtype=Permanent`, `recipient=bounce@simulator.amazonses.com`, linked `message_id` matches); `SuppressedEmail` had 1 row (`reason=hard_bounce`, `notes='Permanent: General'`). Pre-send check now stops further sends to this address.
+
+Outstanding / known issues:
+
+- The two `write2aruld@gmail.com` email subscriptions on `ses-bounces-prod` / `ses-complaints-prod` are still `PendingConfirmation` and now redundant (HTTPS path handles everything). They will auto-expire in 3 days; can also be unsubscribed explicitly.
+- `DJANGO_DEBUG` is still defaulting to `True` in production (since no env var sets it). Every 4xx/5xx leaks a full Django debug page including settings, traceback, and environment. Pre-existing — not introduced by this work — but should be set to `False` before any real traffic. Outside the scope of this task; raising it here so it isn't lost.
+
+## ISBN resolver — Foundation refactor + decouple migration + PRD reconciliation
+
+A multi-part pass on the ISBN metadata pipeline at `backend/apps/inventory/services/isbnapi/`, paired with a project-wide config-library migration and a substantial PRD update at `prd/todo/isbn-meta-data-extraction/isbn-meta-data-extraction.md`.
+
+Config (project-wide):
+
+- Migrated `backend/config/settings.py` from `os.environ.get(...)` + `python-dotenv` to **`python-decouple`** as the canonical config library. 43 `config(...)` reads now drive the entire settings file with proper type casts (`bool`, `int`, `Csv()` with empty-filter). Removed `_env_bool`, `_env_list` helpers, the `python-dotenv` import, and the manual fallback parser. Two bootstrap exceptions kept: `os.getenv("DJANGO_ENV")` (read before decouple is configured) and a single block that populates `os.environ` from the `.env` file for subprocess (Celery worker) inheritance.
+- Installed `python-decouple==3.8` and saved a feedback memory so future sessions know decouple is the only acceptable config lib here.
+- `Django>=5.2,<5.3` pinned to match installed `5.2.11` (was `<5.2`, which conflicted with reality).
+- Added `GOOGLE_BOOKS_API_KEY`, `ISBNDB_API_KEY`, `UPCITEMDB_API_KEY` env reads (all default empty) so adapters can pick them up without `getattr` fallbacks.
+
+ISBN resolver foundation:
+
+- Filesystem cache rewritten. **Permanent** (no TTL), sharded layout (`{isbn[:3]}/{isbn}.json`), canonical filename is ISBN-13, ISBN-10 alias is a **relative symlink** (`026/0262033844.json → ../978/9780262033848.json`). Old `index.json` mechanism removed. Atomic writes via hidden tmp + `os.replace`. Verified: ISBN-10 lookups follow the symlink and hit the same physical file as ISBN-13 lookups.
+- Adapters were already async with `httpx.AsyncClient` (no sync→async migration needed — earlier audit flagged this incorrectly). Added a shared `User-Agent`/`DEFAULT_HEADERS` constant in `sources/base.py` and routed all four adapters through it (Open Library now blocks requests without a descriptive User-Agent).
+- New **UPCitemdb** adapter at `sources/upcitemdb.py` registered as a fourth source. **Narrow scope** per PRD §3.4: contributes only `list_price_usd` (lowest non-zero offer) and cover URL candidates — explicitly leaves title/authors/brand `None`. Uses the no-auth trial endpoint (`/prod/trial/lookup`, 100/day) when `UPCITEMDB_API_KEY` is unset; switches to `/prod/v1/lookup` with `user_key` header when set.
+- `schemas.py` gained `list_price_usd: Optional[float]` on both `NormalizedBook` and `MergedBookResponse`, with **INTERNAL-ONLY** docstrings noting it must be excluded from every public response. Customer-facing pricing remains `list_price_inr` (to be added in a follow-up slice).
+- `merger.py`: `FIELD_PRIORITY["list_price_usd"] = ["isbndb", "upcitemdb", "google_books"]`; `upcitemdb` appended to `thumbnail` priority chain (last). UPCitemdb is intentionally absent from every other field so the merger never pulls title/authors from a generic-product DB. Added `is_valid_price` validator (positive numeric).
+- `service.py`: after merge, the queried `isbn_13`/`isbn_10` are propagated onto the response so pricing-only hits still carry the ISBN (merger excludes upcitemdb from isbn13 priority by design).
+- Removed stale incompatible cache file `book_cache/inventory_bookapi/9788131720479.json` (legacy schema, would have crashed the new reader).
+
+Verified end-to-end: ISBN-13 lookup writes `978/9780262033848.json`, sibling symlink `026/0262033844.json → ../978/9780262033848.json` is created, and subsequent lookups by either form (or hyphenated input) hit the cache. `manage.py check` passes; gunicorn + celery-worker + celery-beat restarted cleanly.
+
+External issues surfaced (not code — flagged for separate work):
+
+- Google Books → `429` from the prod IP: unauthenticated 1K/day quota exhausted. Needs `GOOGLE_BOOKS_API_KEY` set in `.env.production`. Existing TODO at `prd/todo/isbn-meta-data-extraction/google-books-api-key.txt`.
+- Open Library → `403` (nginx-level, not application): AWS IP range appears to be blocked at the edge. Even a proper descriptive User-Agent doesn't unblock it. Workaround would be an outbound proxy or accepting this source as unreliable from prod.
+- ISBNdb stays disabled until `ISBNDB_API_KEY` is set (Tier 3 paid; expected).
+- UPCitemdb works fine from this host on the trial endpoint.
+
+PRD reconciliation (`prd/todo/isbn-meta-data-extraction/isbn-meta-data-extraction.md`):
+
+- §2 Non-Goals — softened the polymorphism prohibition: `Book(Product)` is intentional and supported alongside `Soap(Product)`; only the ISBN cascade is books-only.
+- §8 Data Model intro — clarified that models live in the existing `apps/inventory/` app (not a new `isbn_resolver` app); listed which models already exist vs which gaps remain; added an explicit "covers are out of scope" paragraph.
+- §8.1 — annotated `binding` row: persisted as `Book.cover_type` in the existing model (no new column).
+- §8.4 — `BookCover` model section replaced with a "DEFERRED" note. Covers will use the existing product-image system in a later phase.
+- §5 — Phase 5 (cover pipeline: fetcher / processor / Bunny upload / sizes / placeholder) collapsed to a deferred note; only `MergedBookResponse.thumbnail` URL is in scope.
+- §12 — Caching Strategy committed to filesystem-only (no Redis hot layer in v1); documented the filename + relative-symlink rule, the permanent-no-TTL rule, and the trigger conditions to add Redis later (multi-host, >50 req/s sustained, or measured filesystem bottleneck).
+- Phase 0.1 — pointed at existing `apps/inventory/services/isbnapi/` package; "do not create a new `isbn_resolver` app."
+- §6.2 (Phase 6 flow) — removed cover-pipeline step and `BookCover` from the persist transaction.
+- §6.1 — pinned `Django>=5.2,<5.3`; removed `django-environ`; replaced with `python-decouple>=3.8` and explicit "do NOT add django-environ or python-dotenv" note.
+- §6.2 (packages) — commented out `django-redis` as deferred per §12.6.
+
+Memories saved for future sessions:
+
+- `feedback_config_lib_decouple.md` — always use python-decouple; never django-environ, raw os.environ, or python-dotenv in new code.
+- `project_binding_is_cover_type.md` — PRD's `binding` field is implemented as `Book.cover_type`; do not flag it as missing.
+- `feedback_no_bookcover_model.md` — do not build a `BookCover` model or PRD Phase 5; covers will piggyback on the existing product-image system.
+
+## ISBN resolver — Schema additions + Book DB persistence
+
+Continuation of the ISBN resolver work. Adds the missing Book fields the resolver needs, introduces a proper through model for the Book↔Author relationship (with author ordering and role), and wires the resolver to write merged metadata onto Book rows.
+
+### Schema (`apps/inventory/models.py`)
+
+New Book fields:
+
+- `subtitle` (CharField, blank) — populated by google_books / open_library.
+- `list_price_inr` (DecimalField, nullable) — publisher's customer-facing list price. **Distinct** from seller pricing on `Product` (`min_retail_price`, `max_retail_price`, `sale_price`), which is transactional. Not yet populated by any source — placeholder for future Indian-market pricing data.
+- `list_price_usd` (DecimalField, nullable) — **internal-only**, never expose in public API. Populated by UPCitemdb (lowest non-zero offer) and ISBNdb when available. Used for source-priority merging, FX conversion, and analytics.
+
+New `BookAuthor` through model replacing the old auto-created `inventory_book_authors` M2M join:
+
+- Fields: `book` (FK, CASCADE), `author` (FK, PROTECT), `order` (positive small int, 0=primary credit), `role` (choices: author/editor/translator/illustrator, default author), `created_on`.
+- Unique constraint on `(book, author, role)` — one person can hold multiple roles on the same book (author + illustrator) but not duplicate the same role.
+- Index on `(book, order)` for fast ordered fetches.
+- Book.authors field becomes `ManyToManyField(through="BookAuthor")`.
+
+New `ISBNNotFoundCache` model:
+
+- Suppresses repeated lookups for ISBNs that returned nothing from every source. Backoff schedule (to be wired in by the resolver): 1d → 7d → 30d → 90d → never.
+- Fields: `isbn_13` (CharField, unique), `attempts`, `last_attempt_at`, `retry_after` (indexed), `created_on`.
+
+### Migration `0022_isbn_resolver_schema.py` — hand-edited
+
+Django refuses to `AlterField` an M2M to add `through=`:
+
+```
+ValueError: Cannot alter field ... they are not compatible types
+(you cannot alter to or from M2M fields, or add or remove through= on M2M fields)
+```
+
+Workaround pattern used:
+
+1. `CreateModel(BookAuthor)` — creates the new `inventory_bookauthor` table.
+2. `RunPython(copy_book_authors_forward)` — copies the 779 existing `(book_id, author_id)` rows from the auto-created `inventory_book_authors` table into `inventory_bookauthor` with `role="author"`, `order=0..N` per book sequenced by the original join row's `id`.
+3. `SeparateDatabaseAndState` — state-only `AlterField` swaps `Book.authors` to `through=BookAuthor` (so the ORM knows about the new through model), database operation runs raw SQL `DROP TABLE inventory_book_authors` to drop the now-redundant auto-table.
+4. `AddIndex`/`AddConstraint` on BookAuthor.
+
+Reverse direction restores `BookAuthor` data deletion; the auto-M2M table would need a separate restore if anyone reverses. Reverse path is one-way in practice — flagged in the migration comments.
+
+Migration ran cleanly against the 508 existing books / 20 authors / 779 M2M rows. Post-migration counts verified: BookAuthor=779, ISBNNotFoundCache exists empty, old `inventory_book_authors` table dropped.
+
+### Resolver → DB persistence (`apps/inventory/services/isbnapi/persistence.py`, new file)
+
+Public API:
+
+- `persist_merged_book(book, merged) -> Book` — applies a `MergedBookResponse` onto an existing Book row. Wrapped in `transaction.atomic()`.
+- `enrich_book(book) -> Book` — high-level wrapper: runs the resolver service for `book.isbn_13` (or `_10`), then persists.
+
+Field-mapping policy (boundary between resolver and seller-owned data):
+
+- **Seller-owned, only fill if blank**: `Book.name` (Product.name), `Book.description` (Product.description). The resolver never overwrites these — sellers might have hand-curated them.
+- **Pure metadata, overwrite from cascade**: `Book.subtitle`, `Book.isbn_10`/`_13` (only if currently empty), `Book.page_count` (if > 0), `Book.book_language`, `Book.published_date`, `Book.published_year` (parsed from `published_date`), `Book.list_price_usd`.
+- **Never touched**: `Product.sku`, `Product.seller`, `Product.category`, `Product.min_retail_price`, `Product.max_retail_price`, `Product.sale_price`, `Book.quality*`, `Book.book_edition`. These are seller transactional/condition data the resolver has nothing to say about.
+
+Author handling:
+
+- Author rows are deduplicated via `Author.normalized_name`, lowercased, accent-stripped, **punctuation-stripped**, whitespace-collapsed. So `"Thomas H. Cormen"`, `"thomas h cormen"`, `"THOMAS H. CORMEN"`, and `"José Saramago"` vs `"Jose Saramago"` all collapse to single Author rows.
+- Resolver writes wipe-and-recreate the BookAuthor rows for each book to preserve the merger-supplied author order. `role="author"` for all resolver-created links (editor/translator support is for callers that distinguish roles, e.g. manual admin entry).
+- One-time data backfill: any existing `Author.normalized_name` values that disagree with the new normalize function get refreshed. On the existing 20 authors, only 1 row needed updating.
+
+Publisher handling:
+
+- Resolved via case-insensitive name match → `Publisher.objects.filter(name__iexact=name).first()`, falling back to `Publisher.objects.create(name=name)`. No accent/punctuation normalization on publishers yet — names from the sources are already canonical enough.
+
+Metadata accounting:
+
+- `Book.metadata_quality_score` = `merged.confidence` (0–100 from the merger).
+- `Book.sources` = `{"contributing": [source_names...]}` (JSONField, dict-shaped to leave room for future raw-per-source storage like `{"google_books": {...raw}, ...}`).
+- `Book.field_origins` mirrors the merger's per-field provenance.
+- `Book.last_fetched_at` set to now.
+- `Book.is_stale` reset to False.
+- `Book.manual_review_needed` flipped True if score < 50 (matches PRD §10 threshold).
+
+### Schema additions to the dataclasses (`schemas.py`)
+
+- Added `subtitle: Optional[str]` to `NormalizedBook` and `MergedBookResponse` + `to_dict()`.
+- `google_books.py` and `open_library.py` now extract `info.get("subtitle")`.
+- `merger.py` adds `"subtitle"` to `FIELD_PRIORITY` (`["google_books", "open_library", "isbndb"]`) and `SCALAR_VALIDATORS` (reuses `is_valid_title` — same non-empty/>=2-char check).
+- ISBNdb skipped for subtitle: their schema only has `title_long` which conflates title+subtitle. Not worth parsing for v1.
+
+### Admin (`apps/inventory/admin.py`)
+
+- `BookAdmin.filter_horizontal = ("authors",)` removed — Django rejects it on `through=` M2Ms (`admin.E013`).
+- Replaced with a `BookAuthorInline(TabularInline)` showing the `(author, role, order)` triple, ordered by `order`. `autocomplete_fields = ("author",)` keeps the author picker fast.
+
+### Verification
+
+Synthetic test (hand-built MergedBookResponse onto an existing Book row):
+
+- Seller-set `Book.name` left intact when merged.title is supplied.
+- `subtitle`, `publisher` (FK created + linked), `page_count`, `published_year` (parsed from `published_date`), `list_price_usd`, `metadata_quality_score`, `sources`, `field_origins`, `last_fetched_at` all populated.
+- 5 author-name variants (3 Cormen variants + 2 Saramago variants) → exactly 2 BookAuthor rows after dedup, ordered correctly.
+
+Live test (enrich_book on a Book with `isbn_13="9780262033848"`, hitting the filesystem cache from the foundation refactor):
+
+- Resolver returned the cached merged response (UPCitemdb pricing only, confidence=0).
+- Persistence wrote `list_price_usd=15.55` (Decimal), `metadata_quality_score=0`, `sources={"contributing": ["upcitemdb"]}`, `last_fetched_at=now`, `manual_review_needed=True` (score<50).
+
+Regression check: 508 Books / 22 Authors / 779 BookAuthor rows after all tests cleaned up. Migration data preservation confirmed.
+
+## ISBN resolver — ISBNNotFoundCache wired into the cascade
+
+The `ISBNNotFoundCache` model added in the schema slice is now active in the resolver. Stops the cascade from repeatedly hammering Google/OpenLibrary/UPCitemdb for ISBNs that returned nothing from every source.
+
+New module `apps/inventory/services/isbnapi/not_found_cache.py`:
+
+- `is_suppressed(isbn_13) -> bool` — quick check (exists query on retry_after > now).
+- `get_suppression(isbn_13) -> ISBNNotFoundCache | None` — same check but returns the row so the resolver can include `attempts` and `retry_after` in the error message.
+- `record_miss(isbn_13) -> ISBNNotFoundCache` — `select_for_update().get_or_create()` inside `@transaction.atomic`; first miss → attempts=1, subsequent misses bump attempts and recompute `retry_after`. Backoff schedule: 1d → 7d → 30d → 90d → year 9999 ("never"). select_for_update keeps two concurrent racers from both incrementing against a stale value.
+- `clear(isbn_13) -> int` — removes any suppression row. Called when the cascade succeeds, so previously-suppressed ISBNs that now resolve re-enter normal flow.
+
+`BookMetadataService.get()` (`service.py`) updated:
+
+1. **Step 1** — filesystem cache check (unchanged).
+2. **Step 1.5 NEW** — suppression check. If a suppression row exists with `retry_after > now`, return a `MergedBookResponse` carrying the queried isbn13/isbn10 and an error like `"No metadata found for ISBN X (suppressed; attempts=3, retry after 2026-08-24T...)"`. `retryable=False` — caller shouldn't immediately retry; the future cascade will be auto-allowed once `retry_after` passes.
+3. **Steps 2–3** — parallel cascade (unchanged).
+4. **Step 4** — all-miss branch now calls `record_miss()`; the returned `MergedBookResponse` includes attempt number and next retry timestamp in its error message. `retryable=True` because the resolver itself is still "willing" to try again once the backoff expires.
+5. **Step 5b NEW** — after a successful merge (at least one source returned data), `clear()` removes any pre-existing suppression row.
+
+Sync ORM helpers wrapped with `sync_to_async` (same pattern `sources/base.py` uses for `_persist_lookup_log`). The resolver remains fully async.
+
+End-to-end test (mock sources to avoid external-API dependency):
+
+- `AlwaysMissesSource` returning `normalized=None` → first call records row (attempts=1, retry_after ≈ 1d out); second call short-circuits in ~1.5 ms with "suppressed" error.
+- Manually expire the row, third call → cascade re-runs → row bumped to attempts=2, retry_after ≈ 7d out.
+- Swap to `AlwaysHitsSource` returning a `NormalizedBook` → cascade succeeds → previously-planted suppression row deleted by step 5b.
+
+Backoff verification: attempts 1/2/3/4/5 yield retry_after values ~1/7/30/90 days / year 9999.
+
+Not yet wired (deferred):
+
+- Periodic cleanup task to purge very old `ISBNNotFoundCache` rows (PRD §7 `cleanup_not_found_cache_task`) — current rows persist indefinitely once they hit "never".
+- `force_refresh` parameter on `service.get()` to bypass both the FS cache AND the suppression row — required for admin "Re-fetch" actions later.
+
 # 25-May-2026
 
 ## Remove `email_verification_token` / `email_verification_expiry` from User model
