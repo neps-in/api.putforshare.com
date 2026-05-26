@@ -12,7 +12,7 @@ from django.conf import settings
 from ratelimit import limits
 
 from ..schemas import NormalizedBook
-from .base import BookSource, retry_transient
+from .base import DEFAULT_HEADERS, BookSource, retry_transient
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class ISBNdbSource(BookSource):
         self, isbn_13: str,
     ) -> tuple[Optional[NormalizedBook], dict, Optional[int], list[dict]]:
         api_key = str(getattr(settings, "ISBNDB_API_KEY", "") or "").strip()
-        headers = {"Authorization": api_key, "Accept": "application/json"}
+        headers = {**DEFAULT_HEADERS, "Authorization": api_key}
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 URL_TEMPLATE.format(isbn=isbn_13),

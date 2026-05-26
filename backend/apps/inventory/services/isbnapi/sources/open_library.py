@@ -11,7 +11,7 @@ import httpx
 from ratelimit import limits
 
 from ..schemas import NormalizedBook
-from .base import BookSource, retry_transient
+from .base import DEFAULT_HEADERS, BookSource, retry_transient
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class OpenLibrarySource(BookSource):
             "format": "json",
             "jscmd": "data",
         }
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(headers=DEFAULT_HEADERS) as client:
             response = await client.get(URL, params=params, timeout=TIMEOUT_SECONDS)
             response.raise_for_status()
             data = response.json()
@@ -75,6 +75,7 @@ class OpenLibrarySource(BookSource):
 
         normalized = NormalizedBook(
             title=info.get("title"),
+            subtitle=info.get("subtitle"),
             authors=authors,
             isbn10=isbn10_list[0] if isbn10_list else None,
             isbn13=isbn13_list[0] if isbn13_list else None,

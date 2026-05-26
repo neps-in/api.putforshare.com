@@ -249,17 +249,23 @@ class Book(Product):
     quality_note = models.CharField(max_length=255, blank=True, default="")
     isbn_10 = models.CharField(max_length=15, blank=True, default="")
     isbn_13 = models.CharField(max_length=15, blank=True, default="")
-    
+
+    subtitle = models.CharField(max_length=500, blank=True, default="")
     book_language = models.CharField(max_length=255, blank=True, default="")
     book_edition = models.CharField(max_length=255, blank=True, default="")
-    cover_type = models.CharField(max_length=255, blank=True, default="")
+    cover_type = models.CharField(max_length=255, blank=True, default="")  # PRD's "binding"
     page_count = models.PositiveIntegerField(default=0)
     publisher = models.ForeignKey(
         Publisher, related_name="books", on_delete=models.PROTECT, null=True, blank=True, default=None
     )
     published_date = models.CharField(max_length=20, blank=True, default="")  # raw string; APIs return "2019", "2019-03", "2019-03-15" after publisher
     published_year = models.PositiveIntegerField(null=True, blank=True)
-    authors = models.ManyToManyField(Author, related_name="books", blank=True)
+    authors = models.ManyToManyField(Author, through="BookAuthor", related_name="books", blank=True)
+    # Publisher's list (cover) price — metadata. Distinct from seller pricing on Product (min/max/sale).
+    list_price_inr = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    # INTERNAL ONLY — never expose in public API. Used for source merging, FX conversion, analytics.
+    # Customer-facing price is list_price_inr.
+    list_price_usd = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     metadata_quality_score = models.IntegerField(default=0)  # 0–100; see §10
     sources = models.JSONField(default=dict)  # {"google": {...raw}, "openlibrary": {...raw}} for audit
     field_origins = models.JSONField(default=dict)  # {"title": "google", "binding": "isbndb"} — which source provided each value
@@ -267,7 +273,7 @@ class Book(Product):
     last_refreshed_at = models.DateTimeField(null=True, blank=True)
     is_stale = models.BooleanField(default=False)  # flagged after 12 months
     manual_review_needed = models.BooleanField(default=False)
-    
+
     # To display goodreads review in book detail page
     goodread_id = models.CharField(max_length=255, blank=True, default="")
 
@@ -296,6 +302,61 @@ class Book(Product):
             raise ValidationError({"quality": "Select a valid book quality."})
         if not self.quality:
             self.quality = "USED_LOOKS_GOOD"
+
+
+class BookAuthor(models.Model):
+    """Through model for the Book↔Author M2M.
+
+    Carries `order` (author sequence; first-listed = primary credit) and
+    `role` (one person may appear as author/editor/translator/illustrator
+    on the same book — the unique constraint covers all four combinations).
+    """
+
+    class Role(models.TextChoices):
+        AUTHOR = "author", "Author"
+        EDITOR = "editor", "Editor"
+        TRANSLATOR = "translator", "Translator"
+        ILLUSTRATOR = "illustrator", "Illustrator"
+
+    id = models.BigAutoField(primary_key=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="book_authors")
+    author = models.ForeignKey(Author, on_delete=models.PROTECT, related_name="author_books")
+    order = models.PositiveSmallIntegerField(default=0)  # 0 = primary credit
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.AUTHOR)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("book_id", "order", "id")
+        constraints = [
+            models.UniqueConstraint(fields=["book", "author", "role"], name="bookauthor_unique_book_author_role"),
+        ]
+        indexes = [
+            models.Index(fields=["book", "order"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.author.name} ({self.role}) on book #{self.book_id}"
+
+
+class ISBNNotFoundCache(models.Model):
+    """Suppress repeated lookups for ISBNs that returned nothing from every source.
+
+    Backoff schedule (set by the resolver): 1d → 7d → 30d → 90d → never.
+    Cleared on explicit re-fetch (admin or force_refresh).
+    """
+
+    id = models.BigAutoField(primary_key=True)
+    isbn_13 = models.CharField(max_length=13, unique=True)
+    attempts = models.PositiveIntegerField(default=1)
+    last_attempt_at = models.DateTimeField(auto_now=True)
+    retry_after = models.DateTimeField(db_index=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-last_attempt_at",)
+
+    def __str__(self) -> str:
+        return f"ISBNNotFoundCache[{self.isbn_13}] attempts={self.attempts} retry_after={self.retry_after.isoformat()}"
 
 
 class Soap(Product):

@@ -80,6 +80,16 @@ def is_valid_preview_link(value: Optional[str]) -> bool:
     return bool(value and value.startswith("http"))
 
 
+def is_valid_price(value) -> bool:
+    """Accept any positive numeric price; reject None, zero, negative, or non-numeric."""
+    if value is None:
+        return False
+    try:
+        return float(value) > 0
+    except (TypeError, ValueError):
+        return False
+
+
 async def is_valid_thumbnail(url: Optional[str]) -> bool:
     """
     Async validator: does a HEAD request to check the URL is reachable

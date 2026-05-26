@@ -20,6 +20,12 @@ from ..schemas import NormalizedBook
 
 logger = logging.getLogger(__name__)
 
+# Descriptive User-Agent identifying this project. Open Library (and increasingly
+# other free APIs) reject or rate-limit requests without one — see
+# https://openlibrary.org/developers/api. Every source uses this header.
+USER_AGENT = "PutForShare-ISBN-Resolver/1.0 (+https://putforshare.com; contact: hi@putforshare.com)"
+DEFAULT_HEADERS = {"User-Agent": USER_AGENT, "Accept": "application/json"}
+
 
 def _should_retry_http(exc: BaseException) -> bool:
     """Retry on transient network/server errors, but NOT on 4xx (incl. 404)."""

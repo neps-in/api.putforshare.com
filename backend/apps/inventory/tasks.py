@@ -8,6 +8,12 @@ import redis
 from apps.inventory.models import MerchantFeedDebounceEntry, MerchantFeedSyncLog
 from apps.inventory.services.merchant_feed import write_google_merchant_feed_file
 
+# Bring ISBN resolver tasks into the inventory app's task namespace so
+# Celery's autodiscover_tasks() picks them up. The tasks live in their own
+# package under services/isbnapi/ for modularity; this import is what makes
+# them visible to the worker.
+from apps.inventory.services.isbnapi import tasks as _isbnapi_tasks  # noqa: F401
+
 User = get_user_model()
 
 

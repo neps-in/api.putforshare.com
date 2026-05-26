@@ -20,6 +20,7 @@ from .validators import (
     is_valid_publisher,
     is_valid_categories,
     is_valid_preview_link,
+    is_valid_price,
     is_valid_thumbnail,
 )
 
@@ -31,6 +32,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 FIELD_PRIORITY = {
     "title":          ["google_books", "isbndb", "open_library"],
+    "subtitle":       ["google_books", "open_library", "isbndb"],
     "authors":        ["google_books", "isbndb", "open_library"],
     "isbn10":         ["isbndb", "google_books", "open_library"],
     "isbn13":         ["isbndb", "google_books", "open_library"],
@@ -40,13 +42,19 @@ FIELD_PRIORITY = {
     "page_count":     ["google_books", "isbndb", "open_library"],
     "categories":     ["google_books", "open_library", "isbndb"],
     "language":       ["google_books", "isbndb", "open_library"],
-    "thumbnail":      ["isbndb", "google_books", "open_library"],   # OpenDB deprioritized
+    "thumbnail":      ["isbndb", "google_books", "open_library", "upcitemdb"],
     "preview_link":   ["google_books", "open_library", "isbndb"],
+    # list_price_usd is INTERNAL — never expose in public API. UPCitemdb is the
+    # primary free contributor; ISBNdb (paid) is most authoritative when set.
+    # upcitemdb is intentionally absent from every other field's priority list
+    # so the merger never pulls title/authors/etc. from a generic-product DB.
+    "list_price_usd": ["isbndb", "upcitemdb", "google_books"],
 }
 
 # Scalar validators (sync)
 SCALAR_VALIDATORS = {
     "title":          is_valid_title,
+    "subtitle":       is_valid_title,       # same non-empty + len>=2 check
     "authors":        is_valid_authors,
     "isbn10":         is_valid_title,       # non-empty string check is sufficient
     "isbn13":         is_valid_title,
@@ -57,6 +65,7 @@ SCALAR_VALIDATORS = {
     "categories":     is_valid_categories,
     "language":       is_valid_language,
     "preview_link":   is_valid_preview_link,
+    "list_price_usd": is_valid_price,
 }
 
 # All tracked fields — used for confidence scoring

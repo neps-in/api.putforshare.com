@@ -9,12 +9,14 @@ from .base import BookSource, SourceResult
 from .google_books import GoogleBooksSource
 from .isbndb import ISBNdbSource
 from .open_library import OpenLibrarySource
+from .upcitemdb import UPCitemdbSource
 
 # Registered sources, lowest priority value first.
 SOURCES: tuple[BookSource, ...] = (
     GoogleBooksSource(),
     OpenLibrarySource(),
     ISBNdbSource(),
+    UPCitemdbSource(),
 )
 
 __all__ = ["BookSource", "SourceResult", "SOURCES"]

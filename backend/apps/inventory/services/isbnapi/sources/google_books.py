@@ -12,7 +12,7 @@ from django.conf import settings
 from ratelimit import limits
 
 from ..schemas import NormalizedBook
-from .base import BookSource, retry_transient
+from .base import DEFAULT_HEADERS, BookSource, retry_transient
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class GoogleBooksSource(BookSource):
         if api_key:
             params["key"] = api_key
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(headers=DEFAULT_HEADERS) as client:
             response = await client.get(URL, params=params, timeout=TIMEOUT_SECONDS)
             response.raise_for_status()
             data = response.json()
@@ -74,6 +74,7 @@ class GoogleBooksSource(BookSource):
 
         normalized = NormalizedBook(
             title=info.get("title"),
+            subtitle=info.get("subtitle"),
             authors=info.get("authors") or [],
             isbn10=isbn10,
             isbn13=isbn13,
