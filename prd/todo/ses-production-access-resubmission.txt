@@ -1,0 +1,55 @@
+SES Production Access Resubmission — Use Case Text
+====================================================
+
+Status: DRAFT — needs manual submission via AWS Console.
+Reason: `aws sesv2 put-account-details` returns ConflictException after a prior denial
+        (CaseId 177961585300575). Resubmission must go through the Console.
+
+Submission paths (try in order):
+  A. SES Console → ap-south-1 → Account dashboard → "Request production access"
+  B. Support → Create case → Service limit increase → SES Sending Limits → ap-south-1
+  C. Reply / reopen case 177961585300575 in Support Center
+
+Form fields to set:
+  MailType:                          TRANSACTIONAL
+  WebsiteURL:                        https://putforshare.com/
+  ContactLanguage:                   English
+  AdditionalContactEmailAddresses:   hi@putforshare.com, write2aruld@gmail.com
+  Region:                            Asia Pacific (Mumbai) / ap-south-1
+
+------------------------------------------------------------
+USE CASE DESCRIPTION (paste into "Use case description" field):
+------------------------------------------------------------
+
+We are requesting production access to send transactional email to users who sign up on PutForShare (https://putforshare.com), an online marketplace in India for buying and selling pre-loved books.
+
+The reason we need to leave the SES sandbox is that the recipients of our emails are NEW USER SIGNUPS - their email addresses cannot be pre-verified with SES. In sandbox mode, every account verification email, password reset, and welcome message fails because the recipient is not a verified SES identity. Without production access, we cannot complete the user signup flow.
+
+Scope of email - transactional only, three templates currently in production:
+  1. Email address verification (sent immediately on signup; required to complete account creation).
+  2. Password reset (sent only on the user's explicit 'forgot password' request).
+  3. Welcome onboarding (sent once after the email address is verified).
+
+We do not send promotional or marketing email. We do not import third-party mailing lists. Every recipient has explicitly created an account on our platform using their own email address - account creation constitutes opt-in.
+
+Bounce and complaint handling (already implemented in the application):
+Our Django backend (apps.notifications) processes SES feedback notifications via Anymail's tracking signal (apps/notifications/signals.py):
+  - Every SES event (Send, Delivery, Bounce, Complaint, Reject) is persisted in a SesEvent audit log.
+  - On permanent bounce or complaint, the recipient address is immediately added to a SuppressedEmail table with the reason recorded.
+  - The SuppressedEmail table is checked before every outgoing send; suppressed recipients are skipped at the application layer, before SES is called.
+  - Soft bounces use Celery exponential-backoff retries (max 5 attempts).
+  - The account-level SES suppression list is enabled for both BOUNCE and COMPLAINT reasons.
+
+Domain and authentication (ap-south-1):
+  - putforshare.com is verified in this region.
+  - DKIM signing is enabled (RSA 2048-bit, status SUCCESS).
+  - A dedicated configuration set (pfs-configuration-set) is linked.
+  - From: notifications@putforshare.com.
+  - Reply-To: hi@putforshare.com (monitored shared inbox for replies and abuse reports).
+
+Expected volume:
+  - First 1-3 months: ~100-300 emails/day (matching early signup rate).
+  - 6-12 months: scaling to 2,000-5,000 emails/day as the user base grows.
+  - No bulk or burst sending - emails are dispatched per-user-action.
+
+We will continue to monitor SES bounce and complaint rates against AWS recommended thresholds and will adjust our verification flow if rates approach the warning levels.

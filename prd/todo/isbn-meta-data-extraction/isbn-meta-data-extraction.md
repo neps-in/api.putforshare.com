@@ -21,6 +21,7 @@ This PRD is the single source of truth for implementation. Every section is a bu
 - Not real-time price tracking. Pricing is snapshot-at-fetch.
 - Not a reviews/ratings aggregator.
 - Not OCR/barcode scanning (caller is responsible for providing a clean ISBN string).
+- **Books-only enrichment scope.** This service enriches exclusively the `Book` model. `Book` extends the shared `Product` base (polymorphism on `Product` is intentional and load-bearing — `Soap(Product)` and other types coexist), but the ISBN cascade, source adapters, cover pipeline, and book-specific fields (`isbn_10`, `isbn_13`, `metadata_quality_score`, `field_origins`, `sources`, etc.) apply to books only. Non-book product types (soap, household goods, anything without an ISBN) have their own enrichment flows and must not invoke `resolve_isbn`. ISBN validation in Phase 1 is the first hard guard: any input that fails `stdnum.isbn.is_valid` is rejected before the cascade runs, so non-book SKUs cannot enter this pipeline.
 
 ---
 
@@ -46,6 +47,7 @@ This PRD is the single source of truth for implementation. Every section is a bu
 | Google Books API       | `https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}`                    | 1K/day no key, 100K/day with free key | title, authors, description, publisher, year, pages, categories, covers (S/M/L/XL) |
 | Open Library Books API | `https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data` | ~100 req/min polite cap               | metadata, editions, physical format                                                |
 | Open Library Covers    | `https://covers.openlibrary.org/b/isbn/{isbn}-L.jpg`                           | Same polite cap                       | cover images (S/M/L)                                                               |
+| UPCitemdb (trial)      | `https://api.upcitemdb.com/prod/trial/lookup?upc={isbn_13}`                    | 100/day no key (trial), paid for more | **offers/pricing** (USD list price), cover image fallback. Title/authors unreliable (generic product DB) — do NOT consume |
 
 ### 4.2 Free with registration (Tier 2)
 
@@ -100,19 +102,19 @@ Pin versions at install time; the list below is for `requirements.txt`.
 ### 6.1 Core framework
 
 ```
-Django>=5.0,<5.2
+Django>=5.2,<5.3            # LTS line; matches installed 5.2.11. Allow patch updates, block 5.3+ until intentional
 djangorestframework>=3.15
-django-environ>=0.11
-psycopg2-binary>=2.9
+python-decouple>=3.8        # CANONICAL config lib for this project — use for ALL env-var reads. Do NOT add django-environ or python-dotenv.
+psycopg2-binary>=2.9        # only if migrating from sqlite to Postgres (currently db.sqlite3 in use)
 ```
 
 ### 6.2 Async tasks & caching
 
 ```
 celery>=5.4
-redis>=5.0
-django-redis>=5.4
-django-celery-beat>=2.6        # periodic refresh jobs
+redis>=5.0                      # Python client — required by Celery as broker
+# django-redis>=5.4             # DEFERRED — filesystem cache only in v1; add when §12.6 triggers fire
+django-celery-beat>=2.6         # periodic refresh jobs
 django-celery-results>=2.5      # task result persistence (optional)
 ```
 
@@ -202,8 +204,10 @@ freezegun>=1.5
                        └────────────┬─────────────┘
                                     ▼
                        ┌──────────────────────────┐
+                       │  Write raw responses     │
+                       │  to filesystem (perm.)   │
+                       │  + symlink isbn10↔isbn13 │
                        │  Persist Book + Covers   │
-                       │  Cache in Redis (30d)    │
                        └────────────┬─────────────┘
                                     ▼
                               Return payload
@@ -214,6 +218,12 @@ freezegun>=1.5
 ## 8. Data Model
 
 Implement these as Django models. SQL types are PostgreSQL.
+
+**Scope:** The models in this section live inside the existing `apps/inventory/` app alongside other product types. `Book` extends the shared `Product` base (`class Book(Product):`) — that polymorphism is intentional, since books share generic product attributes (sku, prices, dimensions, seller, etc.) with other catalogue items. The **book-specific** tables (`Author`, `BookAuthor`, `ISBNLookupLog`, `ISBNNotFoundCache`) and the ISBN enrichment service apply to books only; non-book product types (soap, household goods, etc.) do not share these tables or invoke this enrichment pipeline.
+
+**Existing implementation:** Several models below are already present in `apps/inventory/models.py` (`Product`, `Book`, `Author`, `Publisher`, `Soap`, `ISBNLookupLog`). Treat this section as the **target schema** — implementation work is reconciling gaps (missing `BookAuthor` through table, missing `ISBNNotFoundCache`, missing `subtitle`/price fields on `Book`), not greenfield model creation. Note: PRD's `binding` field is already implemented as `Book.cover_type`.
+
+**Covers are out of scope.** No `BookCover` model. Book cover images will piggyback on the existing product-image system (`apps.photos` / `Product` image flow) in a later phase; the resolver only carries a thumbnail URL on `MergedBookResponse`.
 
 ### 8.1 `Book`
 
@@ -230,11 +240,11 @@ Implement these as Django models. SQL types are PostgreSQL.
 | `published_year`         | IntegerField, nullable, indexed          | parsed from above                                                             |
 | `page_count`             | IntegerField, nullable                   |                                                                               |
 | `language`               | CharField(10), blank                     | ISO 639-1                                                                     |
-| `binding`                | CharField(50), blank                     | "paperback", "hardcover", "ebook", "unknown"                                  |
+| `binding`                | _persisted as `Book.cover_type` (existing model)_ | "paperback", "hardcover", "ebook", "unknown". Resolver writes the binding value to `Book.cover_type` — no new column needed. |
 | `edition`                | CharField(100), blank                    |                                                                               |
 | `categories`             | JSONField, default=list                  | list of strings                                                               |
-| `list_price_inr`         | DecimalField(10,2), nullable             |                                                                               |
-| `list_price_usd`         | DecimalField(10,2), nullable             |                                                                               |
+| `list_price_inr`         | DecimalField(10,2), nullable             | **Customer-facing.** The only price surfaced in public API responses.         |
+| `list_price_usd`         | DecimalField(10,2), nullable             | **Internal only.** Never expose in public API. Used for source merging, INR conversion, and analytics. |
 | `metadata_quality_score` | IntegerField, default=0                  | 0–100; see §10                                                                |
 | `sources`                | JSONField, default=dict                  | `{"google": {...raw}, "openlibrary": {...raw}}` for audit                     |
 | `field_origins`          | JSONField, default=dict                  | `{"title": "google", "binding": "isbndb"}` — which source provided each value |
@@ -266,22 +276,9 @@ Indexes: `isbn_10`, `isbn_13`, `published_year`, `metadata_quality_score`, `(is_
 
 Unique constraint on `(book, author, role)`.
 
-### 8.4 `BookCover`
+### 8.4 ~~`BookCover`~~ — DEFERRED
 
-| Field         | Type           | Notes                                               |
-| ------------- | -------------- | --------------------------------------------------- |
-| `book`        | FK Book        |                                                     |
-| `size`        | CharField(20)  | "thumbnail", "small", "medium", "large", "original" |
-| `format`      | CharField(10)  | "webp", "jpeg"                                      |
-| `width`       | IntegerField   |                                                     |
-| `height`      | IntegerField   |                                                     |
-| `bytes`       | IntegerField   |                                                     |
-| `cdn_url`     | URLField(500)  | Bunny CDN URL                                       |
-| `storage_key` | CharField(500) | path in Bunny Storage                               |
-| `source`      | CharField(50)  | "google", "openlibrary", "manual"                   |
-| `created_at`  | auto           |                                                     |
-
-Unique constraint on `(book, size, format)`.
+**Removed from scope.** Book cover images will use the existing product-image system (`apps.photos` / `Product` image flow) in a later phase. The resolver only surfaces a thumbnail URL via `MergedBookResponse.thumbnail` (string); persistent multi-size cover storage is out of scope for this PRD. See PRD §5 for the matching scope reduction on the cover pipeline.
 
 ### 8.5 `ISBNLookupLog`
 
@@ -316,13 +313,14 @@ Execute in this order. Each step is independently testable.
 
 ### Phase 0 — Project setup
 
-- [ ] **0.1** Create new Django app: `python manage.py startapp isbn_resolver`
-- [ ] **0.2** Add to `INSTALLED_APPS`: `'isbn_resolver'`, `'rest_framework'`, `'django_celery_beat'`
-- [ ] **0.3** Configure environment via `django-environ`. Required env vars:
+- [ ] **0.1** **Use the existing `apps/inventory/` app and its `services/isbnapi/` package** — already scaffolded with `sources/{base,google_books,open_library,isbndb}.py`, `isbn.py`, `merger.py`, `schemas.py`, `service.py`, `cache.py`, `views.py`, `urls.py`, `validators.py`, `tests.py`. **Do not create a new `isbn_resolver` app.** Book-related models (`Book`, `Author`, `Publisher`, `ISBNLookupLog`) already live in `apps/inventory/models.py` alongside `Product` and `Soap`.
+- [ ] **0.2** Confirm `INSTALLED_APPS` contains: `'apps.inventory'`, `'rest_framework'`, `'django_celery_beat'`. (Already present.)
+- [ ] **0.3** Configure environment via `python-decouple` — `from decouple import config; FOO = config("FOO", default=..., cast=...)`. Decouple auto-loads `.env` files; do **not** use `django-environ`, raw `os.environ.get()`, or `python-dotenv.load_dotenv()` in new code. Required env vars:
   - `DATABASE_URL`
   - `REDIS_URL`
   - `GOOGLE_BOOKS_API_KEY` (optional, raises quota)
   - `ISBNDB_API_KEY` (optional, Tier 3)
+  - `UPCITEMDB_API_KEY` (optional, raises trial quota beyond 100/day)
   - `BUNNY_STORAGE_ZONE`
   - `BUNNY_STORAGE_ACCESS_KEY`
   - `BUNNY_CDN_HOSTNAME`
@@ -375,6 +373,7 @@ class BookSource(ABC):
 
 ### Phase 3 — Source adapters
 
+- [ ] **3.0** **Migrate existing adapters from sync `requests` to async `httpx.AsyncClient`.** The current adapters at `apps/inventory/services/isbnapi/sources/{google_books,open_library,isbndb}.py` use blocking `requests` — this prevents true parallelism in the Phase 4 cascade (`asyncio.gather` over sync calls only fans out via a threadpool, blocks the event loop, and serializes under load). Replace with a shared `httpx.AsyncClient` instance (one per process, reused across calls — see `httpx` docs for connection pooling). Update `BookSource.fetch` signature to `async def`, port retry logic to `httpx`-compatible exceptions (`httpx.HTTPError`, `httpx.TimeoutException`), and remove `requests` from `requirements.txt` for this module. The async DRF view at `views.py:BookMetadataView` already expects this.
 - [ ] **3.1** `GoogleBooksSource` (`sources/google_books.py`)
   - Fetch `https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn_13}&key={key}`
   - Map fields: `volumeInfo.title`, `subtitle`, `authors[]`, `publisher`, `publishedDate`, `description`, `pageCount`, `categories[]`, `language`, `imageLinks.{smallThumbnail, thumbnail, small, medium, large, extraLarge}`
@@ -385,7 +384,13 @@ class BookSource(ABC):
 - [ ] **3.3** `ISBNdbSource` (`sources/isbndb.py`) — only if `ISBNDB_API_KEY` is set
   - Fetch `https://api2.isbndb.com/book/{isbn}` with `Authorization: {key}` header
   - Map fields, including `binding`, `dimensions`, `msrp`
-- [ ] **3.4** Per adapter, write tests using `respx` to mock responses. Include real fixtures captured from each API (one popular book, one Indian book, one missing book).
+- [ ] **3.4** `UPCitemdbSource` (`sources/upcitemdb.py`)
+  - Fetch `https://api.upcitemdb.com/prod/trial/lookup?upc={isbn_13}` (no auth) — or `https://api.upcitemdb.com/prod/v1/lookup` with `user_key` header if `UPCITEMDB_API_KEY` is set.
+  - **Narrow scope** — only map `items[0].offers[].price` → `list_price_usd` (take the lowest non-zero offer) and `items[0].images[]` → cover candidates.
+  - **Do NOT consume** `title`, `brand`, or any author-like field. UPCitemdb is a generic product DB; book metadata is unreliable and authors are typically embedded in the title string. Title/author must come from Google or Open Library.
+  - Handle empty `items[]` (ISBN not in catalogue) and `code: "INVALID_UPC"` gracefully — return `SourceResult(found=False)`.
+  - On `429` or `code: "EXCEED_LIMIT"`, mark source `temporarily_disabled` in Redis for 5 min (per §13).
+- [ ] **3.5** Per adapter, write tests using `respx` to mock responses. Include real fixtures captured from each API (one popular book, one Indian book, one missing book).
 
 ### Phase 4 — Cascade orchestrator
 
@@ -410,48 +415,36 @@ FIELD_SOURCE_PRIORITY = {
     "categories":      ["google", "openlibrary"],
     "language":        ["google", "openlibrary"],
     "binding":         ["isbndb", "openlibrary"],
-    "list_price_usd":  ["isbndb", "google"],
-    "cover":           ["openlibrary", "google", "isbndb"],
+    "list_price_usd":  ["isbndb", "upcitemdb", "google"],   # internal use only — see §8.1
+    "cover":           ["openlibrary", "google", "upcitemdb", "isbndb"],
 }
 ```
 
 - [ ] **4.4** Merger: for each field, walk priority list, take first non-null value, record origin in `field_origins`.
 - [ ] **4.5** Tests: cascade with all sources hit, cascade with Tier 1 sufficient, cascade with all sources missing, source-disagreement scenarios.
 
-### Phase 5 — Cover image pipeline
+### Phase 5 — ~~Cover image pipeline~~ DEFERRED
 
-- [ ] **5.1** Create `isbn_resolver/covers/fetcher.py`
-  - `async fetch_best_cover(cover_candidates: list[dict]) -> tuple[bytes, str]`
-  - Try candidates in order (largest first). Validate it's a real image (min 100×150, not the "no cover" placeholder Google returns).
-  - Return raw bytes + MIME type.
-- [ ] **5.2** Detect Google's "no image" placeholder by hashing known placeholder bytes; reject.
-- [ ] **5.3** Create `isbn_resolver/covers/processor.py`
-  - `process_cover(raw: bytes, isbn_13: str) -> list[CoverVariant]`
-  - Strip EXIF on load.
-  - Generate sizes: thumbnail (150×225), small (300×450), medium (600×900), large (1200×1800).
-  - Maintain aspect ratio; pad with neutral background if source aspect is off.
-  - For each size, emit WebP (q=80) and JPEG (q=85, progressive).
-  - Skip "large" if source is smaller than 1200px wide (don't upscale).
-- [ ] **5.4** Create `isbn_resolver/covers/storage.py`
-  - Upload to Bunny Storage at key `covers/{isbn_13[:3]}/{isbn_13}/{size}.{format}`. The `[:3]` prefix shards across folders for large catalogues.
-  - Return public CDN URL: `https://{BUNNY_CDN_HOSTNAME}/{storage_key}`
-- [ ] **5.5** Placeholder cover generator: if no cover found from any source, render a Pillow-generated placeholder showing title + author in neutral colors. Store as `source="generated"`.
-- [ ] **5.6** Tests: process real JPEG, process malformed image (should not crash), process tiny image (no upscale), Bunny upload mocked.
+**Out of scope for this PRD.** Book cover images will be ingested via the existing product-image system (`apps.photos` / `Product` image flow) in a later phase. The resolver only carries a thumbnail URL on `MergedBookResponse.thumbnail` — downstream product-image ingestion (when wired up) consumes that URL.
+
+- [ ] **5.1** Resolver must populate `MergedBookResponse.thumbnail` with the best validated URL from the cascade (covered by `merger._pick_thumbnail`, already implemented).
+- [ ] **5.2** When the resolver persists to `Book`, write the thumbnail URL to whatever field the product-image pipeline expects (TBD when the photo integration is designed).
+
+§8.4 (`BookCover` model), §11 (image-strategy decisions), and all `covers/` subpackage tasks are removed from this PRD's scope.
 
 ### Phase 6 — Resolver service + persistence
 
 - [ ] **6.1** Create `isbn_resolver/service.py` with `resolve_isbn(raw_isbn: str, force_refresh: bool = False) -> Book`
-- [ ] **6.2** Flow:
-  1. Normalize ISBN (Phase 1).
-  2. If `not force_refresh`: check DB for existing `Book` by `isbn_13` or `isbn_10`. If found and not `is_stale`, return.
-  3. Check `ISBNNotFoundCache`. If `retry_after > now()`, raise `BookNotFound`.
-  4. Check Redis short-cache (`isbn_resolver:miss:{isbn}`, 24h TTL).
-  5. Run cascade (Phase 4) — call via `asyncio.run` inside Celery task, or expose sync wrapper.
-  6. If no data: increment `ISBNNotFoundCache.attempts`, set `retry_after` via backoff schedule, raise `BookNotFound`.
-  7. Run cover pipeline (Phase 5).
-  8. Persist `Book`, `Author`s, `BookAuthor`s, `BookCover`s in a transaction.
-  9. Set Redis cache for the full payload (30 day TTL).
-  10. Return `Book` instance.
+- [ ] **6.2** Flow (matches §12.2 / §12.3):
+  1. Normalize ISBN (Phase 1). Compute both `isbn_13` and `isbn_10` (if derivable — None for 979-prefix).
+  2. **DB check** — if `not force_refresh`, look up existing `Book` by `isbn_13` or `isbn_10`. If found and not `is_stale`, return.
+  3. **ISBNNotFoundCache check** — if `retry_after > now()`, raise `BookNotFound`.
+  4. **Filesystem cache check** — open `backend/book_cache/inventory_bookapi/{isbn_13[:3]}/{isbn_13}.json` (or via `{isbn_10}.json` symlink if caller provided ISBN-10). If present, load cached merged payload, jump to step 7 (persist). **No external API call.**
+  5. **Run cascade** (Phase 4) — via `asyncio.run` inside Celery task, or `async_to_sync` wrapper for sync callers.
+  6. **Write merged payload to filesystem** — atomic write via `.{isbn_13}.json.tmp` + `os.replace` → `{isbn_13[:3]}/{isbn_13}.json`. If `isbn_10` derivable, create relative symlink `{isbn_10[:3]}/{isbn_10}.json → ../{isbn_13[:3]}/{isbn_13}.json`. If both files already exist (re-fetch), overwrite atomically.
+  7. If no data from cascade: increment `ISBNNotFoundCache.attempts`, set `retry_after` via backoff schedule (1d → 7d → 30d → 90d), raise `BookNotFound`.
+  8. Persist `Book`, `Author`s, `BookAuthor`s in a transaction. Write `merged.thumbnail` URL to whatever field the product-image pipeline expects (covers are deferred — see Phase 5).
+  9. Return `Book` instance.
 - [ ] **6.3** Author deduplication: normalize name (lowercase, strip accents via `unicodedata.normalize('NFKD', ...).encode('ascii', 'ignore')`), match on `normalized_name`. Create if missing.
 
 ### Phase 7 — Async tasks (Celery)
@@ -472,7 +465,7 @@ FIELD_SOURCE_PRIORITY = {
   - `POST /api/v1/books/enrich/` — body `{"isbn": "..."}` — enqueues async, returns task ID
   - `GET /api/v1/books/enrich/{task_id}/` — task status
   - `POST /api/v1/books/bulk/` — body `{"isbns": ["...", "..."]}` — bulk enqueue (max 100 per request)
-- [ ] **8.2** Serializers: `BookSerializer` (with nested authors, covers as dict of `{size: {webp: url, jpeg: url}}`).
+- [ ] **8.2** Serializers: `BookSerializer` (with nested authors, covers as dict of `{size: {webp: url, jpeg: url}}`). **Must exclude `list_price_usd` from public output** — only `list_price_inr` is customer-facing. USD is stored for internal use only (source-priority merging, FX conversion, analytics) and must never appear in any DRF response, GraphQL field, or frontend payload. Add a regression test asserting `list_price_usd` is absent from the serialized representation.
 - [ ] **8.3** Throttle: `100/hour` for unauthenticated, `10000/hour` for authenticated. Use DRF's throttle classes.
 - [ ] **8.4** OpenAPI schema via `drf-spectacular` (add to packages if you want this).
 
@@ -578,15 +571,53 @@ These decisions are final. Do not deviate.
 
 ## 12. Caching Strategy
 
-| Layer                                  | TTL                                              | Purpose                               |
-| -------------------------------------- | ------------------------------------------------ | ------------------------------------- |
-| Redis hot cache (book payload by ISBN) | 30 days                                          | Sub-50ms reads                        |
-| Redis miss cache                       | 24 hours                                         | Avoid retry storms on known-bad ISBNs |
-| `ISBNNotFoundCache` (DB)               | Exponential backoff: 1d → 7d → 30d → 90d → never | Long-term suppression                 |
-| `Book.is_stale` flag                   | 12 months                                        | Periodic refresh                      |
-| Bunny CDN edge                         | 30 days                                          | Image delivery                        |
+**v1 uses a single permanent filesystem cache** of raw per-source API responses, with PostgreSQL as the source of truth for merged book data. **No Redis hot cache.** The filesystem cache is the API-call avoider; the DB is the fast read path. Redis is intentionally deferred until measurements justify it (see "When to add Redis later" below).
 
-Invalidate Redis book cache on: manual admin edit, force_refresh, re-enrichment task completion.
+| Layer                                                               | TTL                                              | Purpose                                                                                                                                                  |
+| ------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Filesystem JSON cache** (`backend/book_cache/inventory_bookapi/`) | **Permanent — no TTL**                           | Stores **raw per-source API responses** keyed by ISBN. Prevents re-calling Google/OpenLibrary/ISBNdb/UPCitemdb on re-processing, deploys, merger upgrades, schema changes. The durable archive. |
+| PostgreSQL `Book` row                                               | Authoritative, no expiry                         | Source of truth for merged data. Indexed on `isbn_13`, `isbn_10` — ~5–10 ms reads.                                                                       |
+| `ISBNNotFoundCache` (DB)                                            | Exponential backoff: 1d → 7d → 30d → 90d → never | Suppress retries on ISBNs that returned nothing. Replaces the previously spec'd "Redis miss cache" — DB lookup is fast enough and survives restarts.     |
+| `Book.is_stale` flag                                                | 12 months                                        | Periodic refresh trigger (Celery beat task).                                                                                                             |
+| Bunny CDN edge                                                      | 30 days                                          | Cover image delivery.                                                                                                                                    |
+
+### 12.1 Filename convention
+
+- **Canonical filename:** `{isbn_13}.json` — ISBN-13 is always populated when derivable from ISBN-10, so it's the stable canonical form.
+- **Symlink for ISBN-10:** if an ISBN-10 form exists (i.e., ISBN-13 starts with `978`), create a **relative symlink** `{isbn_10}.json → {isbn_13}.json` in the same directory. Lookups by either form resolve to the same physical file — no duplicate storage, no drift.
+- **No symlink for 979-prefix:** ISBN-13s starting with `979` have no ISBN-10 equivalent — only the `.json` file exists.
+- **Sharded path:** `backend/book_cache/inventory_bookapi/{isbn_13[:3]}/{isbn_13}.json` (3-char prefix shards directories for large catalogues; matches the cover-storage scheme in §11). Symlink lives alongside the canonical file in the same shard directory.
+- **Symlink creation must be atomic:** write `{isbn_13}.json.tmp` first, `os.replace()` into place, then `os.symlink()` the ISBN-10 alias. If the symlink target already exists (re-fetch), `os.replace()` the symlink too.
+
+### 12.2 Read order on lookup (`resolve_isbn`)
+
+1. **DB `Book` row** by `isbn_13` OR `isbn_10` → hit returns in ~5–10 ms.
+2. **Filesystem JSON cache** — open `{isbn_13[:3]}/{isbn_13}.json` (or follow the ISBN-10 symlink if input is ISBN-10). If present, load raw per-source responses, re-run the merger (Phase 4.4), persist `Book` to DB, return. **No external API call.** ~10–50 ms.
+3. **External API cascade** (Phase 4) — only if both DB and filesystem miss. On success, write raw responses to filesystem and create symlink.
+
+### 12.3 Write order on enrichment
+
+1. **Filesystem JSON** — write `{isbn_13}.json` with raw per-source responses (atomic write via tmp + rename). Create relative symlink `{isbn_10}.json → {isbn_13}.json` if ISBN-10 derivable.
+2. **DB** — `Book` + `Author` + `BookAuthor` + `BookCover` in one transaction.
+
+### 12.4 Permanence rule
+
+Raw response files have **no TTL**. The existing `_is_expired()` check in `apps/inventory/services/isbnapi/cache.py` must be **removed for raw-response reads** — files are permanent. Re-fetch only on explicit `force_refresh=true` query param or admin "Re-fetch raw" action.
+
+### 12.5 Invalidation
+
+- **Filesystem cache** invalidated only on: explicit `force_refresh=true` (overwrites the `.json` file; symlink stays valid since target name is unchanged) or admin "Re-fetch raw" action. **Never expires on its own.**
+- **DB** never invalidated by caching; `is_stale` only flags for background refresh, never deletes.
+
+### 12.6 When to add Redis later
+
+Add a thin Redis hot layer in front of the filesystem cache only when one of these triggers fires:
+
+- **Multi-host:** scale beyond one backend host (filesystem cache fragments per host).
+- **High concurrency:** sustained >50 req/s (filesystem-write contention or stat-call latency becomes meaningful).
+- **Measured bottleneck:** P50 latency profiling shows filesystem reads dominating, not DB or merging.
+
+Not before. Premature Redis adds operational surface (RDB/AOF, eviction policy, invalidation race conditions) without user-visible gain at current scale.
 
 ---
 
@@ -598,6 +629,8 @@ Invalidate Redis book cache on: manual admin edit, force_refresh, re-enrichment 
 | Google Books (with key) | 100K/day            | Token bucket; alert at 80% daily quota      |
 | Open Library            | ~100 req/min polite | `ratelimit` decorator: 100/60s              |
 | ISBNdb                  | per-plan            | Check headers, respect 429 with Retry-After |
+| UPCitemdb (trial)       | 100/day             | Skip source after daily quota hit; honor 429 |
+| UPCitemdb (paid)        | per-plan            | Token bucket per plan; honor 429             |
 
 If any source hits rate limit, mark it `temporarily_disabled` for 5 minutes in Redis; cascade skips it gracefully.
 

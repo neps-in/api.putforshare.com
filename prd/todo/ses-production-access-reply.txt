@@ -1,0 +1,123 @@
+SES Production Access — Reply to AWS on Case 177961585300575
+==============================================================
+
+Status: DRAFT — paste into AWS Console → Support Center → case 177961585300575 → Reply.
+(CLI reply via `aws support add-communication-to-case` is blocked on Basic support plan.)
+
+------------------------------------------------------------
+REPLY TEXT (copy from below the dashed line):
+------------------------------------------------------------
+
+Hi AWS Trust & Safety team,
+
+Thank you for the prompt response. Below is the additional information you requested, organised by your questions.
+
+1. SENDING FREQUENCY AND TRIGGERS
+---------------------------------
+Email is sent only in response to a user action; we do not schedule, batch, or bulk-send.
+  - Email verification: sent once, immediately, when a user clicks "Sign up" and submits the form.
+  - Password reset: sent once, only when the user clicks "Forgot password" and submits their address.
+  - Welcome onboarding: sent once, when the user clicks the verification link in (1) and the address transitions to verified.
+There are no marketing, newsletter, digest, or re-engagement emails. Expected day-1 volume is well under 100 messages/day, scaling with organic signups.
+
+2. RECIPIENT LIST MANAGEMENT
+----------------------------
+We do not maintain mailing lists and we do not import recipient data from any third party. Each "recipient" is a single user who has just performed an action on our platform using their own email address. Account creation on PutForShare requires the user to enter their own email and click a verification link — that is our sole consent mechanism. There is no way for one user to add another user to email delivery.
+
+3. BOUNCE HANDLING
+------------------
+Bounces are processed by our Django backend (`apps.notifications`) via Anymail's tracking signal (`apps/notifications/signals.py`):
+  - Every SES bounce notification is persisted in a `SesEvent` audit row with the full bounce subtype (Permanent / Transient / Undetermined) and diagnostic.
+  - On a Permanent bounce, the recipient address is added to the `SuppressedEmail` table with reason = HARD_BOUNCE. This table is queried before EVERY outgoing send; suppressed addresses are skipped at the application layer, before SES is invoked.
+  - Transient (soft) bounces are retried up to 5 times via Celery with exponential backoff, then marked as `gave_up` (not retried further).
+  - The account-level SES suppression list is also enabled for BOUNCE reasons as a defence in depth.
+
+4. COMPLAINT HANDLING
+---------------------
+Complaints are treated as permanent:
+  - Every SES complaint is persisted in `SesEvent` with the complaintFeedbackType.
+  - The recipient is immediately added to `SuppressedEmail` with reason = COMPLAINT — no further mail of any kind will be sent to that address from our system.
+  - The account-level SES suppression list is also enabled for COMPLAINT reasons.
+We treat complaint rate as an operational alarm and will pause sending if we approach AWS's recommended thresholds.
+
+5. UNSUBSCRIBE
+--------------
+Because every email we send is transactional (verification, password reset, welcome) — i.e. directly required to complete a user action the recipient just initiated — there is no recurring stream to unsubscribe from. Each recipient receives at most three lifetime emails from us (one of each type). Users can also delete their account at any time from the dashboard (https://dash.putforshare.com), which removes them from any further delivery. The `hi@putforshare.com` Reply-To address is monitored and any reply asking us to stop is honoured immediately by adding the address to `SuppressedEmail`.
+
+6. EXAMPLES OF EMAIL CONTENT
+----------------------------
+All three templates live at https://putforshare.com (production) and are rendered server-side at send time.
+
+Template 1 — Email verification
+Subject: Confirm your email address
+Body (plain-text excerpt):
+"""
+Hi {first_name},
+
+Thanks for signing up for PutForShare!
+To finish setting up your account, please verify that this email address ({user_email}) belongs to you.
+
+Verify your email:
+{action_url}
+
+This verification link expires in 24 hours. You can request a new one anytime from your account settings.
+
+Didn't sign up? You can safely ignore this email — no account will be created unless you confirm.
+
+Welcome aboard,
+The PutForShare Team
+"""
+
+Template 2 — Password reset
+Subject: Reset your password
+Body (plain-text excerpt):
+"""
+Hi {first_name},
+
+We received a request to reset the password for your PutForShare account ({user_email}). Open the link below to choose a new one:
+
+{action_url}
+
+This link expires in 24 hours. After that you'll need to request a new one.
+
+Didn't ask for this? You can safely ignore this email — your password won't change unless you open the link above.
+
+Stay secure,
+The PutForShare Team
+"""
+
+Template 3 — Welcome
+Subject: Welcome aboard, {first_name}!
+Body (plain-text excerpt):
+"""
+Welcome aboard, {first_name}!
+
+Thanks for joining PutForShare. Your account is all set up and ready to use.
+
+PutForShare helps you share what you have — books, gear, gadgets — with people who'd love to use them. Here's a quick start:
+  - List items you'd like to put up for sharing.
+  - Browse what others in your community are sharing.
+  - Connect with borrowers and lenders, hassle-free.
+
+Get started:
+https://dash.putforshare.com/onboarding
+
+Happy sharing,
+The PutForShare Team
+"""
+
+7. VERIFIED IDENTITY CONFIRMATION
+---------------------------------
+Per your note about verified identities:
+  - Domain identity `putforshare.com` is verified in ap-south-1 (Mumbai). Verification Status: SUCCESS.
+  - DKIM is enabled and signing with RSA 2048-bit keys (Status: SUCCESS, three CNAME records published).
+  - A dedicated configuration set (`pfs-configuration-set`) is linked to the domain identity for event publishing.
+  - From: notifications@putforshare.com.  Reply-To: hi@putforshare.com (monitored shared inbox).
+The orphaned us-east-1 verification attempt referenced in earlier reminder emails has been deleted — ap-south-1 is now the sole SES region for this domain.
+
+Thank you for the review. Happy to provide further information if useful.
+
+Best regards,
+Napoleon Arouldas
+PutForShare — https://putforshare.com
+Contact: hi@putforshare.com / write2aruld@gmail.com
