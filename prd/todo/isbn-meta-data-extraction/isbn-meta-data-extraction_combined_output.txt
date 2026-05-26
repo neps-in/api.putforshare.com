@@ -1,12 +1,4 @@
 ==================================================
-FILE: google-books-api-key.txt
-==================================================
-
-
-# Use this key in your application by passing it with the key=API_KEY parameter.
-GOOGLE_BOOKS_API_KEY="AIzaSyB7PHsiqb8mTe_K5-gTxYCz1sf8awFFYVE"
-
-==================================================
 FILE: isbn-meta-data-extraction.md
 ==================================================
 
